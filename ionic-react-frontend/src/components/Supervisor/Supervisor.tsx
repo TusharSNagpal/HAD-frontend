@@ -1,7 +1,5 @@
 
-import { IonContent, IonCard, IonCardHeader, IonCardTitle, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonButton, IonRouterOutlet, setupIonicReact, IonPage, IonCardSubtitle} from '@ionic/react';
-import {IonReactRouter} from "@ionic/react-router";
-import {Route} from "react-router-dom";
+import { IonContent, IonCard, IonCardHeader, IonCardTitle, IonHeader, IonTitle, IonToolbar, IonButton, IonPage} from '@ionic/react';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -19,10 +17,10 @@ import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 
-import RegisterDoctor from "./RegisterDoctor"
+// import RegisterDoctor from "./RegisterDoctor"
 
 /* Theme variables */
-import '../theme/variables.css';
+import '../../theme/variables.css';
 
 // setupIonicReact();
 
@@ -65,7 +63,7 @@ const Supervisor: React.FC = () => {
 
             <IonCard class = "card-style">
                 <IonCardHeader>
-                    <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./registerDoctor">REGISTER PATIENT</IonButton></IonCardTitle>
+                    <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./registerPatient">REGISTER PATIENT</IonButton></IonCardTitle>
                 </IonCardHeader>
             </IonCard>
 

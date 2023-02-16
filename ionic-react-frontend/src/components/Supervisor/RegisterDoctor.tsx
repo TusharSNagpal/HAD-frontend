@@ -1,5 +1,5 @@
 
-import { IonPage, IonCard, IonCardHeader, IonCardTitle, IonInput, IonList, IonItem, IonContent, IonHeader, IonTitle, IonToolbar, IonLabel, setupIonicReact, IonCardSubtitle, IonDatetime} from '@ionic/react';
+import { IonPage, IonCard, IonCardHeader, IonCardTitle, IonInput, IonContent, IonHeader, IonTitle, IonToolbar, IonCardSubtitle, IonDatetime} from '@ionic/react';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -20,7 +20,7 @@ import '@ionic/react/css/display.css';
 // import Date from "../items/Date";
 
 /* Theme variables */
-import '../theme/variables.css';
+import '../../theme/variables.css';
 
 // setupIonicReact();
 
