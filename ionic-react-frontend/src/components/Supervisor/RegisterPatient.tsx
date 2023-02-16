@@ -11,7 +11,7 @@ import {
     IonToolbar,
     IonCardSubtitle,
     IonDatetime,
-    IonButton
+    IonButton, IonAlert
 } from '@ionic/react';
 
 /* Core CSS required for Ionic components to work properly */
@@ -30,15 +30,24 @@ import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 
-// import Date from "../items/Date";
+// import Alert from "../../items/Alert";
+// import { useNavigate } from 'react-router-dom';
 
 /* Theme variables */
 import '../../theme/variables.css';
-import {useRef} from "react";
+import {useRef, useState} from "react";
+import { Redirect } from 'react-router';
 
 // setupIonicReact();
 
 const RegisterPatient: React.FC = () => {
+
+    // const navigate = useNavigate();
+
+    const [showAlert, setShowAlert] = useState(false);
+    const [showAlertErr, setShowAlertErr] = useState(false);
+
+    const [redirect, setRedirect] = useState(false);
 
     const supervisorId = useRef<HTMLIonInputElement>(null);
     const fname = useRef<HTMLIonInputElement>(null);
@@ -47,6 +56,16 @@ const RegisterPatient: React.FC = () => {
     const dob = useRef<HTMLIonDatetimeElement>(null);
     const address = useRef<HTMLIonInputElement>(null);
     const phoneNo = useRef<HTMLIonInputElement>(null);
+
+    const resetAll = () => {
+        supervisorId.current!.value = null;
+        dob.current!.reset();
+        fname.current!.value = null;
+        lname.current!.value = null;
+        gender.current!.value = null;
+        address.current!.value = null;
+        phoneNo.current!.value = null;
+    }
 
     const registerPatient = async() => {
         let data = {'hospital':{'hospitalId': 1}, 'supervisor':{'supervisorId': supervisorId.current!.value}, 'fname' : fname.current!.value, 'lname' : lname.current!.value, 'gender' : gender.current!.value, 'address': address.current!.value, 'phoneNo': phoneNo.current!.value, 'dob': dob.current!.value};
@@ -65,10 +84,18 @@ const RegisterPatient: React.FC = () => {
         console.log(response);
         if(result['status'] === 200){
             console.log("DONE");
+            setShowAlert(true);
+            setShowAlertErr(false);
+            setRedirect(true);
+            resetAll();
+
         }
 
         else{
             console.log("ERROR");
+            setShowAlert(false);
+            setShowAlertErr(true);
+            setRedirect(false);
         }
     }
 
@@ -141,6 +168,29 @@ const RegisterPatient: React.FC = () => {
                 </IonCard>
 
                 <IonButton onClick = {registerPatient}>Submit</IonButton>
+
+                <IonAlert
+                    isOpen={showAlert}
+                    onDidDismiss={() => setShowAlert(false)}
+                    header="Alert"
+                    subHeader="Registration Successful..!"
+                    message="Please go to Patient Login Tab to Login..!"
+                    buttons={['OK']}
+                />
+
+                <IonAlert
+                    isOpen={showAlertErr}
+                    onDidDismiss={() => setShowAlertErr(false)}
+                    header="Alert"
+                    subHeader="Registration Unsuccessful..!"
+                    message="Please Go to Patient Registration Tab and Register Again!"
+                    buttons={['OK']}
+                />
+
+                {!showAlert && redirect?<Redirect to='/' />
+                    :null}
+
+
             </IonContent>
 
         </IonPage>

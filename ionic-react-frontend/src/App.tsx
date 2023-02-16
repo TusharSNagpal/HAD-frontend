@@ -42,7 +42,6 @@ const App: React.FC = () => (
           <Route exact path = "/" component={Supervisor}/>
           <Route path = "/registerDoctor" component={RegisterDoctor}/>
           <Route path = "/registerPatient" component={RegisterPatient}/>
-
         </IonRouterOutlet>
       </IonReactRouter>
   </IonApp>
