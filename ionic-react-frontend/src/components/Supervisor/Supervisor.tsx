@@ -28,11 +28,19 @@ const Supervisor: React.FC = () => {
     return (
     <IonPage>
         <IonHeader>
-        <IonToolbar>
-            <IonTitle class="ion-text-center">
-            <b>SUPERVISOR</b>
-            </IonTitle>
-        </IonToolbar>
+
+            <IonToolbar>
+                <IonTitle class="ion-text-center">
+                    <b>HEALTHCARE SERVICES</b>
+                </IonTitle>
+            </IonToolbar>
+
+            <IonToolbar>
+                <IonTitle class="ion-text-center">
+                <b>SUPERVISOR</b>
+                </IonTitle>
+            </IonToolbar>
+
         </IonHeader>
 
         <IonContent class = "content-style">
@@ -45,7 +53,7 @@ const Supervisor: React.FC = () => {
 
             <IonCard class = "card-style">
                 <IonCardHeader>
-                    <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./registerDoctor">NEW CASE</IonButton></IonCardTitle>
+                    <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./newCase">NEW CASE</IonButton></IonCardTitle>
                 </IonCardHeader>
             </IonCard>
 

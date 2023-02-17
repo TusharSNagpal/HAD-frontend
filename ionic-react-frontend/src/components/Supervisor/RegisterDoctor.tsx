@@ -28,17 +28,23 @@ const RegisterDoctor: React.FC = () => {
     return(
         <IonPage>
             <IonHeader>
-            <IonToolbar>
-                <IonTitle class="ion-text-center">
-                <b>SUPERVISOR</b>
-                </IonTitle>
-            </IonToolbar>
+                <IonToolbar>
+                    <IonTitle class="ion-text-center">
+                        <b>HEALTHCARE SERVICES</b>
+                    </IonTitle>
+                </IonToolbar>
 
-            <IonToolbar>
-                <IonTitle class="ion-text-center">
-                <b>DOCTOR REGISTRATION</b>
-                </IonTitle>
-            </IonToolbar>
+                <IonToolbar>
+                    <IonTitle class="ion-text-center">
+                    <b>SUPERVISOR</b>
+                    </IonTitle>
+                </IonToolbar>
+
+                <IonToolbar>
+                    <IonTitle class="ion-text-center">
+                    <b>DOCTOR REGISTRATION</b>
+                    </IonTitle>
+                </IonToolbar>
 
             </IonHeader>
             

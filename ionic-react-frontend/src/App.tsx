@@ -25,6 +25,9 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import NewCase from "./components/Supervisor/NewCase";
+import DoctorHome from "./components/Doctor/DoctorHome";
+import Admin from "./components/Admin/Admin";
 
 setupIonicReact();
 
@@ -33,15 +36,18 @@ const App: React.FC = () => (
     <IonHeader>
       <IonToolbar>
         <IonTitle class="ion-text-center">
-          <b>SUPERVISOR</b>
+          <b>HEALTHCARE SERVICES</b>
         </IonTitle>
       </IonToolbar>
     </IonHeader>
       <IonReactRouter>
         <IonRouterOutlet>
-          <Route exact path = "/" component={Supervisor}/>
+          <Route exact path = "/" component={Admin}/>
+          <Route path = "/supervisorHome" component={Supervisor}/>
           <Route path = "/registerDoctor" component={RegisterDoctor}/>
           <Route path = "/registerPatient" component={RegisterPatient}/>
+          <Route path = "/newCase" component={NewCase}/>
+          <Route path = "/doctorHome" component={DoctorHome}/>
         </IonRouterOutlet>
       </IonReactRouter>
   </IonApp>

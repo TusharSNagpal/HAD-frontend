@@ -82,13 +82,12 @@ const RegisterPatient: React.FC = () => {
         const response = await fetch(addRecordEndpoint, options);
         const result = await response;
         console.log(response);
-        if(result['status'] === 200){
+        if(result['status'] === 201){
             console.log("DONE");
             setShowAlert(true);
             setShowAlertErr(false);
             setRedirect(true);
             resetAll();
-
         }
 
         else{
@@ -102,6 +101,12 @@ const RegisterPatient: React.FC = () => {
     return(
         <IonPage>
             <IonHeader>
+                <IonToolbar>
+                    <IonTitle class="ion-text-center">
+                        <b>HEALTHCARE SERVICES</b>
+                    </IonTitle>
+                </IonToolbar>
+
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
                         <b>SUPERVISOR</b>
@@ -187,7 +192,7 @@ const RegisterPatient: React.FC = () => {
                     buttons={['OK']}
                 />
 
-                {!showAlert && redirect?<Redirect to='/' />
+                {!showAlert && redirect?<Redirect to='/supervisorHome' />
                     :null}
 
 
