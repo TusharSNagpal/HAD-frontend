@@ -49,6 +49,8 @@ const RegisterPatient: React.FC = () => {
 
     const [redirect, setRedirect] = useState(false);
 
+    const [displayPatientId, setDisplayPatientId] = useState(0);
+
     const supervisorId = useRef<HTMLIonInputElement>(null);
     const fname = useRef<HTMLIonInputElement>(null);
     const lname = useRef<HTMLIonInputElement>(null);
@@ -79,23 +81,58 @@ const RegisterPatient: React.FC = () => {
             body: JSON.stringify(data)
         }
 
-        const response = await fetch(addRecordEndpoint, options);
-        const result = await response;
-        console.log(response);
-        if(result['status'] === 201){
-            console.log("DONE");
-            setShowAlert(true);
-            setShowAlertErr(false);
-            setRedirect(true);
-            resetAll();
-        }
+        await fetch(addRecordEndpoint, options)
+            .then(function(response){
+                console.log(response);
+                if(response['status'] === 201){
+                    console.log("DONE");
+                }
 
-        else{
-            console.log("ERROR");
-            setShowAlert(false);
-            setShowAlertErr(true);
-            setRedirect(false);
-        }
+                else{
+                    console.log("ERROR");
+                }
+                return response.json();
+            })
+            .then(function(data){
+                console.log(data);
+                const items  = data;
+                if(data.size != 0) {
+                    setDisplayPatientId(items.patientId);
+                    // console.log(displayPatientId);
+                    setShowAlert(true);
+                    setShowAlertErr(false);
+                    setRedirect(true);
+                    resetAll();
+                }
+                else{
+                    setShowAlert(false);
+                    setShowAlertErr(true);
+                    setRedirect(false);
+                }
+
+                return items;
+            }
+            )
+
+        return data;
+
+        // const response = await fetch(addRecordEndpoint, options);
+        // const result = await response;
+        // console.log(response);
+        // if(result['status'] === 201){
+        //     console.log("DONE");
+        //     setShowAlert(true);
+        //     setShowAlertErr(false);
+        //     setRedirect(true);
+        //     resetAll();
+        // }
+        //
+        // else{
+        //     console.log("ERROR");
+        //     setShowAlert(false);
+        //     setShowAlertErr(true);
+        //     setRedirect(false);
+        // }
     }
 
     return(
@@ -177,7 +214,7 @@ const RegisterPatient: React.FC = () => {
                 <IonAlert
                     isOpen={showAlert}
                     onDidDismiss={() => setShowAlert(false)}
-                    header="Alert"
+                    header= {`PATIENT ID: ${displayPatientId}`}
                     subHeader="Registration Successful..!"
                     message="Please go to Patient Login Tab to Login..!"
                     buttons={['OK']}
@@ -194,7 +231,6 @@ const RegisterPatient: React.FC = () => {
 
                 {!showAlert && redirect?<Redirect to='/supervisorHome' />
                     :null}
-
 
             </IonContent>
 
