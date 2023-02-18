@@ -51,6 +51,9 @@ const RegisterPatient: React.FC = () => {
 
     const [displayPatientId, setDisplayPatientId] = useState(0);
 
+    // const [hospitalId, setHospitalId] = useState(0);
+    const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
+
     const supervisorId = useRef<HTMLIonInputElement>(null);
     const fname = useRef<HTMLIonInputElement>(null);
     const lname = useRef<HTMLIonInputElement>(null);
@@ -69,22 +72,15 @@ const RegisterPatient: React.FC = () => {
         phoneNo.current!.value = null;
     }
 
-    const registerPatient = async() => {
-        let data = {'hospital':{'hospitalId': 1}, 'supervisor':{'supervisorId': supervisorId.current!.value}, 'fname' : fname.current!.value, 'lname' : lname.current!.value, 'gender' : gender.current!.value, 'address': address.current!.value, 'phoneNo': phoneNo.current!.value, 'dob': dob.current!.value};
-        console.log(JSON.stringify(data));
-        const addRecordEndpoint = "http://localhost:9090/api/patients/";
-        const options = {
-            method: 'POST',
-            headers:{
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        }
+    // const getHospitalId = async() => {
+    //
+    // }
 
-        await fetch(addRecordEndpoint, options)
+    const registerPatient = async() => {
+        fetch(`http://localhost:9090/api/supervisors/${supervisorId.current!.value}`)
             .then(function(response){
                 console.log(response);
-                if(response['status'] === 201){
+                if(response['status'] === 200){
                     console.log("DONE");
                 }
 
@@ -94,45 +90,67 @@ const RegisterPatient: React.FC = () => {
                 return response.json();
             })
             .then(function(data){
-                console.log(data);
-                const items  = data;
-                if(data.size != 0) {
-                    setDisplayPatientId(items.patientId);
-                    // console.log(displayPatientId);
-                    setShowAlert(true);
-                    setShowAlertErr(false);
-                    setRedirect(true);
-                    resetAll();
-                }
-                else{
-                    setShowAlert(false);
-                    setShowAlertErr(true);
-                    setRedirect(false);
-                }
+                    console.log(data);
+                    const items  = data;
+                    if(data.size !== 0) {
+                        // setHospitalId(items.hospitalId.hospitalId);
+                        // console.log(hospitalId);
+                        setShowAlertNoSuchId(false);
+                    }
+                    else{
+                        setShowAlertNoSuchId(true);
+                    }
 
-                return items;
-            }
+                    return items.hospitalId.hospitalId;
+                }
             )
+            .then( async function (hospitalId){
+                console.log(hospitalId);
 
-        return data;
+                let data = {'hospital':{'hospitalId': hospitalId}, 'supervisor':{'supervisorId': supervisorId.current!.value}, 'fname' : fname.current!.value, 'lname' : lname.current!.value, 'gender' : gender.current!.value, 'address': address.current!.value, 'phoneNo': phoneNo.current!.value, 'dob': dob.current!.value};
+                console.log(JSON.stringify(data));
+                const addRecordEndpoint = "http://localhost:9090/api/patients/";
+                const options = {
+                    method: 'POST',
+                    headers:{
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }
 
-        // const response = await fetch(addRecordEndpoint, options);
-        // const result = await response;
-        // console.log(response);
-        // if(result['status'] === 201){
-        //     console.log("DONE");
-        //     setShowAlert(true);
-        //     setShowAlertErr(false);
-        //     setRedirect(true);
-        //     resetAll();
-        // }
-        //
-        // else{
-        //     console.log("ERROR");
-        //     setShowAlert(false);
-        //     setShowAlertErr(true);
-        //     setRedirect(false);
-        // }
+                await fetch(addRecordEndpoint, options)
+                    .then(function(response){
+                        console.log(response);
+                        if(response['status'] === 201){
+                            console.log("DONE");
+                        }
+
+                        else{
+                            console.log("ERROR");
+                        }
+                        return response.json();
+                    })
+                    .then(function(data){
+                        console.log(data);
+                        const items  = data;
+                        if(data.size != 0) {
+                            setDisplayPatientId(items.patientId);
+                            // console.log(displayPatientId);
+                            setShowAlert(true);
+                            setShowAlertErr(false);
+                            setRedirect(true);
+                            resetAll();
+                        }
+                        else{
+                            setShowAlert(false);
+                            setShowAlertErr(true);
+                            setRedirect(false);
+                        }
+
+                        return items;
+                    })
+                }
+    )
     }
 
     return(
@@ -166,6 +184,15 @@ const RegisterPatient: React.FC = () => {
                         <IonCardSubtitle><IonInput ref = {supervisorId} class = "card-input" type="number" placeholder="1234"></IonInput></IonCardSubtitle>
                     </IonCardHeader>
                 </IonCard>
+
+                <IonAlert
+                    isOpen={showAlertNoSuchId}
+                    onDidDismiss={() => setShowAlertNoSuchId(false)}
+                    header= "No such supervisor ID found please try again..!"
+                    subHeader="ID NOT FOUND..!"
+                    message="!!UNSUCCESSFUL..!"
+                    buttons={['OK']}
+                />
 
                 <IonCard class = "card-style">
                     <IonCardHeader>
