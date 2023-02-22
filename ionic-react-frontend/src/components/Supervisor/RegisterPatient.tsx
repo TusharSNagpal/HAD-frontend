@@ -83,7 +83,6 @@ const RegisterPatient: React.FC = () => {
                 if(response['status'] === 200){
                     console.log("DONE");
                 }
-
                 else{
                     console.log("ERROR");
                 }
@@ -92,63 +91,72 @@ const RegisterPatient: React.FC = () => {
             .then(function(data){
                     console.log(data);
                     const items  = data;
-                    if(data.size !== 0) {
-                        // setHospitalId(items.hospitalId.hospitalId);
-                        // console.log(hospitalId);
-                        setShowAlertNoSuchId(false);
+                    console.log(items.size);
+                    if(items.size === undefined) {
+                       return -1;
                     }
-                    else{
-                        setShowAlertNoSuchId(true);
-                    }
-
+                    setShowAlertNoSuchId(false);
                     return items.hospitalId.hospitalId;
                 }
             )
             .then( async function (hospitalId){
-                console.log(hospitalId);
-
-                let data = {'hospital':{'hospitalId': hospitalId}, 'supervisor':{'supervisorId': supervisorId.current!.value}, 'fname' : fname.current!.value, 'lname' : lname.current!.value, 'gender' : gender.current!.value, 'address': address.current!.value, 'phoneNo': phoneNo.current!.value, 'dob': dob.current!.value};
-                console.log(JSON.stringify(data));
-                const addRecordEndpoint = "http://localhost:9090/api/patients/";
-                const options = {
-                    method: 'POST',
-                    headers:{
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
+                if(hospitalId === -1){
+                    setShowAlertNoSuchId(true);
                 }
+                else {
+                    setShowAlertNoSuchId(false);
 
-                await fetch(addRecordEndpoint, options)
-                    .then(function(response){
-                        console.log(response);
-                        if(response['status'] === 201){
-                            console.log("DONE");
-                        }
+                    console.log(hospitalId);
 
-                        else{
-                            console.log("ERROR");
-                        }
-                        return response.json();
-                    })
-                    .then(function(data){
-                        console.log(data);
-                        const items  = data;
-                        if(data.size != 0) {
-                            setDisplayPatientId(items.patientId);
-                            // console.log(displayPatientId);
-                            setShowAlert(true);
-                            setShowAlertErr(false);
-                            setRedirect(true);
-                            resetAll();
-                        }
-                        else{
-                            setShowAlert(false);
-                            setShowAlertErr(true);
-                            setRedirect(false);
-                        }
+                    let data = {
+                        'hospital': {'hospitalId': hospitalId},
+                        'supervisor': {'supervisorId': supervisorId.current!.value},
+                        'fname': fname.current!.value,
+                        'lname': lname.current!.value,
+                        'gender': gender.current!.value,
+                        'address': address.current!.value,
+                        'phoneNo': phoneNo.current!.value,
+                        'dob': dob.current!.value
+                    };
+                    console.log(JSON.stringify(data));
+                    const addRecordEndpoint = "http://localhost:9090/api/patients/";
+                    const options = {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    }
 
-                        return items;
-                    })
+                    await fetch(addRecordEndpoint, options)
+                        .then(function (response) {
+                            console.log(response);
+                            if (response['status'] === 201) {
+                                console.log("DONE");
+                            } else {
+                                console.log("ERROR");
+                            }
+                            return response.json();
+                        })
+                        .then(function (data) {
+                            console.log(data);
+                            const items = data;
+                            if (data.size != 0) {
+                                setDisplayPatientId(items.patientId);
+                                // console.log(displayPatientId);
+                                setShowAlert(true);
+                                setShowAlertErr(false);
+                                setRedirect(true);
+                                resetAll();
+                            } else {
+                                setShowAlert(false);
+                                setShowAlertErr(true);
+                                setRedirect(false);
+                            }
+
+                            return items;
+                        })
+                }
                 }
     )
     }
