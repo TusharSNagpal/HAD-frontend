@@ -96,7 +96,7 @@ const RegisterPatient: React.FC = () => {
                        return -1;
                     }
                     setShowAlertNoSuchId(false);
-                    return items.hospitalId.hospitalId;
+                    return items.hospital.hospitalId;
                 }
             )
             .then( async function (hospitalId){
