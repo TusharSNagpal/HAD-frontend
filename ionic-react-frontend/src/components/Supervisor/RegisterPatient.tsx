@@ -91,8 +91,8 @@ const RegisterPatient: React.FC = () => {
             .then(function(data){
                     console.log(data);
                     const items  = data;
-                    console.log(items.size);
-                    if(items.size === undefined) {
+                    console.log(items.success);
+                    if(items.success === false) {
                        return -1;
                     }
                     setShowAlertNoSuchId(false);
