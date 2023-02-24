@@ -6,7 +6,7 @@ import {
     IonContent,
     IonHeader,
     IonTitle,
-    IonToolbar
+    IonToolbar, IonButton
 } from '@ionic/react';
 
 /* Core CSS required for Ionic components to work properly */
@@ -28,6 +28,7 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import '../../theme/variables.css';
 import {useEffect, useState} from "react";
+
 // import {Redirect} from "react-router";
 
 // setupIonicReact();
@@ -36,15 +37,42 @@ const DoctorHome: React.FC = () => {
 
     const [activeCases, setActiveCases] = useState<any[]>([]);
 
-    useEffect(() => {
-        fetch(`http://localhost:9090/api/visits/activeVisits/hospital/1`)
+    // const [redirect, setRedirect] = useState(false);
+
+    const [useSt, setUseSt] = useState(false);
+
+
+    const deactivate = (visitId:any) => {
+        fetch(`http://localhost:9090/api/visits/${visitId}`, {method : 'PUT'})
             .then((response) => response.json())
             .then((json) => {
+                console.log(json);
+                handle();
+            })
+        // setRedirect(true);
+    }
+
+    const handle = () => {
+        console.log('Database updated..!');
+        if(useSt)
+            setUseSt(false);
+        else
+            setUseSt(true);
+    }
+
+
+    useEffect(() => {
+         fetch(`http://localhost:9090/api/visits/activeVisits/hospital/1`)
+            .then((response) => response.json())
+            .then((json) => {
+                // setUseSt(true);
                 setActiveCases(json);
                 console.log(json);
+                // setUseSt(1);
                 console.log(activeCases);
+                return json;
             })
-    },[]);
+    },[useSt]);
 
     return(
         <IonPage>
@@ -70,10 +98,11 @@ const DoctorHome: React.FC = () => {
             </IonHeader>
 
             <IonContent class = "content-style">
+                <IonButton onClick = {handle}>REFRESH</IonButton>
                     {activeCases.map(cases =>
                         <IonCard class = "card-style">
                             <IonCardHeader>
-                                <li className= "no-style" value = {cases.patient.patientId} key = {cases.patient.patientId}><div>Patient ID: {cases.patient.patientId}  </div>  <div>Patient Name: {cases.patient.fname}  </div></li>
+                                <li className= "no-style" value = {cases.visitId} key = {cases.visitId}><div>Patient ID: {cases.patient.patientId}  </div>  <div>Patient Name: {cases.patient.fname}  </div>   <div><IonButton onClick = {() => deactivate(cases.visitId)}>PICK</IonButton></div></li>
                             </IonCardHeader>
                         </IonCard>
                     )}
