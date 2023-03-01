@@ -34,6 +34,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import '../../theme/variables.css';
+import './Supervisor.css';
 import {useRef, useState} from "react";
 import { Redirect } from 'react-router';
 
