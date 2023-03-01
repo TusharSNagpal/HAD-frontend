@@ -27,6 +27,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import '../../theme/variables.css';
+import './Doctor.css';
 import {useEffect, useState} from "react";
 
 // import {Redirect} from "react-router";
