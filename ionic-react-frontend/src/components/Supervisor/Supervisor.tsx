@@ -1,5 +1,16 @@
 
-import { IonContent, IonCard, IonCardHeader, IonCardTitle, IonHeader, IonTitle, IonToolbar, IonButton, IonPage} from '@ionic/react';
+import {
+    IonContent,
+    IonGrid,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonButton,
+    IonPage
+} from '@ionic/react';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -43,37 +54,41 @@ const Supervisor: React.FC = () => {
 
         </IonHeader>
 
-        <IonContent class = "content-style">
+        <IonContent className='ion-padding'/*class = "content-style"*/>
 
-            <IonCard class = "card-style">
-                <IonCardHeader>
-                    <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./registerDoctor">ASSIGN TASKS TO FIELD WORKER</IonButton></IonCardTitle>
-                </IonCardHeader>
-            </IonCard>
+            <IonGrid className='ion-text-center ion-margin ion-padding'>
 
-            <IonCard class = "card-style">
-                <IonCardHeader>
-                    <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./newCase">NEW CASE</IonButton></IonCardTitle>
-                </IonCardHeader>
-            </IonCard>
+                {/*<IonSegment>*/}
+                <IonCard class = "card-style">
+                    <IonCardHeader>
+                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./registerDoctor">REGISTER DOCTOR</IonButton></IonCardTitle>
+                    </IonCardHeader>
+                </IonCard>
 
-            <IonCard class = "card-style">
-                <IonCardHeader>
-                    <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./registerDoctor">REGISTER DOCTOR</IonButton></IonCardTitle>
-                </IonCardHeader>
-            </IonCard>
+                <IonCard class = "card-style">
+                    <IonCardHeader>
+                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./registerDoctor">REGISTER FIELD WORKER</IonButton></IonCardTitle>
+                    </IonCardHeader>
+                </IonCard>
 
-            <IonCard class = "card-style">
-                <IonCardHeader>
-                    <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./registerDoctor">REGISTER FIELD WORKER</IonButton></IonCardTitle>
-                </IonCardHeader>
-            </IonCard>
+                <IonCard class = "card-style">
+                    <IonCardHeader>
+                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./registerPatient">REGISTER PATIENT</IonButton></IonCardTitle>
+                    </IonCardHeader>
+                </IonCard>
 
-            <IonCard class = "card-style">
-                <IonCardHeader>
-                    <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./registerPatient">REGISTER PATIENT</IonButton></IonCardTitle>
-                </IonCardHeader>
-            </IonCard>
+                <IonCard class = "card-style">
+                    <IonCardHeader>
+                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./registerDoctor">ASSIGN TASKS TO FIELD WORKER</IonButton></IonCardTitle>
+                    </IonCardHeader>
+                </IonCard>
+
+                <IonCard class = "card-style">
+                    <IonCardHeader>
+                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./newCase">NEW CASE</IonButton></IonCardTitle>
+                    </IonCardHeader>
+                </IonCard>
+            </IonGrid>
 
         </IonContent>
     </IonPage>

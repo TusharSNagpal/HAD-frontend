@@ -235,40 +235,50 @@ http://ionicframework.com/docs/theming/ */
   }
 }
 
-.content-style{
-  --padding-top: 5vw;
-  --padding-bottom: 5vw;
-  text-align: center;
+/*.content-style{*/
+/*  --padding-top: 5vw;*/
+/*  --padding-bottom: 5vw;*/
+/*  text-align: center;*/
+/*}*/
+
+/*.card-style{*/
+/*    width: 70%;*/
+/*    margin-left: auto;*/
+/*    margin-right: auto;*/
+/*}*/
+
+/*.btn{*/
+/*    font-size: 1.2vw;*/
+/*    color: white;*/
+/*    background: black;*/
+/*}*/
+
+/*.card-input{*/
+/*  font-size: 1.2vw;*/
+/*  color: black;*/
+/*  background: rgb(240, 232, 232);*/
+/*}*/
+
+/*.ion-card-subtitle-style{*/
+/*  display: flex;*/
+/*  justify-content: center;*/
+/*}*/
+
+/*.no-style{*/
+/*  list-style-type: none;*/
+/*}*/
+
+/*li>div{*/
+/*  display: inline-block;*/
+/*  font-size: 1.2vw;*/
+/*}*/
+
+.header-border{
+  border: 0.14vw solid;
+  margin-bottom: 0.1vw;
 }
 
-.card-style{
-    width: 70%;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.btn{
-    font-size: 1.2vw;
-    color: white;
-    background: black;
-}
-
-.card-input{
-  font-size: 1.2vw;
-  color: black;
-  background: rgb(240, 232, 232);
-}
-
-.ion-card-subtitle-style{
+.ion-select-style{
   display: flex;
   justify-content: center;
-}
-
-.no-style{
-  list-style-type: none;
-}
-
-li>div{
-  display: inline-block;
-  font-size: 1.2vw;
 }

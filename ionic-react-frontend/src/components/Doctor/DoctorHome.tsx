@@ -6,7 +6,7 @@ import {
     IonContent,
     IonHeader,
     IonTitle,
-    IonToolbar, IonButton
+    IonToolbar, IonButton, IonGrid, IonSegment, IonCol, IonRow
 } from '@ionic/react';
 
 /* Core CSS required for Ionic components to work properly */
@@ -54,20 +54,35 @@ const DoctorHome: React.FC = () => {
 
     const handle = () => {
         console.log('Database updated..!');
-        if(useSt)
+        if (useSt)
             setUseSt(false);
         else
             setUseSt(true);
     }
 
+    useEffect(() => {
+
+        fetch(`http://localhost:9090/api/visits/activeVisits/hospital/1000`)
+            .then((response) => response.json())
+            .then((json) => {
+                // setUseSt(true);
+                setActiveCases(json);
+
+                console.log(json);
+                // setUseSt(1);
+                console.log(activeCases);
+                return json;
+            })
+    }, []);
 
     useEffect(() => {
-         fetch(`http://localhost:9090/api/visits/activeVisits/hospital/1`)
+         fetch(`http://localhost:9090/api/visits/activeVisits/hospital/1000`)
             .then((response) => response.json())
             .then((json) => {
                 // setUseSt(true);
                 setActiveCases(json);
                 console.log(json);
+                console.log(json.length);
                 // setUseSt(1);
                 console.log(activeCases);
                 return json;
@@ -82,30 +97,45 @@ const DoctorHome: React.FC = () => {
                         <b>HEALTHCARE SERVICES</b>
                     </IonTitle>
                 </IonToolbar>
+            </IonHeader>
 
+            <IonHeader>
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
                         <b>DOCTOR</b>
                     </IonTitle>
                 </IonToolbar>
-
+            </IonHeader>
+            
+            <IonHeader>
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
                         <b>ASSIGNED CASES</b>
                     </IonTitle>
                 </IonToolbar>
-
             </IonHeader>
-
-            <IonContent class = "content-style">
-                <IonButton onClick = {handle}>REFRESH</IonButton>
-                    {activeCases.map(cases =>
-                        <IonCard class = "card-style">
-                            <IonCardHeader>
-                                <li className= "no-style" value = {cases.visitId} key = {cases.visitId}><div>Patient ID: {cases.patient.patientId}  </div>  <div>Patient Name: {cases.patient.fname}  </div>   <div><IonButton onClick = {() => deactivate(cases.visitId)}>PICK</IonButton></div></li>
-                            </IonCardHeader>
-                        </IonCard>
-                    )}
+                
+            <IonContent className='ion-padding'/*class = "content-style"*/>
+                <IonGrid className='ion-text-center ion-margin'>
+                    <IonButton onClick = {handle}>REFRESH</IonButton>
+                        {activeCases.map(cases =>
+                            <IonCard class = "card-style">
+                                <IonCardHeader>
+                                    <IonSegment value = {cases.visitId} key = {cases.visitId}>
+                                        <IonGrid>
+                                            <IonRow>
+                                                <IonCol><h5>Patient ID: {cases.patient.patientId}</h5></IonCol>
+                                                <IonCol><h5>Patient Name: {cases.patient.fname}</h5></IonCol>   
+                                                <IonCol>
+                                                    <IonButton onClick = {() => deactivate(cases.visitId)}>PICK</IonButton>
+                                                </IonCol>
+                                            </IonRow>
+                                        </IonGrid>
+                                    </IonSegment>
+                                </IonCardHeader>
+                            </IonCard>
+                        )}
+                </IonGrid>
             </IonContent>
 
         </IonPage>

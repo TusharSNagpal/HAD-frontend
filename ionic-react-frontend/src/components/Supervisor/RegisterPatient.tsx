@@ -2,16 +2,15 @@
 import {
     IonPage,
     IonCard,
-    IonCardHeader,
+    // IonCardHeader,
     IonCardTitle,
     IonInput,
     IonContent,
     IonHeader,
     IonTitle,
     IonToolbar,
-    IonCardSubtitle,
     IonDatetime,
-    IonButton, IonAlert
+    IonButton, IonAlert, IonGrid, IonCol, IonRow
 } from '@ionic/react';
 
 /* Core CSS required for Ionic components to work properly */
@@ -71,10 +70,6 @@ const RegisterPatient: React.FC = () => {
         address.current!.value = null;
         phoneNo.current!.value = null;
     }
-
-    // const getHospitalId = async() => {
-    //
-    // }
 
     const registerPatient = async() => {
         fetch(`http://localhost:9090/api/supervisors/${supervisorId.current!.value}`)
@@ -184,68 +179,64 @@ const RegisterPatient: React.FC = () => {
 
             </IonHeader>
 
-            <IonContent class = "content-style">
-
+            <IonContent className='ion-padding'/*class = "content-style"*/>
                 <IonCard class = "card-style">
-                    <IonCardHeader>
-                        <IonCardTitle>Supervisor ID: </IonCardTitle>
-                        <IonCardSubtitle><IonInput ref = {supervisorId} class = "card-input" type="number" placeholder="1234"></IonInput></IonCardSubtitle>
-                    </IonCardHeader>
+                    <IonGrid className='ion-text-center ion-margin' >
+                        <IonRow className = "header-border">
+                            <IonCol>
+                                <IonCardTitle>Supervisor ID: </IonCardTitle>
+                                <IonCardTitle ><IonInput ref = {supervisorId} class = "card-input" type="number" placeholder="1234"></IonInput></IonCardTitle>
+                            </IonCol>
+                        </IonRow>
+                        <IonAlert
+                            isOpen={showAlertNoSuchId}
+                            onDidDismiss={() => setShowAlertNoSuchId(false)}
+                            header= "No such supervisor ID found please try again..!"
+                            subHeader="ID NOT FOUND..!"
+                            message="!!UNSUCCESSFUL..!"
+                            buttons={['OK']}
+                            />
+
+                        <IonRow className = "header-border">
+
+                            <IonCol>
+                                <IonCardTitle>First Name: </IonCardTitle>
+                                <IonCardTitle><IonInput ref={fname} class="card-input" placeholder="Binod"></IonInput></IonCardTitle>
+                            </IonCol>
+                            <IonCol>
+                                <IonCardTitle>Last Name: </IonCardTitle>
+                                <IonCardTitle><IonInput ref={lname} class="card-input" placeholder="Modi"></IonInput></IonCardTitle>
+                            </IonCol>
+                            <IonCol>
+                                <IonCardTitle>Gender: </IonCardTitle>
+                                <IonCardTitle><IonInput ref={gender} class="card-input" placeholder="M"></IonInput></IonCardTitle>
+                            </IonCol>
+
+                        </IonRow>
+
+                        <IonRow className = "header-border">
+                            <IonCol><IonCardTitle>Date of Birth: </IonCardTitle></IonCol>
+                            <IonCol><IonCardTitle class="ion-card-subtitle-style"><IonDatetime ref={dob} display-format="MM/DD/YYYY" picker-format="MM DD YYYY"></IonDatetime></IonCardTitle></IonCol>
+                        </IonRow>
+
+                        <IonRow className = "header-border">
+                            <IonCol>
+                                <IonCardTitle>Address: </IonCardTitle>
+                                <IonCardTitle><IonInput ref={address} class="card-input" placeholder="IIITB- Electronic City Phase 1"></IonInput></IonCardTitle>
+                            </IonCol>
+                            <IonCol>
+                                <IonCardTitle>Phone Number: </IonCardTitle>
+                                <IonCardTitle><IonInput ref={phoneNo} class="card-input" type="tel" placeholder="888-888-8888"></IonInput></IonCardTitle>
+
+                            </IonCol>
+                        </IonRow>
+                    </IonGrid>
                 </IonCard>
 
-                <IonAlert
-                    isOpen={showAlertNoSuchId}
-                    onDidDismiss={() => setShowAlertNoSuchId(false)}
-                    header= "No such supervisor ID found please try again..!"
-                    subHeader="ID NOT FOUND..!"
-                    message="!!UNSUCCESSFUL..!"
-                    buttons={['OK']}
-                />
-
-                <IonCard class = "card-style">
-                    <IonCardHeader>
-                        <IonCardTitle>First Name: </IonCardTitle>
-                        <IonCardSubtitle><IonInput ref = {fname} class = "card-input" placeholder="Narendra"></IonInput></IonCardSubtitle>
-                    </IonCardHeader>
-                </IonCard>
-
-                <IonCard class = "card-style">
-                    <IonCardHeader>
-                        <IonCardTitle>Last Name: </IonCardTitle>
-                        <IonCardSubtitle><IonInput ref = {lname} class = "card-input" placeholder="Modi"></IonInput></IonCardSubtitle>
-                    </IonCardHeader>
-                </IonCard>
-
-                <IonCard class = "card-style">
-                    <IonCardHeader>
-                        <IonCardTitle>Gender: </IonCardTitle>
-                        <IonCardSubtitle><IonInput ref = {gender} class = "card-input" placeholder="M"></IonInput></IonCardSubtitle>
-                    </IonCardHeader>
-                </IonCard>
-
-                <IonCard class = "card-style">
-                    <IonCardHeader>
-                        <IonCardTitle>Date of Birth: </IonCardTitle>
-                        <IonCardSubtitle class = "ion-card-subtitle-style"><IonDatetime ref = {dob} display-format="MM/DD/YYYY" picker-format="MM DD YYYY"></IonDatetime></IonCardSubtitle>
-                    </IonCardHeader>
-                </IonCard>
-
-                <IonCard class = "card-style">
-                    <IonCardHeader>
-                        <IonCardTitle>Address: </IonCardTitle>
-                        <IonCardSubtitle><IonInput ref = {address} class = "card-input" placeholder="IIITB- Electronic City Phase 1"></IonInput></IonCardSubtitle>
-                    </IonCardHeader>
-                </IonCard>
-
-                <IonCard class = "card-style">
-                    <IonCardHeader>
-                        <IonCardTitle>Phone Number: </IonCardTitle>
-                        <IonCardSubtitle><IonInput ref = {phoneNo} class = "card-input" type="tel" placeholder="888-888-8888"></IonInput></IonCardSubtitle>
-                    </IonCardHeader>
-                </IonCard>
-
+            <IonGrid className='ion-text-center ion-margin'>
                 <IonButton onClick = {registerPatient}>Submit</IonButton>
-
+            </IonGrid>
+                
                 <IonAlert
                     isOpen={showAlert}
                     onDidDismiss={() => setShowAlert(false)}
