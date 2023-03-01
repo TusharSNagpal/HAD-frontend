@@ -9,8 +9,7 @@ import {
     IonHeader,
     IonTitle,
     IonToolbar,
-    IonCardSubtitle,
-    IonButton, IonAlert
+    IonButton, IonAlert, IonGrid
 } from '@ionic/react';
 
 /* Core CSS required for Ionic components to work properly */
@@ -68,33 +67,52 @@ const NewCase: React.FC = () => {
     }
 
     const createCase = async() => {
-        let data = {'hospital':{'hospitalId': 1}, 'patient':{'patientId': patientIdRef.current!.value}};
-        console.log(JSON.stringify(data));
-        const addRecordEndpoint = "http://localhost:9090/api/visits/";
-        const options = {
-            method: 'POST',
-            headers:{
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        }
+        fetch(`http://localhost:9090/api/patients/search/${patientIdRef.current!.value}`)
+            .then(function (response) {
+                console.log(response);
+                if (response['status'] === 200) {
+                    console.log("DONE");
+                } else {
+                    console.log("ERROR");
+                }
+                return response.json();
+            })
+            .then(function (data) {
+                    console.log(data);
+                    const items = data;
+                    console.log(items.success);
+                    return items.hospital.hospitalId;
+                }
+            )
+            .then(async function (hospitalId) {
+                let data = {'hospital':{'hospitalId': hospitalId}, 'patient':{'patientId': patientIdRef.current!.value}};
+                console.log(JSON.stringify(data));
+                const addRecordEndpoint = "http://localhost:9090/api/visits/";
+                const options = {
+                    method: 'POST',
+                    headers:{
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }
 
-        const response = await fetch(addRecordEndpoint, options);
-        const result = await response;
-        console.log(response);
-        if(result['status'] === 200){
-            console.log("DONE");
-            setShowAlertCase(true);
-            setShowAlertCaseErr(false);
-            setRedirect(true);
-        }
+                const response = await fetch(addRecordEndpoint, options);
+                const result = await response;
+                console.log(response);
+                if(result['status'] === 200){
+                    console.log("DONE");
+                    setShowAlertCase(true);
+                    setShowAlertCaseErr(false);
+                    setRedirect(true);
+                }
 
-        else{
-            console.log("ERROR");
-            setShowAlertCaseErr(true);
-            setShowAlertCase(false);
-            setRedirect(false);
-        }
+                else{
+                    console.log("ERROR");
+                    setShowAlertCaseErr(true);
+                    setShowAlertCase(false);
+                    setRedirect(false);
+                }
+            })
     }
 
     return(
@@ -120,56 +138,57 @@ const NewCase: React.FC = () => {
 
             </IonHeader>
 
-            <IonContent class = "content-style">
-                <IonCard class = "card-style">
-                    <IonCardHeader>
-                        <IonCardTitle>PATIENT ID: </IonCardTitle>
-                        <IonCardSubtitle><IonInput ref = {patientIdRef} class = "card-input" type = "number" placeholder="1234"></IonInput></IonCardSubtitle>
-                    </IonCardHeader>
-                </IonCard>
+            <IonContent className='ion-padding'/*class = "content-style"*/>
+                <IonGrid className='ion-text-center ion-margin'>
+                    <IonCard class = "card-style">
+                        <IonCardHeader>
+                            <IonCardTitle>PATIENT ID: </IonCardTitle>
+                            <IonCardTitle><IonInput ref = {patientIdRef} class = "card-input" type = "number" placeholder="1234"></IonInput></IonCardTitle>
+                        </IonCardHeader>
+                    </IonCard>
 
-                <IonButton onClick = {loginPatient}>Submit</IonButton>
+                    <IonButton onClick = {loginPatient}>Submit</IonButton>
 
-                <IonAlert
-                    isOpen={showAlert}
-                    onDidDismiss={() => setShowAlert(false)}
-                    header="Alert"
-                    subHeader="REGISTERED PATIENT ID FOUND..!"
-                    message="PLEASE CLICK ON CREATE CASE BUTTON..!"
-                    buttons={['OK']}
-                />
+                    <IonAlert
+                        isOpen={showAlert}
+                        onDidDismiss={() => setShowAlert(false)}
+                        header="Alert"
+                        subHeader="REGISTERED PATIENT ID FOUND..!"
+                        message="PLEASE CLICK ON CREATE CASE BUTTON..!"
+                        buttons={['OK']}
+                    />
 
-                <IonAlert
-                    isOpen={showAlertErr}
-                    onDidDismiss={() => setShowAlertErr(false)}
-                    header="Alert"
-                    subHeader="No such ID FOUND..!"
-                    message="Please try entering correct ID again!"
-                    buttons={['OK']}
-                />
+                    <IonAlert
+                        isOpen={showAlertErr}
+                        onDidDismiss={() => setShowAlertErr(false)}
+                        header="Alert"
+                        subHeader="No such ID FOUND..!"
+                        message="Please try entering correct ID again!"
+                        buttons={['OK']}
+                    />
 
-                {!showAlert && loginSuccess?
-                    <IonButton onClick = {createCase}>Create Case</IonButton>
-                    :null}
+                    {!showAlert && loginSuccess?
+                        <IonButton onClick = {createCase}>Create Case</IonButton>
+                        :null}
 
-                <IonAlert
-                    isOpen={showAlertCase}
-                    onDidDismiss={() => setShowAlertCase(false)}
-                    header="Alert"
-                    subHeader="CASE CREATED SUCCESSFULLY..!"
-                    message="Please wait for your appointment with DOCTOR..!"
-                    buttons={['OK']}
-                />
+                    <IonAlert
+                        isOpen={showAlertCase}
+                        onDidDismiss={() => setShowAlertCase(false)}
+                        header="Alert"
+                        subHeader="CASE CREATED SUCCESSFULLY..!"
+                        message="Please wait for your appointment with DOCTOR..!"
+                        buttons={['OK']}
+                    />
 
-                <IonAlert
-                    isOpen={showAlertCaseErr}
-                    onDidDismiss={() => setShowAlertCaseErr(false)}
-                    header="Alert"
-                    subHeader="!! CASE NOT CREATED..!"
-                    message="There is some issue while creating CASE. Kindly contact developer..!"
-                    buttons={['OK']}
-                />
-
+                    <IonAlert
+                        isOpen={showAlertCaseErr}
+                        onDidDismiss={() => setShowAlertCaseErr(false)}
+                        header="Alert"
+                        subHeader="!! CASE NOT CREATED..!"
+                        message="There is some issue while creating CASE. Kindly contact developer..!"
+                        buttons={['OK']}
+                    />
+                </IonGrid>
                 {!showAlertCase && redirect ?
                     <Redirect to='/' />
                 :null}

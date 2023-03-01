@@ -34,7 +34,7 @@ setupIonicReact();
 const App: React.FC = () => (
   <IonApp>
     <IonHeader>
-      <IonToolbar>
+      <IonToolbar color = "primary">
         <IonTitle class="ion-text-center">
           <b>HEALTHCARE SERVICES</b>
         </IonTitle>
