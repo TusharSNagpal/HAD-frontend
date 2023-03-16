@@ -2,10 +2,12 @@
 import { IonApp, IonHeader, IonTitle, IonToolbar, setupIonicReact, IonRouterOutlet} from '@ionic/react';
 import {IonReactRouter} from "@ionic/react-router";
 import {Route} from "react-router-dom";
+import React from "react";
 
 import Supervisor from "./components/Supervisor/Supervisor";
 import RegisterDoctor from './components/Supervisor/RegisterDoctor';
 import RegisterPatient from "./components/Supervisor/RegisterPatient";
+import FieldWorker from './components/FieldWorker/FieldWorker';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -48,6 +50,7 @@ const App: React.FC = () => (
           <Route path = "/registerPatient" component={RegisterPatient}/>
           <Route path = "/newCase" component={NewCase}/>
           <Route path = "/doctorHome" component={DoctorHome}/>
+          <Route path = "/fieldWorker" component={FieldWorker}/>
         </IonRouterOutlet>
       </IonReactRouter>
   </IonApp>
