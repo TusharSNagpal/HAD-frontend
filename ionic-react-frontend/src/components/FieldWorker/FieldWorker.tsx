@@ -28,26 +28,33 @@ import '@ionic/react/css/display.css';
 import '../../theme/variables.css';
 import './FieldWorker.css';
 import {useEffect, useState} from "react";
-// import { useStorage } from './useStorage';
+import { useStorage } from './useStorage';
 
 const FieldWorker: React.FC = () => {
-    const [useSt, setUseSt] = useState(false);
-    const [followups, setFollowups] = useState<any[]>([]);
+    // const [fups, setFups] = useState<any[]>([]);
 
-    // const{ followups } = useStorage();
+    // const [followups, setFollowups] = useState<any[]>([]);
+
+    const [useSt, setUseSt] = useState(false);
+
+    const {followups, addFollowups} = useStorage();
+
+    const handle = () => {
+        console.log('Database updated..!');
+        if (useSt)
+            setUseSt(false);
+        else
+            setUseSt(true);
+    }
+
     useEffect(() => {
         fetch(`http://localhost:9090/api/followUps/1`)
            .then((response) => response.json())
            .then((json) => {
-               // setUseSt(true);
-               setFollowups(json);
                console.log(json);
-               console.log(json.length);
-               // setUseSt(1);
-               console.log(followups);
-               return json;
+               addFollowups(json);
            })
-    }, []);
+    }, [useSt]);
     
 
     return(
@@ -77,6 +84,7 @@ const FieldWorker: React.FC = () => {
             
             <IonContent className='ion-padding'/*class = "content-style"*/>
                 <IonGrid className='ion-text-center ion-margin'>
+                <IonButton onClick = {handle}>REFRESH</IonButton>
                         {followups.map(followup =>
                             <IonCard class = "card-style">
                                 <IonCardHeader>

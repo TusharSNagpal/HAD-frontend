@@ -17,9 +17,25 @@ export function useStorage() {
             setFollowups(storedFollowups);
         }
         initStorage();
+    
     }, []);
 
+    
+    const addFollowups = async(fups: any) => {
+        console.log(fups);
+        store?.set('my-followups', fups)
+        const storedFollowups = await store?.get('my-followups') || []
+        setFollowups(storedFollowups);
+    }
+
+    // const getFollowups = async() => {
+    //     const storedFollowups = await store?.get('my-followups') || [];
+    //     setFollowups(storedFollowups)
+    //     return followups;
+    // }
+
     return {
-        followups
+        followups,
+        addFollowups
     }
 }
