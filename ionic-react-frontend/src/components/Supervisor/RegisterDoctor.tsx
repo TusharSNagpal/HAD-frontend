@@ -1,4 +1,3 @@
-
 import { IonPage, IonGrid, IonCard, IonCardHeader, IonCardTitle, IonContent, IonHeader, IonTitle, IonToolbar} from '@ionic/react';
 
 /* Core CSS required for Ionic components to work properly */
