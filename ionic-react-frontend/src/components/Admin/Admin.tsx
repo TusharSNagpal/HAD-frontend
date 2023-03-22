@@ -73,7 +73,8 @@ const Admin: React.FC = () => {
                                 <IonSelectOption value="admin">ADMIN</IonSelectOption>
                                 <IonSelectOption value="supervisorHome">SUPERVISOR</IonSelectOption>
                                 <IonSelectOption value="doctorHome">DOCTOR</IonSelectOption>
-                                <IonSelectOption value="fieldWorkerHome">FIELD WORKER</IonSelectOption>
+
+                                <IonSelectOption value="fieldWorker">FIELD WORKER</IonSelectOption>
                             </IonSelect>
                         </IonItem>
                     </IonList>

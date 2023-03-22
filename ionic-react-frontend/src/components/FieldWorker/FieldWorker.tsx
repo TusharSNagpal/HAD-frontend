@@ -1,4 +1,3 @@
-
 import {
     IonPage,
     IonCard,
@@ -6,7 +5,7 @@ import {
     IonContent,
     IonHeader,
     IonTitle,
-    IonToolbar, IonButton, IonGrid, IonSegment, IonCol, IonRow
+    IonToolbar, IonButton, IonGrid, IonSegment, IonCol, IonRow, IonCardTitle
 } from '@ionic/react';
 
 /* Core CSS required for Ionic components to work properly */
@@ -27,31 +26,23 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import '../../theme/variables.css';
-import './Doctor.css';
+import './FieldWorker.css';
 import {useEffect, useState} from "react";
+import { useStorage } from './useStorage';
+import { Redirect } from 'react-router';
 
-// import {Redirect} from "react-router";
-
-// setupIonicReact();
-
-const DoctorHome: React.FC = () => {
-
-    const [activeCases, setActiveCases] = useState<any[]>([]);
-
-    // const [redirect, setRedirect] = useState(false);
-
+const FieldWorker: React.FC = () => {
+    
     const [useSt, setUseSt] = useState(false);
+    const [redirect,setRedirect] = useState(false);
+    const [currFollowup, setCurrFollowup] = useState(null);
+    const {followups, addFollowups} = useStorage();
 
-
-    const deactivate = (visitId:any) => {
-        fetch(`http://localhost:9090/api/visits/${visitId}`, {method : 'PUT'})
-            .then((response) => response.json())
-            .then((json) => {
-                console.log(json);
-                handle();
-            })
-        // setRedirect(true);
+    const review = (followup : any) => {
+        setCurrFollowup(followup);
+        setRedirect(true);
     }
+
 
     const handle = () => {
         console.log('Database updated..!');
@@ -62,18 +53,14 @@ const DoctorHome: React.FC = () => {
     }
 
     useEffect(() => {
-         fetch(`http://localhost:9090/api/visits/activeVisits/hospital/1`)
-            .then((response) => response.json())
-            .then((json) => {
-                // setUseSt(true);
-                setActiveCases(json);
-                console.log(json);
-                console.log(json.length);
-                // setUseSt(1);
-                console.log(activeCases);
-                return json;
-            })
-    },[useSt]);
+        fetch(`http://localhost:9090/api/followUps/1`)
+           .then((response) => response.json())
+           .then((json) => {
+               console.log(json);
+               addFollowups(json);
+           })
+    }, [useSt]);
+    
 
     return(
         <IonPage>
@@ -83,37 +70,36 @@ const DoctorHome: React.FC = () => {
                         <b>HEALTHCARE SERVICES</b>
                     </IonTitle>
                 </IonToolbar>
+
+                <IonToolbar>
+                    <IonTitle class="ion-text-center">
+                    <b>FieldWorker</b>
+                    </IonTitle>
+                </IonToolbar>
+
+                <IonHeader>
+                <IonToolbar>
+                    <IonTitle class="ion-text-center">
+                        <b>ASSIGNED FOLLOWUPS</b>
+                    </IonTitle>
+                </IonToolbar>
             </IonHeader>
 
-            <IonHeader>
-                <IonToolbar>
-                    <IonTitle class="ion-text-center">
-                        <b>DOCTOR</b>
-                    </IonTitle>
-                </IonToolbar>
             </IonHeader>
             
-            <IonHeader>
-                <IonToolbar>
-                    <IonTitle class="ion-text-center">
-                        <b>ASSIGNED CASES</b>
-                    </IonTitle>
-                </IonToolbar>
-            </IonHeader>
-                
             <IonContent className='ion-padding'/*class = "content-style"*/>
                 <IonGrid className='ion-text-center ion-margin'>
-                    <IonButton onClick = {handle}>REFRESH</IonButton>
-                        {activeCases.map(cases =>
+                <IonButton onClick = {handle}>REFRESH</IonButton>
+                        {followups.map(followup =>
                             <IonCard class = "card-style">
                                 <IonCardHeader>
-                                    <IonSegment value = {cases.visitId} key = {cases.visitId}>
+                                    <IonSegment value = {followup.follow_ups_id} key = {followup.follow_ups_id}>
                                         <IonGrid>
                                             <IonRow>
-                                                <IonCol><h5>Patient ID: {cases.patient.patientId}</h5></IonCol>
-                                                <IonCol><h5>Patient Name: {cases.patient.fname}</h5></IonCol>   
+                                                <IonCol><h5>{followup.visit.patient.fname}</h5></IonCol>   
                                                 <IonCol>
-                                                    <IonButton onClick = {() => deactivate(cases.visitId)}>PICK</IonButton>
+                                                    <IonButton onClick={() => review(followup)}>PICK</IonButton>
+                                                    {redirect ? <Redirect to={{ pathname: './followup', state: { fup: {currFollowup} } }} />:null}
                                                 </IonCol>
                                             </IonRow>
                                         </IonGrid>
@@ -128,4 +114,4 @@ const DoctorHome: React.FC = () => {
     )
 };
 
-export default DoctorHome;
+export default FieldWorker; 
