@@ -32,11 +32,13 @@ import '@ionic/react/css/display.css';
 import '../../theme/variables.css';
 import './Admin.css';
 import {useState} from "react";
+import { useStorage } from '../../hooks/useStorage';
 
 // setupIonicReact();
 
 const Admin: React.FC = () => {
     // const patientIdRef = useRef<HTMLIonInputElement>(null);
+    // const [task, setTask] = useState('');
     const [role, setRole] = useState("");
 
     const handleChange = (event:any) => {
@@ -71,6 +73,7 @@ const Admin: React.FC = () => {
                                 <IonSelectOption value="admin">ADMIN</IonSelectOption>
                                 <IonSelectOption value="supervisorHome">SUPERVISOR</IonSelectOption>
                                 <IonSelectOption value="doctorHome">DOCTOR</IonSelectOption>
+
                                 <IonSelectOption value="fieldWorker">FIELD WORKER</IonSelectOption>
                             </IonSelect>
                         </IonItem>
@@ -80,9 +83,9 @@ const Admin: React.FC = () => {
                         <form className="ion-padding">
                             <IonItem>
                                 <IonLabel position="floating">ID</IonLabel>
-                                <IonInput />
+                                <IonInput/>
                             </IonItem>
-                            <IonButton className="ion-margin-top" type="submit" expand="block">
+                            <IonButton className="ion-margin-top" expand="block">
                                 GENERATE OTP
                             </IonButton>
                             <IonItem>
@@ -95,29 +98,6 @@ const Admin: React.FC = () => {
                         </form>
                     </IonSegment>
 
-                    {/*<IonCard class = "card-style">*/}
-                    {/*    <IonCardHeader>*/}
-                    {/*        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./fieldWorkerHome">ADMIN</IonButton></IonCardTitle>*/}
-                    {/*    </IonCardHeader>*/}
-                    {/*</IonCard>*/}
-
-                    {/*<IonCard class = "card-style">*/}
-                    {/*    <IonCardHeader>*/}
-                    {/*        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./supervisorHome">SUPERVISOR</IonButton></IonCardTitle>*/}
-                    {/*    </IonCardHeader>*/}
-                    {/*</IonCard>*/}
-
-                    {/*<IonCard class = "card-style">*/}
-                    {/*    <IonCardHeader>*/}
-                    {/*        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./doctorHome">DOCTOR</IonButton></IonCardTitle>*/}
-                    {/*    </IonCardHeader>*/}
-                    {/*</IonCard>*/}
-
-                    {/*<IonCard class = "card-style">*/}
-                    {/*    <IonCardHeader>*/}
-                    {/*        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./fieldWorkerHome">FIELD WORKER</IonButton></IonCardTitle>*/}
-                    {/*    </IonCardHeader>*/}
-                    {/*</IonCard>*/}
                 </IonGrid>
 
             </IonContent>

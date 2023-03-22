@@ -62,21 +62,6 @@ const DoctorHome: React.FC = () => {
     }
 
     useEffect(() => {
-
-        fetch(`http://localhost:9090/api/visits/activeVisits/hospital/1`)
-            .then((response) => response.json())
-            .then((json) => {
-                // setUseSt(true);
-                setActiveCases(json);
-
-                console.log(json);
-                // setUseSt(1);
-                console.log(activeCases);
-                return json;
-            })
-    }, []);
-
-    useEffect(() => {
          fetch(`http://localhost:9090/api/visits/activeVisits/hospital/1`)
             .then((response) => response.json())
             .then((json) => {

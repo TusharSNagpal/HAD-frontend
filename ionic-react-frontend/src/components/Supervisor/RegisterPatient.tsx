@@ -137,7 +137,7 @@ const RegisterPatient: React.FC = () => {
                         .then(function (data) {
                             console.log(data);
                             const items = data;
-                            if (data.size != 0) {
+                            if (data.size !== 0) {
                                 setDisplayPatientId(items.patientId);
                                 // console.log(displayPatientId);
                                 setShowAlert(true);
