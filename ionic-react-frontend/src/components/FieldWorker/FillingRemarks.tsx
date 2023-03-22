@@ -106,9 +106,10 @@ const FillingRemarks: React.FC<any> = props => {
 
     // setOut(output);
 
-    // useEffect(() => {
-    //     console.log(props.location.state.followupId);
-    // }, [])
+    useEffect(() => {
+        
+        // console.log(props.location.state.followupId);
+    }, [])
 
     const handleFormChange = (event: any, key: string) => {
         // console.log(event.target.value);
