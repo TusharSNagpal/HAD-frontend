@@ -8,6 +8,7 @@ import Supervisor from "./components/Supervisor/Supervisor";
 import RegisterDoctor from './components/Supervisor/RegisterDoctor';
 import RegisterPatient from "./components/Supervisor/RegisterPatient";
 import FieldWorker from './components/FieldWorker/FieldWorker';
+import FollowUp from './components/FollowUp/FollowUp';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -51,6 +52,8 @@ const App: React.FC = () => (
           <Route path = "/newCase" component={NewCase}/>
           <Route path = "/doctorHome" component={DoctorHome}/>
           <Route path = "/fieldWorker" component={FieldWorker}/>
+          <Route path = "/followup" component={FollowUp}/>
+
         </IonRouterOutlet>
       </IonReactRouter>
   </IonApp>

@@ -23,7 +23,7 @@ export function useStorage() {
     
     const addFollowups = async(fups: any) => {
         console.log(fups);
-        store?.set('my-followups', fups)
+        await store?.set('my-followups', fups)
         const storedFollowups = await store?.get('my-followups') || []
         setFollowups(storedFollowups);
     }

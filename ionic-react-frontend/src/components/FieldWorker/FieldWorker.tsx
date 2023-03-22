@@ -29,15 +29,20 @@ import '../../theme/variables.css';
 import './FieldWorker.css';
 import {useEffect, useState} from "react";
 import { useStorage } from './useStorage';
+import { Redirect } from 'react-router';
 
 const FieldWorker: React.FC = () => {
-    // const [fups, setFups] = useState<any[]>([]);
-
-    // const [followups, setFollowups] = useState<any[]>([]);
-
+    
     const [useSt, setUseSt] = useState(false);
-
+    const [redirect,setRedirect] = useState(false);
+    const [currFollowup, setCurrFollowup] = useState(null);
     const {followups, addFollowups} = useStorage();
+
+    const review = (followup : any) => {
+        setCurrFollowup(followup);
+        setRedirect(true);
+    }
+
 
     const handle = () => {
         console.log('Database updated..!');
@@ -91,10 +96,10 @@ const FieldWorker: React.FC = () => {
                                     <IonSegment value = {followup.follow_ups_id} key = {followup.follow_ups_id}>
                                         <IonGrid>
                                             <IonRow>
-                                                {/* <IonCol><h5>Patient ID: {followup.visit.patient.patientId}</h5></IonCol> */}
                                                 <IonCol><h5>{followup.visit.patient.fname}</h5></IonCol>   
                                                 <IonCol>
-                                                    <IonButton>-</IonButton>
+                                                    <IonButton onClick={() => review(followup)}>PICK</IonButton>
+                                                    {redirect ? <Redirect to={{ pathname: './followup', state: { fup: {currFollowup} } }} />:null}
                                                 </IonCol>
                                             </IonRow>
                                         </IonGrid>
