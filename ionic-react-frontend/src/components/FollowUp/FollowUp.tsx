@@ -32,13 +32,14 @@ import { Redirect } from 'react-router';
 
 const FollowUp: React.FC<any> = props => {
     const followupDetails = props.location.state.fup.currFollowup;
-    const [redirect,setRedirect] = useState(false);
+    const [newF,setNewF] = useState(followupDetails);
+    const [redirect, setRedirect] = useState(false);
 
-    const review = (followup : any) => {
+    const review = () => {
         setRedirect(true);
+        console.log(props.location.state);
     }
 
-    console.log(followupDetails);
     return (
         <IonPage>
              <IonHeader>
@@ -57,18 +58,20 @@ const FollowUp: React.FC<any> = props => {
 
             <IonContent>
                 <IonGrid class='ion-text-center'>
-                        <IonCol><h5>Patient Name: {followupDetails.visit.patient.fname}</h5></IonCol>   
-                        <IonCol><h5>Address: {followupDetails.visit.patient.address}</h5></IonCol>
+                        <IonCol><h5>Patient Name: {newF.visit.patient.fname}</h5></IonCol>   
+                        <IonCol><h5>Address: {newF.visit.patient.address}</h5></IonCol>
                         <IonSegment>
                         <form className="ion-padding">
                             <IonItem>
                                 <IonLabel position="floating">Enter OTP</IonLabel>
                                 <IonInput type="password" />
                             </IonItem>
-                            <IonButton className="ion-margin-top" expand="block">
+                            <IonButton className="ion-margin-top" expand="block" onClick={(review)}>
                                 Review
                             </IonButton>
-                            {redirect ? <Redirect to={{ pathname: './FillingRemarks', state: { fup: {followupDetails} } }} />:null}
+                            {redirect ? 
+                            <Redirect to={{ pathname: '/fillingRemarks', state: { fup: {newF} } }} />
+                            :null}
                         </form>
                     </IonSegment>
                 </IonGrid>

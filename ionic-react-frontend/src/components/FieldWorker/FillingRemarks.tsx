@@ -32,8 +32,13 @@ interface PatientId {
 }
 
 const FillingRemarks: React.FC<any> = props => {
+    const followUpRow = props.location.state.fup.newF;
+    const [followUpCurr, setFollowUpCurr] = useState(followUpRow);
+
     const [assigned, setAssigned] = useState({} as any);
-    const s = "BLOOD PRESSURE $ FEVER $ HEALTH RATE $ TEMPERATURE";
+    // const s = "BLOOD PRESSURE $ FEVER $ HEALTH RATE $ TEMPERATURE";
+    const [s,setS] = useState(followUpCurr.taskAssignedByDoctor);
+
     const [save, setSave] = useState(false);
 
     let temp = {} as any;
@@ -107,8 +112,7 @@ const FillingRemarks: React.FC<any> = props => {
     // setOut(output);
 
     useEffect(() => {
-        
-        // console.log(props.location.state.followupId);
+        console.log(props.location.state);
     }, [])
 
     const handleFormChange = (event: any, key: string) => {
