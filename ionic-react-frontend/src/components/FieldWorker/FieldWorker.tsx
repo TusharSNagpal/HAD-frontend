@@ -31,13 +31,13 @@ import {useEffect, useState} from "react";
 import { useStorage } from './useStorage';
 import { Redirect } from 'react-router';
 
-const FieldWorker: React.FC = () => {
+const FieldWorker: React.FC<any> = props => {
     
     const [useSt, setUseSt] = useState(false);
     const [redirect,setRedirect] = useState(false);
     const [currFollowup, setCurrFollowup] = useState(null);
     const {followups, addFollowups} = useStorage();
-
+    const fwid = props.location.state.id.id;
     const review = (followup : any) => {
         setCurrFollowup(followup);
         setRedirect(true);
@@ -53,10 +53,10 @@ const FieldWorker: React.FC = () => {
     }
 
     useEffect(() => {
-        fetch(`http://localhost:9090/api/followUps/1`)
+        fetch(`http://localhost:9090/api/followUps/${fwid}`)
            .then((response) => response.json())
            .then((json) => {
-               console.log(json);
+               console.log("data fetched");
                addFollowups(json);
            })
     }, [useSt]);

@@ -33,6 +33,7 @@ import '../../theme/variables.css';
 import './Admin.css';
 import {useState} from "react";
 import { useStorage } from '../../hooks/useStorage';
+import { Redirect } from 'react-router';
 
 // setupIonicReact();
 
@@ -40,10 +41,15 @@ const Admin: React.FC = () => {
     // const patientIdRef = useRef<HTMLIonInputElement>(null);
     // const [task, setTask] = useState('');
     const [role, setRole] = useState("");
-
+    const [id, setId] = useState(0);
+    const [redirect, setRedirect] = useState(false);
     const handleChange = (event:any) => {
         setRole(event.target.value);
         // console.log(event.target.value);
+    }
+
+    const login = () => {
+        setRedirect(true);
     }
     return (
         <IonPage>
@@ -67,7 +73,7 @@ const Admin: React.FC = () => {
 
                 <IonGrid className='ion-text-center ion-margin'>
 
-                    <IonList className = "ion-select-style">
+                    <IonList className = "ion-select-style"> 
                         <IonItem>
                             <IonSelect interface = "action-sheet" placeholder="LOGIN AS" onIonChange={handleChange}>
                                 <IonSelectOption value="admin">ADMIN</IonSelectOption>
@@ -83,7 +89,7 @@ const Admin: React.FC = () => {
                         <form className="ion-padding">
                             <IonItem>
                                 <IonLabel position="floating">ID</IonLabel>
-                                <IonInput/>
+                                <IonInput onIonInput={(e: any) => setId(e.target.value)}/>
                             </IonItem>
                             <IonButton className="ion-margin-top" expand="block">
                                 GENERATE OTP
@@ -92,9 +98,10 @@ const Admin: React.FC = () => {
                                 <IonLabel position="floating">OTP</IonLabel>
                                 <IonInput type="password" />
                             </IonItem>
-                            <IonButton className="ion-margin-top" expand="block" routerLink = {`./${role}`}>
+                            <IonButton className="ion-margin-top" expand="block" onClick={login}>
                                 Login
                             </IonButton>
+                            {redirect ? <Redirect from = '/' to={{ pathname: `/${role}`, state: { id: {id} } }} />:null}
                         </form>
                     </IonSegment>
 
