@@ -7,7 +7,7 @@ import {
     IonToolbar,
     IonButton,
     IonPage,
-    IonSegment, IonList, IonItem, IonSelect, IonSelectOption, IonLabel, IonInput
+    IonSegment, IonList, IonItem, IonSelect, IonSelectOption, IonLabel, IonInput, generateId
 } from '@ionic/react';
 
 /* Core CSS required for Ionic components to work properly */
@@ -31,8 +31,9 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import '../../theme/variables.css';
 import './Admin.css';
-import {useState} from "react";
+import { useState, useRef, useEffect } from "react";
 import { useStorage } from '../../hooks/useStorage';
+import {Redirect} from "react-router";
 
 // setupIonicReact();
 
@@ -40,11 +41,68 @@ const Admin: React.FC = () => {
     // const patientIdRef = useRef<HTMLIonInputElement>(null);
     // const [task, setTask] = useState('');
     const [role, setRole] = useState("");
+    const userId = useRef<HTMLIonInputElement>(null);
+    const otp = useRef<HTMLIonInputElement>(null);
+    // const [valid, setValid] = useState(false);
+    const [mobileNo, setMobileNo] = useState("");
+    const [auth, setAuth] = useState(false);
 
-    const handleChange = (event:any) => {
+    const handleChange = (event: any) => {
         setRole(event.target.value);
         // console.log(event.target.value);
     }
+
+    const generate = () => {
+
+        fetch(`http://localhost:9090/api/${role}/phoneNo/${userId.current!.value}`)
+            .then(function (response) {
+                // console.log(response.text());
+                if (response['status'] === 200) {
+                    console.log("Found entry");
+                    return response.text();
+                }
+                else {
+                    console.log("No such entry..!");
+                    return "-1";
+                }
+            })
+            .then(function (data) {
+                console.log(data);
+                if(data === "-1"){
+                    console.log("Try again..!");
+                }
+                else{
+                    setMobileNo(data);
+                    fetch(`http://localhost:9090/api/phoneNumber/generateOTP/${data}`)
+                    .then(function (response) {
+                        console.log(response);
+                        if (response['status'] === 200) {
+                            console.log("OTP Sent to Registered Mobile Number");
+                        }
+                        else {
+                            console.log("Please Enter a valid Phone Number");
+                        }
+                    }
+                )}})
+    }
+
+    const authenticate = () => {
+        //verifyOTP:
+        // fetch(`http://localhost:9090/api/phoneNumber/verifyOTP/${otp.current!.value}/${mobileNo}`)
+        //     .then(function (response) {
+        //         console.log(response);
+        //         if (response['status'] === 200) {
+        //             console.log("OTP Validated");
+        //             setAuth(true);
+        //         }
+        //         else {
+        //             console.log("OTP mismatch Sorry..!");
+        //             setAuth(false);
+        //         }
+        //     })
+        setAuth(true);
+    }
+
     return (
         <IonPage>
             <IonHeader>
@@ -67,14 +125,13 @@ const Admin: React.FC = () => {
 
                 <IonGrid className='ion-text-center ion-margin'>
 
-                    <IonList className = "ion-select-style">
+                    <IonList className="ion-select-style">
                         <IonItem>
-                            <IonSelect interface = "action-sheet" placeholder="LOGIN AS" onIonChange={handleChange}>
+                            <IonSelect interface="action-sheet" placeholder="LOGIN AS" onIonChange={handleChange}>
                                 <IonSelectOption value="admin">ADMIN</IonSelectOption>
-                                <IonSelectOption value="supervisorHome">SUPERVISOR</IonSelectOption>
-                                <IonSelectOption value="doctorHome">DOCTOR</IonSelectOption>
-
-                                <IonSelectOption value="fieldWorker">FIELD WORKER</IonSelectOption>
+                                <IonSelectOption value="supervisors">SUPERVISOR</IonSelectOption>
+                                <IonSelectOption value="doctors">DOCTOR</IonSelectOption>
+                                <IonSelectOption value="fieldworkers">FIELD WORKER</IonSelectOption>
                             </IonSelect>
                         </IonItem>
                     </IonList>
@@ -83,18 +140,23 @@ const Admin: React.FC = () => {
                         <form className="ion-padding">
                             <IonItem>
                                 <IonLabel position="floating">ID</IonLabel>
-                                <IonInput/>
+                                <IonInput ref={userId} />
                             </IonItem>
-                            <IonButton className="ion-margin-top" expand="block">
+                            <IonButton className="ion-margin-top" expand="block" /*onClick={() => generate()}*/>
                                 GENERATE OTP
                             </IonButton>
                             <IonItem>
                                 <IonLabel position="floating">OTP</IonLabel>
-                                <IonInput type="password" />
+                                <IonInput ref={otp} type="password" />
                             </IonItem>
-                            <IonButton className="ion-margin-top" expand="block" routerLink = {`./${role}`}>
+                            <IonButton className="ion-margin-top" expand="block" onClick={() => authenticate()}/*routerLink = {`./${role}`}*/>
                                 Login
                             </IonButton>
+
+                            {
+                                auth ?
+                                <Redirect to={{ pathname: `./${role}`, state: { userId: userId.current!.value } }}/>
+                            :null}
                         </form>
                     </IonSegment>
 

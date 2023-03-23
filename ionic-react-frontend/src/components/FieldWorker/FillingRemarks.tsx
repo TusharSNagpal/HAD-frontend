@@ -200,7 +200,7 @@ const FillingRemarks: React.FC<any> = props => {
                     : null}
 
                 {redirect ?
-                <Redirect from = "/fillingRemarks" to = "/fieldWorker"/> : null}
+                <Redirect from = "/fillingRemarks" to = "/fieldworkers"/> : null}
 
             </IonContent>
         </IonPage>

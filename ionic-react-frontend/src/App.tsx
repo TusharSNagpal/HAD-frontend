@@ -48,12 +48,12 @@ const App: React.FC = () => {
       <IonReactRouter>
         <IonRouterOutlet>
           <Route exact path = "/" component={Admin}/>
-          <Route path = "/supervisorHome" component={Supervisor}/>
+          <Route path = "/supervisors" component={Supervisor}/>
           <Route path = "/registerDoctor" component={RegisterDoctor}/>
           <Route path = "/registerPatient" component={RegisterPatient}/>
           <Route path = "/newCase" component={NewCase}/>
-          <Route path = "/doctorHome" component={DoctorHome}/>
-          <Route path = "/fieldWorker" component={FieldWorker}/>
+          <Route path = "/doctors" component={DoctorHome}/>
+          <Route path = "/fieldWorkers" component={FieldWorker}/>
           <Route path = "/followup" component={FollowUp}/>
           <Route path = "/fieldWorkerHome" component={FWHome}/>
           <Route path = "/fillingRemarks" component={FillingRemarks}/>
