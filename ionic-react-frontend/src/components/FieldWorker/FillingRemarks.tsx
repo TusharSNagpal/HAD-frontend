@@ -1,6 +1,6 @@
 import { IonPage, IonCardTitle, IonCard, IonGrid, IonRow, IonCol, IonCardHeader, IonButton, IonLabel, IonItem, IonInput, IonSegment, IonHeader, IonTitle, IonToolbar, setupIonicReact, IonRouterOutlet, IonContent } from '@ionic/react';
 import { IonReactRouter } from "@ionic/react-router";
-import { Route } from "react-router-dom";
+import { Redirect, Route, Link } from "react-router-dom";
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -32,12 +32,13 @@ interface PatientId {
 }
 
 const FillingRemarks: React.FC<any> = props => {
-    const followUpRow = props.location.state.fup.newF;
+    const followUpRow = props.location.state;
     const [followUpCurr, setFollowUpCurr] = useState(followUpRow);
+    const [redirect, setRedirect] = useState(false);
 
     const [assigned, setAssigned] = useState({} as any);
     // const s = "BLOOD PRESSURE $ FEVER $ HEALTH RATE $ TEMPERATURE";
-    const [s,setS] = useState(followUpCurr.taskAssignedByDoctor);
+    const [s,setS] = useState(followUpCurr.fup.newF.taskAssignedByDoctor);
 
     const [save, setSave] = useState(false);
 
@@ -87,7 +88,7 @@ const FillingRemarks: React.FC<any> = props => {
             'reviewByFieldWorker': task
         };
 
-        const addRecordEndpoint = `http://localhost:9090/api/followUps/fieldWorker/${props.location.state.followupId}`;
+        const addRecordEndpoint = `http://localhost:9090/api/followUps/fieldWorker/${followUpCurr.fup.newF.followUpId}`;
         const options = {
             method: 'PUT',
             headers: {
@@ -101,6 +102,7 @@ const FillingRemarks: React.FC<any> = props => {
                 console.log(response);
                 if (response['status'] === 200) {
                     console.log("DONE");
+                    setRedirect(true);
                     // console.log(task);
                 } else {
                     console.log("ERROR");
@@ -112,7 +114,7 @@ const FillingRemarks: React.FC<any> = props => {
     // setOut(output);
 
     useEffect(() => {
-        console.log(props.location.state);
+        console.log(followUpCurr.fup.newF);
     }, [])
 
     const handleFormChange = (event: any, key: string) => {
@@ -196,6 +198,9 @@ const FillingRemarks: React.FC<any> = props => {
                         Fill Remarks
                     </IonButton>
                     : null}
+
+                {redirect ?
+                <Redirect from = "/fillingRemarks" to = "/fieldWorker"/> : null}
 
             </IonContent>
         </IonPage>

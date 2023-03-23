@@ -99,7 +99,7 @@ const FieldWorker: React.FC = () => {
                                                 <IonCol><h5>{followup.visit.patient.fname}</h5></IonCol>   
                                                 <IonCol>
                                                     <IonButton onClick={() => review(followup)}>PICK</IonButton>
-                                                    {redirect ? <Redirect to={{ pathname: './followup', state: { fup: {currFollowup} } }} />:null}
+                                                    {redirect ? <Redirect from = '/fieldWorker' to={{ pathname: './followup', state: { fup: {currFollowup} } }} />:null}
                                                 </IonCol>
                                             </IonRow>
                                         </IonGrid>
