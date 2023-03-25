@@ -101,9 +101,9 @@ const RegisterPatient: React.FC = () => {
                 }
                 else {
                     setShowAlertNoSuchId(false);
-
-                    console.log(hospitalId);
-
+                    var changeDateFormat = dob.current!.value;
+                    if(changeDateFormat!=null && typeof(changeDateFormat)=='string')
+                        changeDateFormat = changeDateFormat.split('T')[0];
                     let data = {
                         'hospital': {'hospitalId': hospitalId},
                         'supervisor': {'supervisorId': supervisorId.current!.value},
@@ -112,7 +112,7 @@ const RegisterPatient: React.FC = () => {
                         'gender': gender.current!.value,
                         'address': address.current!.value,
                         'phoneNo': phoneNo.current!.value,
-                        'dob': dob.current!.value
+                        'dob': changeDateFormat
                     };
                     console.log(JSON.stringify(data));
                     const addRecordEndpoint = "http://localhost:9090/api/patients/";

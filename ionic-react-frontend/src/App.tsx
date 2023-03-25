@@ -28,6 +28,8 @@ import './theme/variables.css';
 import NewCase from "./components/Supervisor/NewCase";
 import DoctorHome from "./components/Doctor/DoctorHome";
 import Admin from "./components/Admin/Admin";
+import Patient from "./components/Doctor/Patient"
+import OldFollowUp from "./components/Doctor/OldFollowUp";
 
 setupIonicReact();
 
@@ -47,7 +49,9 @@ const App: React.FC = () => (
           <Route path = "/registerDoctor" component={RegisterDoctor}/>
           <Route path = "/registerPatient" component={RegisterPatient}/>
           <Route path = "/newCase" component={NewCase}/>
-          <Route path = "/doctorHome" component={DoctorHome}/>
+          <Route path = "/doctorHome" component={DoctorHome}  />
+          <Route path = "/patient" component={Patient}/>
+          <Route path = "/oldFollowUp" component={OldFollowUp}/>
         </IonRouterOutlet>
       </IonReactRouter>
   </IonApp>

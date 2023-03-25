@@ -49,7 +49,7 @@ const NewCase: React.FC = () => {
     const [showAlertCaseErr, setShowAlertCaseErr] = useState(false);
 
     const loginPatient = async() => {
-        const response = await fetch(`http://localhost:9090/api/patients/search/${patientIdRef.current!.value}`)
+        const response = await fetch(`http://localhost:9090/api/patients/${patientIdRef.current!.value}`)
         const result = await response;
         console.log(response);
         if(result['status'] === 200){
@@ -68,7 +68,7 @@ const NewCase: React.FC = () => {
     }
 
     const createCase = async() => {
-        fetch(`http://localhost:9090/api/patients/search/${patientIdRef.current!.value}`)
+        fetch(`http://localhost:9090/api/patients/${patientIdRef.current!.value}`)
             .then(function (response) {
                 console.log(response);
                 if (response['status'] === 200) {
