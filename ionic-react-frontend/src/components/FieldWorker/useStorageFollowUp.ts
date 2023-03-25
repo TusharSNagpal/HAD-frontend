@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {Storage} from '@ionic/storage';
 
-export function useStorage() {
+export function useStorageFollowUp() {
     const[store, setStore]= useState<Storage>();
     const[followups, setFollowups] = useState<any[]>([]);
 
@@ -28,6 +28,18 @@ export function useStorage() {
         setFollowups(storedFollowups);
     }
 
+    const updateFollowUp = async(id: number) => {
+        const toUpdate = [...followups];
+        // console.log(id);
+        let fup = await toUpdate.filter(fup => fup.followUpId === id)[0];
+        console.log(fup);
+        fup.isActive = 2;
+
+        await store?.set('my-followups', toUpdate);
+        // setFollowups(toUpdate);
+        // return store?.set('my-followups', toUpdate);
+    }
+
     // const getFollowups = async() => {
     //     const storedFollowups = await store?.get('my-followups') || [];
     //     setFollowups(storedFollowups)
@@ -36,6 +48,7 @@ export function useStorage() {
 
     return {
         followups,
-        addFollowups
+        addFollowups,
+        updateFollowUp
     }
 }
