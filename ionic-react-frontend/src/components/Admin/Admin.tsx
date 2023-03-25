@@ -32,7 +32,7 @@ import '@ionic/react/css/display.css';
 import '../../theme/variables.css';
 import './Admin.css';
 import { useState, useRef, useEffect } from "react";
-import { useStorage } from '../../hooks/useStorage';
+import { useStorageFillingRemarks } from '../../hooks/useStorageFillingRemarks';
 import {Redirect} from "react-router";
 
 // setupIonicReact();
@@ -87,7 +87,7 @@ const Admin: React.FC = () => {
     }
 
     const authenticate = () => {
-        //verifyOTP:
+        // verifyOTP:
         // fetch(`http://localhost:9090/api/phoneNumber/verifyOTP/${otp.current!.value}/${mobileNo}`)
         //     .then(function (response) {
         //         console.log(response);
@@ -157,6 +157,7 @@ const Admin: React.FC = () => {
                                 auth ?
                                 <Redirect to={{ pathname: `./${role}`, state: { userId: userId.current!.value } }}/>
                             :null}
+                            
                         </form>
                     </IonSegment>
 
