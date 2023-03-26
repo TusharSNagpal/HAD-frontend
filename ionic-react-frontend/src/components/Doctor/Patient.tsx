@@ -56,7 +56,8 @@ const Patient: React.FC<any> = props => {
     const [showAlert, setShowAlert] = useState(false);
     const [redirect, setRedirect] = useState(false);
     const [showFollowUpOption, setShowFollowUpOption] = useState(false);
-    const [showAlertErr, setShowAlertErr] = useState(false);
+    const [alertMessage, setAlertMessage] = useState<string>();
+    const [alertHeader, setAlertHeader] = useState<string>()
     const [prescription, setPrescription] = useState<string>();
     const [symptoms, setSymptoms] = useState<string>();
     const [tasksAssigned, setTasksAssigned] = useState<string>();
@@ -69,6 +70,14 @@ const Patient: React.FC<any> = props => {
    // },[]);
 
     const submitDetails = async()=>{
+
+            if(symptoms==null || prescription==null){
+                setShowAlert(true);
+                setAlertHeader("Unsuccessful");
+                setAlertMessage("Please fill the symptoms and prescription");
+                return;
+            }
+
             visitDetails.currCase.symptoms = symptoms;
             visitDetails.currCase.prescription = prescription;
             // console.log(JSON.stringify(visitDetails.currCase));
@@ -92,26 +101,32 @@ const Patient: React.FC<any> = props => {
                 return response.json();
             })
             .then(function (data) {
-                // const items = data;
-                // console.log(items);
-                // if (data.size != 0) {
-                //
-                    setShowAlert(true);
-                //     setShowAlertErr(false);
-                //     setRedirect(true);
-                //     // resetAll();
-                // } else {
-                //     setShowAlert(false);
-                //     setShowAlertErr(true);
-                //     setRedirect(false);
-                // }
+                const items = data;
+                console.log(items);
+                if (data.size != 0) {
 
-                // return items;
+                    setShowAlert(true);
+                    setAlertHeader("Details submitted successfully")
+                    setAlertMessage("Add followups if required")
+                    // setRedirect(true);
+                    // resetAll();
+                } else {
+                    setShowAlert(true);
+                    setAlertHeader("Alert");
+                    setAlertMessage("Unsuccessful");
+                }
+
+                return items;
             })
     }
 
     const handleSubmitFollowUps = async()=>{
-        console.log(tasksAssigned)
+        if(tasksAssigned==null || followUpDate.current!.value==null){
+            setShowAlert(true);
+            setAlertHeader("Unsuccessful");
+            setAlertMessage("Please assign some task and follow-up date");
+            return;
+        }
         // var charCount = tasksAssigned.length + tasksAssigned.match(/\n/gm).length;
         let temp;
         if(tasksAssigned!=null)
@@ -155,31 +170,15 @@ const Patient: React.FC<any> = props => {
             .then(function (data) {
                 console.log(data);
                 const items = data;
-                // if (data.size != 0) {
-                    // setDisplayPatientId(items.patientId);
-                    // console.log(displayPatientId);
-            //     setShowAlert(true);
-            //         setShowAlertErr(false);
+
                     setRedirect(true);
-            //         // resetAll();
-            //     } else {
-            //         setShowAlert(false);
-            //         setShowAlertErr(true);
-            //         setRedirect(false);
-            //     }
-            //
+
                 return items;
             })
 
 
     }
 
-    // if(redirect && !showAlert) {
-    //     // setRedirect(false);
-    //     return (
-    //         <Redirect to='/doctorHome'/>
-    //     );
-    // }
 
     const handleYes = ()=>{
         setShowFollowUpOption(true);
@@ -250,7 +249,7 @@ const Patient: React.FC<any> = props => {
                         </IonCol>
                     </IonRow>
 
-                        { !showFollowUpOption &&
+                        { showFollowUpOption &&
                         <IonCol>
                         <IonRow>
                             <IonCol>
@@ -283,8 +282,8 @@ const Patient: React.FC<any> = props => {
                                         <IonCol>
                                         <IonCardTitle>Follow-up Date: </IonCardTitle>
                                         </IonCol>
-                                    </IonRow>
-                                    <IonRow>
+                                    {/*</IonRow>*/}
+                                    {/*<IonRow>*/}
                                         <IonCol>
                                         <IonCardTitle class="ion-card-subtitle-style">
                                             <IonDatetime ref={followUpDate} display-format="MM/DD/YYYY" picker-format="MM DD YYYY"></IonDatetime>
@@ -306,16 +305,8 @@ const Patient: React.FC<any> = props => {
             <IonAlert
                 isOpen={showAlert}
                 onDidDismiss={() => setShowAlert(false)}
-                header= "Details submitted successfully"
-                message="Add followups if required"
-                buttons={['OK']}
-            />
-            <IonAlert
-                isOpen={showAlertErr}
-                onDidDismiss={() => setShowAlertErr(false)}
-                header="Alert"
-                subHeader="Unsuccessful"
-                message="Please fill all the required fields"
+                header= {alertHeader}
+                message={alertMessage}
                 buttons={['OK']}
             />
 

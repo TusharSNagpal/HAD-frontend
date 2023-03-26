@@ -54,6 +54,8 @@ const OldFollowUp: React.FC<any> = props => {
     const f = props.location.state;
     const [followUpDetails, setFollowUpDetails] = useState(f);
     const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState<string>();
+    const [alertHeader, setAlertHeader] = useState<string>()
     const [redirect, setRedirect] = useState(false);
     const [showFollowUpOption, setShowFollowUpOption] = useState(false);
     const [followUps, setFollowUps] = useState<any[]>([]);
@@ -65,8 +67,17 @@ const OldFollowUp: React.FC<any> = props => {
 
     const currTaskList = followUpDetails.currFollowUp.taskAssignedByDoctor.split("$")
     const currReviewList = followUpDetails.currFollowUp.reviewByFieldWorker.split("$")
+
+    const [oldTaskList,setOldTaskList] = useState<string[]>([])
+    const [oldReviewList,setOldReviewList] = useState<string[]>([])
     // console.log(followUpDetails.currFollowUp)
     const handleExpandFollowUp = (index:any)=>{
+        const tasks = followUps[index].taskAssignedByDoctor.split("$")
+        const reviews = followUps[index].reviewByFieldWorker.split("$")
+        setOldTaskList(tasks)
+        setOldReviewList(reviews)
+        console.log(oldTaskList)
+        console.log(oldReviewList)
         let newArray = [...expanded];
     if(newArray[index]===true)
         newArray[index]=false;
@@ -89,8 +100,12 @@ const OldFollowUp: React.FC<any> = props => {
 
 
     const handleSubmitFollowUps = async()=>{
-        console.log(tasksAssigned)
-        // var charCount = tasksAssigned.length + tasksAssigned.match(/\n/gm).length;
+        if(tasksAssigned==null || followUpDate.current!.value==null){
+            setShowAlert(true);
+            setAlertHeader("Unsuccessful");
+            setAlertMessage("Please assign some task and follow-up date");
+            return;
+        }
         let temp;
         if(tasksAssigned!=null)
             temp = tasksAssigned.replace(/\n/g, "$");
@@ -186,7 +201,6 @@ const OldFollowUp: React.FC<any> = props => {
 
 
             <IonContent className='ion-padding'>
-                <IonCard>
                     <IonGrid>
                         <IonCard class="card-style">
                             <IonCardHeader>
@@ -224,13 +238,12 @@ const OldFollowUp: React.FC<any> = props => {
                             </IonCardHeader>
                         </IonCard>
                     </IonGrid>
-                </IonCard>
 
 
 
                 <IonCard>
                     <IonGrid>
-                        <IonRow>
+                        <IonRow class="ion-text-center">
                             <IonCol>
                                 <h3>Old follow ups</h3>
                             </IonCol>
@@ -247,8 +260,22 @@ const OldFollowUp: React.FC<any> = props => {
                                                     { expanded[index] &&
                                                         <IonCol>
                                                             <h5>Follow-up Date: {followUp.followUpDate}</h5>
-                                                            <h5>Task Assigned: {followUp.taskAssignedByDoctor}</h5>
-                                                            <h5>Review: {followUp.reviewByFieldWorker}</h5>
+                                                            <h5>Tasks Assigned:</h5>
+                                                            {oldTaskList.map((task:any)=>
+                                                                <IonRow>
+                                                                    <IonCol>
+                                                                        <h6>{task}</h6>
+                                                                    </IonCol>
+                                                                </IonRow>
+                                                            )}
+                                                            <h5>Reviews:</h5>
+                                                            {oldReviewList.map((review:any)=>
+                                                                <IonRow>
+                                                                    <IonCol>
+                                                                        <h6>{review}</h6>
+                                                                    </IonCol>
+                                                                </IonRow>
+                                                            )}
                                                         </IonCol>
                                                     }
 
@@ -263,7 +290,8 @@ const OldFollowUp: React.FC<any> = props => {
 
                         {
                             !showFollowUpOption &&
-                            <IonCol>
+
+                            <IonCol class="ion-text-center">
                             <IonRow>
                                 <IonCol>
                                     <h3>Do you want to add followups for this patient?</h3>
@@ -305,13 +333,21 @@ const OldFollowUp: React.FC<any> = props => {
                                     </IonCol>
                                 </IonRow>
 
-                                <IonRow>
+                                <IonRow class="ion-text-center">
                                     <IonCol>
                                         <IonButton onClick={handleSubmitFollowUps}>SUBMIT</IonButton>
                                     </IonCol>
                                 </IonRow>
                             </IonCol>
                         }
+
+                        <IonAlert
+                            isOpen={showAlert}
+                            onDidDismiss={() => setShowAlert(false)}
+                            header= {alertHeader}
+                            message={alertMessage}
+                            buttons={['OK']}
+                        />
 
                         {!showAlert && redirect?<Redirect to='/doctorHome'/>
                             :null}

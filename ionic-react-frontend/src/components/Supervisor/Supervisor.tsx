@@ -33,9 +33,17 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import '../../theme/variables.css';
 import './Supervisor.css';
+import {useState} from "react";
+import {Redirect} from "react-router";
 // setupIonicReact();
 
 const Supervisor: React.FC = () => {
+    const [redirect, setRedirect] = useState(false);
+
+    const handleAssignTasksButton=()=>{
+        setRedirect(true);
+    }
+
     return (
     <IonPage>
         <IonHeader>
@@ -79,7 +87,7 @@ const Supervisor: React.FC = () => {
 
                 <IonCard class = "card-style">
                     <IonCardHeader>
-                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./registerDoctor">ASSIGN TASKS TO FIELD WORKER</IonButton></IonCardTitle>
+                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink="./fieldWorkers">ASSIGN TASKS TO FIELD WORKER</IonButton></IonCardTitle>
                     </IonCardHeader>
                 </IonCard>
 

@@ -71,7 +71,6 @@ const RegisterPatient: React.FC = () => {
         address.current!.value = null;
         phoneNo.current!.value = null;
     }
-
     const registerPatient = async() => {
         fetch(`http://localhost:9090/api/supervisors/${supervisorId.current!.value}`)
             .then(function(response){

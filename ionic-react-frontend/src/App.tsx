@@ -30,6 +30,8 @@ import DoctorHome from "./components/Doctor/DoctorHome";
 import Admin from "./components/Admin/Admin";
 import Patient from "./components/Doctor/Patient"
 import OldFollowUp from "./components/Doctor/OldFollowUp";
+import FieldWorkers from "./components/Supervisor/FieldWorkers";
+import AssignTasks from "./components/Supervisor/AssignTasks";
 
 setupIonicReact();
 
@@ -52,6 +54,8 @@ const App: React.FC = () => (
           <Route path = "/doctorHome" component={DoctorHome}  />
           <Route path = "/patient" component={Patient}/>
           <Route path = "/oldFollowUp" component={OldFollowUp}/>
+          <Route path = "/fieldWorkers" component={FieldWorkers}/>
+          <Route path = "/assignTasks" component={AssignTasks}/>
         </IonRouterOutlet>
       </IonReactRouter>
   </IonApp>
