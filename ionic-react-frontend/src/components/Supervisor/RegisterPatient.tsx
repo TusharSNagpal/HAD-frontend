@@ -40,7 +40,9 @@ import { Redirect } from 'react-router';
 
 // setupIonicReact();
 
-const RegisterPatient: React.FC = () => {
+const RegisterPatient: React.FC<any> = props => {
+    const supId = props.location.state;
+    const [supervisorId, setSupervisorId] = useState(supId);
 
     // const navigate = useNavigate();
 
@@ -54,7 +56,7 @@ const RegisterPatient: React.FC = () => {
     // const [hospitalId, setHospitalId] = useState(0);
     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
 
-    const supervisorId = useRef<HTMLIonInputElement>(null);
+    // const supervisorId = useRef<HTMLIonInputElement>(null);
     const fname = useRef<HTMLIonInputElement>(null);
     const lname = useRef<HTMLIonInputElement>(null);
     const gender = useRef<HTMLIonInputElement>(null);
@@ -63,7 +65,7 @@ const RegisterPatient: React.FC = () => {
     const phoneNo = useRef<HTMLIonInputElement>(null);
 
     const resetAll = () => {
-        supervisorId.current!.value = null;
+        // supervisorId.current!.value = null;
         dob.current!.reset();
         fname.current!.value = null;
         lname.current!.value = null;
@@ -73,7 +75,7 @@ const RegisterPatient: React.FC = () => {
     }
 
     const registerPatient = async() => {
-        fetch(`http://localhost:9090/api/supervisors/${supervisorId.current!.value}`)
+        fetch(`http://localhost:9090/api/supervisors/${supervisorId.userId}`)
             .then(function(response){
                 console.log(response);
                 if(response['status'] === 200){
@@ -106,7 +108,7 @@ const RegisterPatient: React.FC = () => {
 
                     let data = {
                         'hospital': {'hospitalId': hospitalId},
-                        'supervisor': {'supervisorId': supervisorId.current!.value},
+                        'supervisor': {'supervisorId': supervisorId.userId},
                         'fname': fname.current!.value,
                         'lname': lname.current!.value,
                         'gender': gender.current!.value,
@@ -196,7 +198,7 @@ const RegisterPatient: React.FC = () => {
                             subHeader="ID NOT FOUND..!"
                             message="!!UNSUCCESSFUL..!"
                             buttons={['OK']}
-                            />
+                            /> */}
 
                         <IonRow className = "header-border">
 
@@ -256,7 +258,7 @@ const RegisterPatient: React.FC = () => {
                     buttons={['OK']}
                 />
 
-                {!showAlert && redirect?<Redirect to='/supervisorHome' />
+                {!showAlert && redirect?<Redirect to='/supervisors' />
                     :null}
 
             </IonContent>

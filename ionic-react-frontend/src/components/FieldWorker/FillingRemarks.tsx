@@ -22,7 +22,9 @@ import '@ionic/react/css/display.css';
 import '../../theme/variables.css';
 import './FieldWorker.css';
 
-import { useStorage } from '../../hooks/useStorage';
+import { useStorageFillingRemarks } from '../../hooks/useStorageFillingRemarks';
+import { useStorageFollowUp } from './useStorageFollowUp';
+
 import { useEffect, useState } from 'react';
 
 // setupIonicReact();
@@ -52,7 +54,9 @@ const FillingRemarks: React.FC<any> = props => {
     ))
 
     // OFFLINE START..!
-    const { remarks, addRemark } = useStorage();
+    const { remarks, addRemark } = useStorageFillingRemarks();
+    const { followups, addFollowups, updateFollowUp } = useStorageFollowUp();
+
     const [task, setTask] = useState('');
     // console.log(output);
 
@@ -82,7 +86,10 @@ const FillingRemarks: React.FC<any> = props => {
         console.log(assigned);
         console.log(task);
 
-        await addRemark(false, 2, s, task);
+        await addRemark(false, 2, s, task, followUpCurr.fup.newF.followUpId);
+        await updateFollowUp(followUpCurr.fup.newF.followUpId);
+
+        setRedirect(true);
 
         let data = {
             'reviewByFieldWorker': task
@@ -102,7 +109,6 @@ const FillingRemarks: React.FC<any> = props => {
                 console.log(response);
                 if (response['status'] === 200) {
                     console.log("DONE");
-                    setRedirect(true);
                     // console.log(task);
                 } else {
                     console.log("ERROR");
@@ -200,7 +206,7 @@ const FillingRemarks: React.FC<any> = props => {
                     : null}
 
                 {redirect ?
-                <Redirect from = "/fillingRemarks" to = "/fieldWorker"/> : null}
+                <Redirect from = "/fillingRemarks" to = "/fieldworkers"/> : null}
 
             </IonContent>
         </IonPage>

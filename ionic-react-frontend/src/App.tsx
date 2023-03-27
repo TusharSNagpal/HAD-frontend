@@ -61,15 +61,15 @@ const App: React.FC = () => {
       <IonReactRouter>
         <IonRouterOutlet>
           <Route exact path = "/" component={Admin}/>
-          <Route exact path = "/supervisorHome" component={Supervisor}/>
-          <Route exact path = "/registerDoctor" component={RegisterDoctor}/>
-          <Route exact path = "/registerPatient" component={RegisterPatient}/>
-          <Route exact path = "/newCase" component={NewCase}/>
-          <Route exact path = "/doctorHome" component={DoctorHome}/>
-          <Route exact path = "/fieldWorker" component={FieldWorker}/>
-          <Route exact path = "/followup" component={FollowUp}/>
-          <Route exact path = "/fieldWorkerHome" component={FWHome}/>
-          <Route exact path = "/fillingRemarks" component={FillingRemarks}/>
+          <Route exact path = "/supervisors" component={Supervisor}/>
+          <Route path = "/registerDoctor" component={RegisterDoctor}/>
+          <Route path = "/registerPatient" component={RegisterPatient}/>
+          <Route path = "/newCase" component={NewCase}/>
+          <Route path = "/doctors" component={DoctorHome}/>
+          <Route path = "/fieldWorkers" component={FieldWorker}/>
+          <Route path = "/followup" component={FollowUp}/>
+          <Route path = "/fieldWorkerHome" component={FWHome}/>
+          <Route path = "/fillingRemarks" component={FillingRemarks}/>
           <Route exact path = "/admin" component={AdminHome} />
           <Route exact path = "/globalRegister" component={GlobalRegister} />
           <Route exact path = "/globalRegister/globalRegisterHospital" component={GlobalRegisterHospital} />

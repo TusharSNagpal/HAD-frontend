@@ -28,7 +28,7 @@ import '@ionic/react/css/display.css';
 import '../../theme/variables.css';
 import './FieldWorker.css';
 import {useEffect, useState} from "react";
-import { useStorage } from './useStorage';
+import { useStorageFollowUp } from './useStorageFollowUp';
 import { Redirect } from 'react-router';
 
 const FieldWorker: React.FC<any> = props => {
@@ -36,13 +36,14 @@ const FieldWorker: React.FC<any> = props => {
     const [useSt, setUseSt] = useState(false);
     const [redirect,setRedirect] = useState(false);
     const [currFollowup, setCurrFollowup] = useState(null);
-    const {followups, addFollowups} = useStorage();
+
     const fwid = props.location.state.id.id;
+    const {followups, addFollowups} = useStorageFollowUp();
+
     const review = (followup : any) => {
         setCurrFollowup(followup);
         setRedirect(true);
     }
-
 
     const handle = () => {
         console.log('Database updated..!');
@@ -89,8 +90,8 @@ const FieldWorker: React.FC<any> = props => {
             
             <IonContent className='ion-padding'/*class = "content-style"*/>
                 <IonGrid className='ion-text-center ion-margin'>
-                <IonButton onClick = {handle}>REFRESH</IonButton>
-                        {followups.map(followup =>
+                <IonButton onClick = {handle}>DOWNLOAD</IonButton>
+                        {followups.filter(followup => followup.isActive == 1).map(followup =>
                             <IonCard class = "card-style">
                                 <IonCardHeader>
                                     <IonSegment value = {followup.follow_ups_id} key = {followup.follow_ups_id}>
@@ -99,7 +100,7 @@ const FieldWorker: React.FC<any> = props => {
                                                 <IonCol><h5>{followup.visit.patient.fname}</h5></IonCol>   
                                                 <IonCol>
                                                     <IonButton onClick={() => review(followup)}>PICK</IonButton>
-                                                    {redirect ? <Redirect from = '/fieldWorker' to={{ pathname: './followup', state: { fup: {currFollowup} } }} />:null}
+                                                    {redirect ? <Redirect from = '/fieldworkers' to={{ pathname: './followup', state: { fup: {currFollowup} } }} />:null}
                                                 </IonCol>
                                             </IonRow>
                                         </IonGrid>

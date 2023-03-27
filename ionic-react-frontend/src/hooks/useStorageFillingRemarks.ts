@@ -14,7 +14,7 @@ export interface FollowUpRemarks {
     id: string;
 }
 
-export function useStorage() {
+export function useStorageFillingRemarks() {
     const [store, setStore] = useState<Storage>();
     const [remarks, setRemarks] = useState<FollowUpRemarks[]>([]);
 
@@ -36,9 +36,11 @@ export function useStorage() {
     const addRemark = async (urgentFlag: boolean,
                             isActive: number,
                             taskAssignedByDoctor: string,
-                            reviewByFieldWorker: string) => 
+                            reviewByFieldWorker: string,
+                            follow_ups_id: number) => 
     {
         const newRemark = {
+            follow_ups_id:follow_ups_id,
             urgentFlag,
             isActive,
             taskAssignedByDoctor,
