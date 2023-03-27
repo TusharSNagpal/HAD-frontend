@@ -185,7 +185,6 @@ const Admin: React.FC = () => {
                                 auth ?
                                 <Redirect to={{ pathname: `./${role}`, state: { userId: userId.current!.value } }}/>
                             :null}
-                            
                         </form>
                     </IonSegment>
 
