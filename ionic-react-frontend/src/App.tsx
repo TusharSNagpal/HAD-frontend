@@ -1,6 +1,6 @@
-import { IonApp, IonHeader, IonTitle, IonToolbar, setupIonicReact, IonRouterOutlet} from '@ionic/react';
-import {IonReactRouter} from "@ionic/react-router";
-import {Route} from "react-router-dom";
+import { IonApp, IonHeader, IonTitle, IonToolbar, setupIonicReact, IonRouterOutlet } from '@ionic/react';
+import { IonReactRouter } from "@ionic/react-router";
+import { Route } from "react-router-dom";
 import React from "react";
 
 /* Core CSS required for Ionic components to work properly */
@@ -45,19 +45,99 @@ import GlobalUpdateDoctor from './components/Admin/GlobalUpdateDoctor';
 import GlobalUpdateFieldWorker from './components/Admin/GlobalUpdateFieldWorker';
 
 
+import { useState, useEffect } from 'react';
+import { Network } from "@capacitor/network";
+
+import { useStorageFillingRemarks } from './hooks/useStorageFillingRemarks';
+
 setupIonicReact();
 
 const App: React.FC = () => {
 
+  const [on, setOn] = useState(false);
+  const [off, setOff] = useState(false);
+
+  const [offlineAlert, setOfflineAlert] = useState(false);
+  const [onlineAlert, setOnlineAlert] = useState(false);
+
+  // const [offlineData, setOfflineData] = useState([]);
+
+  const { remarks, addRemark, getRemarks, updateRemarks } = useStorageFillingRemarks();
+
+  const syncStart = () => {
+    let flag = 1;
+    getRemarks().then(async offlineData => {
+      console.log(offlineData);
+        while (on && offlineData!.length > 0 && flag === 1) {
+          // console.log(offlineData[0]['reviewByFieldWorker']);
+          // updateRemarks(offlineData);  
+          // count--;
+          // console.log(offlineData[0]['reviewByFieldWorker']);
+          let data = {
+            'reviewByFieldWorker': offlineData[0]['reviewByFieldWorker']
+          };
+
+          const addRecordEndpoint = `http://localhost:9090/api/followUps/fieldWorker/${offlineData[0]['followUpId']}`;
+          const options = {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          }
+
+           await fetch(addRecordEndpoint, options)
+              .then(function (response) {
+                console.log(response);
+                if (response['status'] === 200) {
+                  console.log("DONE");
+                  // console.log(task);
+                  offlineData.shift();
+                  updateRemarks(offlineData);
+                } else {
+                  console.log("ERROR");
+                  flag = 0;
+                }
+              })
+        }
+      }
+    )
+  }
+
+  const status = (status: any) => {
+      console.log('Network status changed', status);
+      if (status.connected === true) {
+        setOn(true);
+        setOff(false);
+        setOnlineAlert(true);
+        setOfflineAlert(false);
+        // syncStart();
+      }
+      else {
+        setOn(false);
+        setOff(true);
+        setOfflineAlert(true);
+        setOnlineAlert(false);
+      }
+  }
+
+  useEffect(() => {
+    syncStart();
+  }, [on, off])
+
+  Network.addListener('networkStatusChange', status);
+  
+  // Network.addListener('networkStatusChange', status);
+
   return (
-  <IonApp>
-    <IonHeader>
-      <IonToolbar color = "primary">
-        <IonTitle class="ion-text-center">
-          <b>HEALTHCARE SERVICES</b>
-        </IonTitle>
-      </IonToolbar>
-    </IonHeader>
+    <IonApp>
+      <IonHeader>
+        <IonToolbar color="primary">
+          <IonTitle class="ion-text-center">
+            <b>HEALTHCARE SERVICES</b>
+          </IonTitle>
+        </IonToolbar>
+      </IonHeader>
       <IonReactRouter>
         <IonRouterOutlet>
           <Route exact path = "/" component={Admin}/>
@@ -83,7 +163,8 @@ const App: React.FC = () => {
           <Route exact path = "/globalUpdate/globalUpdateFieldWorker" component={GlobalUpdateFieldWorker} />
         </IonRouterOutlet>
       </IonReactRouter>
-  </IonApp>
-)};
+    </IonApp>
+  )
+};
 
 export default App; 

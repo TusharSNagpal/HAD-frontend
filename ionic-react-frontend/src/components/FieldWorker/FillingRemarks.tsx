@@ -26,6 +26,7 @@ import { useStorageFillingRemarks } from '../../hooks/useStorageFillingRemarks';
 import { useStorageFollowUp } from './useStorageFollowUp';
 
 import { useEffect, useState } from 'react';
+import { Network } from "@capacitor/network";
 
 // setupIonicReact();
 
@@ -41,6 +42,10 @@ const FillingRemarks: React.FC<any> = props => {
     const [assigned, setAssigned] = useState({} as any);
     // const s = "BLOOD PRESSURE $ FEVER $ HEALTH RATE $ TEMPERATURE";
     const [s,setS] = useState(followUpCurr.fup.newF.taskAssignedByDoctor);
+
+    const [on, setOn] = useState(false);
+    const [offlineAlert, setOfflineAlert] = useState(false);
+    const [onlineAlert, setOnlineAlert] = useState(false);
 
     const [save, setSave] = useState(false);
 
@@ -118,10 +123,6 @@ const FillingRemarks: React.FC<any> = props => {
     // OFFLINE END..!
 
     // setOut(output);
-
-    useEffect(() => {
-        console.log(followUpCurr.fup.newF);
-    }, [])
 
     const handleFormChange = (event: any, key: string) => {
         // console.log(event.target.value);
