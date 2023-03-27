@@ -182,7 +182,7 @@ const RegisterPatient: React.FC = () => {
 
             <IonContent className='ion-padding'/*class = "content-style"*/>
                 <IonCard class = "card-style">
-                    <IonGrid className='ion-text-center ion-margin' >
+                    <IonGrid className='ion-text-center ion-margin'>
                         <IonRow className = "header-border">
                             <IonCol>
                                 <IonCardTitle>Supervisor ID: </IonCardTitle>
