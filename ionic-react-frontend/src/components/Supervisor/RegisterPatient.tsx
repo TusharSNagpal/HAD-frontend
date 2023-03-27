@@ -184,8 +184,8 @@ const RegisterPatient: React.FC<any> = props => {
 
             <IonContent className='ion-padding'/*class = "content-style"*/>
                 <IonCard class = "card-style">
-                    <IonGrid className='ion-text-center ion-margin' >
-                        {/* <IonRow className = "header-border">
+                    <IonGrid className='ion-text-center ion-margin'>
+                        <IonRow className = "header-border">
                             <IonCol>
                                 <IonCardTitle>Supervisor ID: </IonCardTitle>
                                 <IonCardTitle ><IonInput ref = {supervisorId} class = "card-input" type="number" placeholder="1234"></IonInput></IonCardTitle>
