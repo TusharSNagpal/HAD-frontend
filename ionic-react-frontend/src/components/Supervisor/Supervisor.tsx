@@ -75,23 +75,20 @@ const Supervisor: React.FC<any> = props => {
             <IonGrid className='ion-text-center ion-margin ion-padding'>
 
                 {/*<IonSegment>*/}
+
+
                 <IonCard class = "card-style">
-                    <IonCardHeader>
-                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("./registerDoctor")} /*routerLink = "./registerDoctor"*/>REGISTER DOCTOR</IonButton></IonCardTitle>
-                    </IonCardHeader>
+                <IonCardHeader>
+                    <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("./register")} /*routerLink = "./registerDoctor"*/>REGISTER</IonButton></IonCardTitle>
+                </IonCardHeader>
                 </IonCard>
 
                 <IonCard class = "card-style">
                     <IonCardHeader>
-                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("./registerDoctor")} /*routerLink = "./registerDoctor"*/>REGISTER FIELD WORKER</IonButton></IonCardTitle>
+                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("./update")} /*routerLink = "./registerDoctor"*/>UPDATE</IonButton></IonCardTitle>
                     </IonCardHeader>
                 </IonCard>
 
-                <IonCard class = "card-style">
-                    <IonCardHeader>
-                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("./registerPatient")}/*routerLink = "./registerPatient"*/>REGISTER PATIENT</IonButton></IonCardTitle>
-                    </IonCardHeader>
-                </IonCard>
 
                 <IonCard class = "card-style">
                     <IonCardHeader>

@@ -1,3 +1,4 @@
+
 import {
     IonPage,
     IonGrid,
@@ -8,7 +9,7 @@ import {
     IonHeader,
     IonTitle,
     IonToolbar,
-    IonRow, IonCol, IonInput, IonDatetime, IonButton, IonAlert
+    IonRow, IonCol, IonInput, IonDatetime, IonButton, IonAlert, IonLabel, IonItem
 } from '@ionic/react';
 
 /* Core CSS required for Ionic components to work properly */
@@ -32,14 +33,16 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import '../../theme/variables.css';
 import './Supervisor.css';
-import {useRef, useState} from "react";
+import React, {useRef, useState} from "react";
 import {Redirect} from "react-router";
 
 // setupIonicReact();
 
-const RegisterDoctor: React.FC<any> = props => {
-     const supId = props.location.state;
-     const [supervisorId, setSupervisorId] = useState(supId);
+const UpdateDoctor: React.FC<any> = props => {
+    // const supId = props.location.state;
+    // const [supervisorId, setSupervisorId] = useState(supId);
+    const [doctorId, setDoctorId] = useState('');
+
 
     // const navigate = useNavigate();
 
@@ -50,7 +53,7 @@ const RegisterDoctor: React.FC<any> = props => {
 
     const [displayDoctorId, setDisplayDoctorId] = useState(0);
 
-    const [hospitalId, setHospitalId] = useState(0);
+   // const [hospitalId, setHospitalId] = useState(0);
     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
 
     // const supervisorId = useRef<HTMLIonInputElement>(null);
@@ -71,8 +74,16 @@ const RegisterDoctor: React.FC<any> = props => {
         phoneNo.current!.value = null;
     }
 
-    const registerDoctor = async() => {
-        fetch(`http://localhost:9090/api/supervisors/${supervisorId.userId}`)
+
+
+
+    const updateDoctor = async() => {
+        fetch('http://localhost:9090/api/doctors/'+{doctorId}, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
             .then(function(response){
                 console.log(response);
                 if(response['status'] === 200){
@@ -91,17 +102,17 @@ const RegisterDoctor: React.FC<any> = props => {
                         return -1;
                     }
                     setShowAlertNoSuchId(false);
-                    return items.hospital.hospitalId;
+                    return items.doctorId;
                 }
             )
-            .then( async function (hospitalId){
-                    if(hospitalId === -1){
+            .then( async function (doctorId){
+                    if(doctorId === -1){
                         setShowAlertNoSuchId(true);
                     }
                     else {
                         setShowAlertNoSuchId(false);
 
-                        console.log(hospitalId);
+                        console.log(doctorId);
 
                         let data = {
 
@@ -113,9 +124,9 @@ const RegisterDoctor: React.FC<any> = props => {
                             'dob': dob.current!.value
                         };
                         console.log(JSON.stringify(data));
-                        const addRecordEndpoint = "http://localhost:9090/api/doctors/";
+                        const addRecordEndpoint = "http://localhost:9090/api/doctors/"+{doctorId};
                         const options = {
-                            method: 'POST',
+                            method: 'PUT',
                             headers: {
                                 'Content-Type': 'application/json'
                             },
@@ -137,7 +148,7 @@ const RegisterDoctor: React.FC<any> = props => {
                                 const items = data;
                                 if (data.size !== 0) {
                                     setDisplayDoctorId(items.doctorId);
-                                     console.log(displayDoctorId);
+                                    console.log(displayDoctorId);
                                     setShowAlert(true);
                                     setShowAlertErr(false);
                                     setRedirect(true);
@@ -153,6 +164,7 @@ const RegisterDoctor: React.FC<any> = props => {
                     }
                 }
             )
+
     }
 
 
@@ -177,11 +189,12 @@ const RegisterDoctor: React.FC<any> = props => {
 
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
-                        <b>DOCTOR REGISTRATION</b>
+                        <b>DOCTOR UPDATE</b>
                     </IonTitle>
                 </IonToolbar>
 
             </IonHeader>
+
 
             <IonContent className='ion-padding'/*class = "content-style"*/>
                 <IonCard class = "card-style">
@@ -202,6 +215,12 @@ const RegisterDoctor: React.FC<any> = props => {
                             /> */}
 
                         <IonRow className = "header-border">
+
+
+                            <IonCol>
+                                <IonCardTitle>Doctor Id: </IonCardTitle>
+                                <IonCardTitle><IonInput type="text" value={doctorId} class="card-input" placeholder="docId" onIonChange={e => setDoctorId(e.detail.value!)}></IonInput></IonCardTitle>
+                            </IonCol>
 
                             <IonCol>
                                 <IonCardTitle>First Name: </IonCardTitle>
@@ -238,7 +257,7 @@ const RegisterDoctor: React.FC<any> = props => {
                 </IonCard>
 
                 <IonGrid className='ion-text-center ion-margin'>
-                    <IonButton onClick = {registerDoctor}>Submit</IonButton>
+                    <IonButton onClick = {updateDoctor}>Submit</IonButton>
                 </IonGrid>
 
                 <IonAlert
@@ -264,7 +283,8 @@ const RegisterDoctor: React.FC<any> = props => {
 
             </IonContent>
 
-        </IonPage>    )
+        </IonPage>
+    )
 };
 
-export default RegisterDoctor; 
+export default UpdateDoctor;

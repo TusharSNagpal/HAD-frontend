@@ -37,9 +37,9 @@ import {Redirect} from "react-router";
 
 // setupIonicReact();
 
-const RegisterDoctor: React.FC<any> = props => {
-     const supId = props.location.state;
-     const [supervisorId, setSupervisorId] = useState(supId);
+const RegisterFieldWorker: React.FC<any> = props => {
+    const supId = props.location.state;
+    const [supervisorId, setSupervisorId] = useState(supId);
 
     // const navigate = useNavigate();
 
@@ -48,7 +48,7 @@ const RegisterDoctor: React.FC<any> = props => {
 
     const [redirect, setRedirect] = useState(false);
 
-    const [displayDoctorId, setDisplayDoctorId] = useState(0);
+    const [displayFieldWorkerId, setDisplayFieldWorkerId] = useState(0);
 
     const [hospitalId, setHospitalId] = useState(0);
     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
@@ -71,7 +71,7 @@ const RegisterDoctor: React.FC<any> = props => {
         phoneNo.current!.value = null;
     }
 
-    const registerDoctor = async() => {
+    const registerFieldWorker = async() => {
         fetch(`http://localhost:9090/api/supervisors/${supervisorId.userId}`)
             .then(function(response){
                 console.log(response);
@@ -113,7 +113,7 @@ const RegisterDoctor: React.FC<any> = props => {
                             'dob': dob.current!.value
                         };
                         console.log(JSON.stringify(data));
-                        const addRecordEndpoint = "http://localhost:9090/api/doctors/";
+                        const addRecordEndpoint = "http://localhost:9090/api/fieldworkers/";
                         const options = {
                             method: 'POST',
                             headers: {
@@ -136,8 +136,8 @@ const RegisterDoctor: React.FC<any> = props => {
                                 console.log(data);
                                 const items = data;
                                 if (data.size !== 0) {
-                                    setDisplayDoctorId(items.doctorId);
-                                     console.log(displayDoctorId);
+                                    setDisplayFieldWorkerId(items.fwId);
+                                    console.log(displayFieldWorkerId);
                                     setShowAlert(true);
                                     setShowAlertErr(false);
                                     setRedirect(true);
@@ -177,7 +177,7 @@ const RegisterDoctor: React.FC<any> = props => {
 
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
-                        <b>DOCTOR REGISTRATION</b>
+                        <b>FIELDWORKER REGISTRATION</b>
                     </IonTitle>
                 </IonToolbar>
 
@@ -238,15 +238,15 @@ const RegisterDoctor: React.FC<any> = props => {
                 </IonCard>
 
                 <IonGrid className='ion-text-center ion-margin'>
-                    <IonButton onClick = {registerDoctor}>Submit</IonButton>
+                    <IonButton onClick = {registerFieldWorker}>Submit</IonButton>
                 </IonGrid>
 
                 <IonAlert
                     isOpen={showAlert}
                     onDidDismiss={() => setShowAlert(false)}
-                    header= {`DOCTOR ID: ${displayDoctorId}`}
+                    header= {`FIELDWORKER ID: ${displayFieldWorkerId}`}
                     subHeader="Registration Successful..!"
-                    message="Please go to Doctor Login Tab to Login..!"
+                    message="Please go to FieldWorker Login Tab to Login..!"
                     buttons={['OK']}
                 />
 
@@ -255,7 +255,7 @@ const RegisterDoctor: React.FC<any> = props => {
                     onDidDismiss={() => setShowAlertErr(false)}
                     header="Alert"
                     subHeader="Registration Unsuccessful..!"
-                    message="Please Go to Doctor Registration Tab and Register Again!"
+                    message="Please Go to FieldWorker Registration Tab and Register Again!"
                     buttons={['OK']}
                 />
 
@@ -266,5 +266,4 @@ const RegisterDoctor: React.FC<any> = props => {
 
         </IonPage>    )
 };
-
-export default RegisterDoctor; 
+export default RegisterFieldWorker;

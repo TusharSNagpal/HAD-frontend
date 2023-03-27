@@ -37,9 +37,9 @@ import {Redirect} from "react-router";
 
 // setupIonicReact();
 
-const RegisterDoctor: React.FC<any> = props => {
-     const supId = props.location.state;
-     const [supervisorId, setSupervisorId] = useState(supId);
+const UpdateFieldWorker: React.FC<any> = props => {
+    const supId = props.location.state;
+    const [supervisorId, setSupervisorId] = useState(supId);
 
     // const navigate = useNavigate();
 
@@ -137,7 +137,7 @@ const RegisterDoctor: React.FC<any> = props => {
                                 const items = data;
                                 if (data.size !== 0) {
                                     setDisplayDoctorId(items.doctorId);
-                                     console.log(displayDoctorId);
+                                    console.log(displayDoctorId);
                                     setShowAlert(true);
                                     setShowAlertErr(false);
                                     setRedirect(true);
@@ -267,4 +267,4 @@ const RegisterDoctor: React.FC<any> = props => {
         </IonPage>    )
 };
 
-export default RegisterDoctor; 
+export default UpdateFieldWorker;

@@ -31,6 +31,12 @@ import FWHome from './components/FieldWorker/FWHome';
 import FillingRemarks from './components/FieldWorker/FillingRemarks';
 import FieldWorker from './components/FieldWorker/FieldWorker';
 import FollowUp from './components/FollowUp/FollowUp';
+import Register from "./components/Supervisor/Register";
+import RegisterFieldWorker from "./components/Supervisor/RegisterFieldWorker";
+import Update from "./components/Supervisor/Update";
+import UpdateDoctor from "./components/Supervisor/UpdateDoctor";
+import UpdatePatient from "./components/Supervisor/UpdatePatient";
+import UpdateFieldWorker from "./components/Supervisor/UpdateFieldWorker";
 
 setupIonicReact();
 
@@ -50,7 +56,13 @@ const App: React.FC = () => {
           <Route exact path = "/" component={Admin}/>
           <Route path = "/supervisors" component={Supervisor}/>
           <Route path = "/registerDoctor" component={RegisterDoctor}/>
+          <Route path = "/updateDoctor" component={UpdateDoctor}/>
+          <Route path = "/register" component={Register}/>
+          <Route path = "/update" component={Update}/>
           <Route path = "/registerPatient" component={RegisterPatient}/>
+          <Route path = "/registerFieldWorker" component={RegisterFieldWorker}/>
+          <Route path = "/updatePatient" component={UpdatePatient}/>
+          <Route path = "/updateFieldWorker" component={UpdateFieldWorker}/>
           <Route path = "/newCase" component={NewCase}/>
           <Route path = "/doctors" component={DoctorHome}/>
           <Route path = "/fieldWorkers" component={FieldWorker}/>
