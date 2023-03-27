@@ -95,7 +95,7 @@ const Supervisor: React.FC<any> = props => {
 
                 <IonCard class = "card-style">
                     <IonCardHeader>
-                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("./registerDoctor")} /*routerLink = "./registerDoctor"*/>ASSIGN TASKS TO FIELD WORKER</IonButton></IonCardTitle>
+                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink="./supervisors/fieldWorkersInHospital">ASSIGN TASKS TO FIELD WORKER</IonButton></IonCardTitle>
                     </IonCardHeader>
                 </IonCard>
 

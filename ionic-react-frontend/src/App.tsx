@@ -45,10 +45,15 @@ import GlobalUpdateDoctor from './components/Admin/GlobalUpdateDoctor';
 import GlobalUpdateFieldWorker from './components/Admin/GlobalUpdateFieldWorker';
 
 
+
 import { useState, useEffect } from 'react';
 import { Network } from "@capacitor/network";
 
 import { useStorageFillingRemarks } from './hooks/useStorageFillingRemarks';
+import Patient from "./components/Doctor/Patient";
+import OldFollowUp from "./components/Doctor/OldFollowUp";
+import FieldWorkersInHospital from "./components/Supervisor/FieldWorkersInHospital";
+import AssignTasks from "./components/Supervisor/AssignTasks";
 
 setupIonicReact();
 
@@ -142,14 +147,14 @@ const App: React.FC = () => {
         <IonRouterOutlet>
           <Route exact path = "/" component={Admin}/>
           <Route exact path = "/supervisors" component={Supervisor}/>
-          <Route path = "/registerDoctor" component={RegisterDoctor}/>
-          <Route path = "/registerPatient" component={RegisterPatient}/>
-          <Route path = "/newCase" component={NewCase}/>
-          <Route path = "/doctors" component={DoctorHome}/>
-          <Route path = "/fieldWorkers" component={FieldWorker}/>
-          <Route path = "/followup" component={FollowUp}/>
-          <Route path = "/fieldWorkerHome" component={FWHome}/>
-          <Route path = "/fillingRemarks" component={FillingRemarks}/>
+          <Route exact path = "/registerDoctor" component={RegisterDoctor}/>
+          <Route exact path = "/registerPatient" component={RegisterPatient}/>
+          <Route exact path = "/newCase" component={NewCase}/>
+          <Route exact path = "/doctors" component={DoctorHome}/>
+          <Route exact path = "/fieldWorkers" component={FieldWorker}/>
+          <Route exact path = "/followup" component={FollowUp}/>
+          <Route exact path = "/fieldWorkerHome" component={FWHome}/>
+          <Route exact path = "/fillingRemarks" component={FillingRemarks}/>
           <Route exact path = "/admin" component={AdminHome} />
           <Route exact path = "/globalRegister" component={GlobalRegister} />
           <Route exact path = "/globalRegister/globalRegisterHospital" component={GlobalRegisterHospital} />
@@ -161,6 +166,11 @@ const App: React.FC = () => {
           <Route exact path = "/globalUpdate/globalUpdateSupervisor" component={GlobalUpdateSupervisor} />
           <Route exact path = "/globalUpdate/globalUpdateDoctor" component={GlobalUpdateDoctor} />
           <Route exact path = "/globalUpdate/globalUpdateFieldWorker" component={GlobalUpdateFieldWorker} />
+          <Route exact path = "/doctors/patient" component={Patient}></Route>
+          <Route exact path ="/doctors/oldFollowUp" component={OldFollowUp}></Route>
+          <Route exact path ="/supervisors/fieldWorkersInHospital" component={FieldWorkersInHospital}></Route>
+          <Route exact path ="/supervisors/fieldWorkersInHospital/assignTasks" component={AssignTasks}></Route>
+
         </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>

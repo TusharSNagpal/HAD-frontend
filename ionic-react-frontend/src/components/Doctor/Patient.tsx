@@ -56,22 +56,31 @@ const Patient: React.FC<any> = props => {
     const [showAlert, setShowAlert] = useState(false);
     const [redirect, setRedirect] = useState(false);
     const [showFollowUpOption, setShowFollowUpOption] = useState(false);
-    const [showAlertErr, setShowAlertErr] = useState(false);
+    const [alertMessage, setAlertMessage] = useState<string>();
+    const [alertHeader, setAlertHeader] = useState<string>()
     const [prescription, setPrescription] = useState<string>();
     const [symptoms, setSymptoms] = useState<string>();
     const [tasksAssigned, setTasksAssigned] = useState<string>();
     const followUpDate = useRef<HTMLIonDatetimeElement>(null);
 
 
-   //  useEffect(() => {
-   //
-   //      // setPatientDetails(props.location.state.case.patient)
-   // },[]);
+    //  useEffect(() => {
+    //
+    //      // setPatientDetails(props.location.state.case.patient)
+    // },[]);
 
     const submitDetails = async()=>{
-            visitDetails.currCase.symptoms = symptoms;
-            visitDetails.currCase.prescription = prescription;
-            // console.log(JSON.stringify(visitDetails.currCase));
+
+        if(symptoms==null || prescription==null){
+            setShowAlert(true);
+            setAlertHeader("Unsuccessful");
+            setAlertMessage("Please fill the symptoms and prescription");
+            return;
+        }
+
+        visitDetails.currCase.symptoms = symptoms;
+        visitDetails.currCase.prescription = prescription;
+        // console.log(JSON.stringify(visitDetails.currCase));
         const addRecordEndpoint = `http://localhost:9090/api/visits/visited/${visitDetails.currCase.visitId}`;
         const options = {
             method: 'PUT',
@@ -92,26 +101,33 @@ const Patient: React.FC<any> = props => {
                 return response.json();
             })
             .then(function (data) {
-                // const items = data;
-                // console.log(items);
-                // if (data.size != 0) {
-                //
-                    setShowAlert(true);
-                //     setShowAlertErr(false);
-                //     setRedirect(true);
-                //     // resetAll();
-                // } else {
-                //     setShowAlert(false);
-                //     setShowAlertErr(true);
-                //     setRedirect(false);
-                // }
+                const items = data;
+                console.log(items);
+                if (data.size != 0) {
 
-                // return items;
+                    setShowAlert(true);
+                    setAlertHeader("Details submitted successfully")
+                    setAlertMessage("Add followups if required")
+                    setShowFollowUpOption(true)
+                    // setRedirect(true);
+                    // resetAll();
+                } else {
+                    setShowAlert(true);
+                    setAlertHeader("Alert");
+                    setAlertMessage("Unsuccessful");
+                }
+
+                return items;
             })
     }
 
     const handleSubmitFollowUps = async()=>{
-        console.log(tasksAssigned)
+        if(tasksAssigned==null || followUpDate.current!.value==null){
+            setShowAlert(true);
+            setAlertHeader("Unsuccessful");
+            setAlertMessage("Please assign some task and follow-up date");
+            return;
+        }
         // var charCount = tasksAssigned.length + tasksAssigned.match(/\n/gm).length;
         let temp;
         if(tasksAssigned!=null)
@@ -155,31 +171,15 @@ const Patient: React.FC<any> = props => {
             .then(function (data) {
                 console.log(data);
                 const items = data;
-                // if (data.size != 0) {
-                    // setDisplayPatientId(items.patientId);
-                    // console.log(displayPatientId);
-            //     setShowAlert(true);
-            //         setShowAlertErr(false);
-                    setRedirect(true);
-            //         // resetAll();
-            //     } else {
-            //         setShowAlert(false);
-            //         setShowAlertErr(true);
-            //         setRedirect(false);
-            //     }
-            //
+
+                setRedirect(true);
+
                 return items;
             })
 
 
     }
 
-    // if(redirect && !showAlert) {
-    //     // setRedirect(false);
-    //     return (
-    //         <Redirect to='/doctorHome'/>
-    //     );
-    // }
 
     const handleYes = ()=>{
         setShowFollowUpOption(true);
@@ -200,13 +200,13 @@ const Patient: React.FC<any> = props => {
 
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
-                    <b>DOCTOR</b>
+                        <b>DOCTOR</b>
                     </IonTitle>
                 </IonToolbar>
 
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
-                    <b>PATIENT DETAILS AND PRESCRIPTION</b>
+                        <b>PATIENT DETAILS AND PRESCRIPTION</b>
                     </IonTitle>
                 </IonToolbar>
 
@@ -215,60 +215,63 @@ const Patient: React.FC<any> = props => {
             <IonContent className='ion-padding'>
                 <IonCard class = "card-style">
                     <IonGrid className='ion-text-center ion-margin'>
-                                <IonRow>
-                                    <IonCol>
-                                            <h2>Name : {visitDetails.currCase.patient.fname} {visitDetails.currCase.patient.lname}</h2>
-                                            <h2>Gender : {visitDetails.currCase.patient.gender}</h2>
-                                            <h2>Age : {visitDetails.currCase.patient.age}</h2>
-                                    </IonCol>
-
-                                </IonRow>
-
-                                <IonRow>
-                                    <IonCol>
-                                    <IonCard>
-                                        <IonItem>
-                                            <IonLabel position="floating">SYMPTOMS</IonLabel>
-                                            <IonTextarea value={symptoms} onIonChange={(e) => setSymptoms(e.detail.value!)}></IonTextarea>
-                                        </IonItem>
-                                    </IonCard>
-                                    </IonCol>
-
-                                    <IonCol>
-                                    <IonCard>
-                                        <IonItem>
-                                            <IonLabel position="floating">PRESCRIPTION</IonLabel>
-                                            <IonTextarea value={prescription} onIonChange={(e) => setPrescription(e.detail.value!)}></IonTextarea>
-                                        </IonItem>
-                                    </IonCard>
-                                    </IonCol>
-                                </IonRow>
-
-                    <IonRow>
-                        <IonCol>
-                        <IonButton onClick={submitDetails}>SUBMIT</IonButton>
-                        </IonCol>
-                    </IonRow>
-
-                        { !showFollowUpOption &&
-                        <IonCol>
                         <IonRow>
                             <IonCol>
-                            <h3>Do you want to add followups for this patient?</h3>
+                                <h2>Name : {visitDetails.currCase.patient.fname} {visitDetails.currCase.patient.lname}</h2>
+                                <h2>Gender : {visitDetails.currCase.patient.gender}</h2>
+                                <h2>Age : {visitDetails.currCase.patient.age}</h2>
                             </IonCol>
+
                         </IonRow>
 
+                        <IonRow>
+                            <IonCol>
+                                <IonCard>
+                                    <IonItem>
+                                        <IonLabel position="floating">SYMPTOMS</IonLabel>
+                                        <IonTextarea value={symptoms} onIonChange={(e) => setSymptoms(e.detail.value!)}></IonTextarea>
+                                    </IonItem>
+                                </IonCard>
+                            </IonCol>
 
+                            <IonCol>
+                                <IonCard>
+                                    <IonItem>
+                                        <IonLabel position="floating">PRESCRIPTION</IonLabel>
+                                        <IonTextarea value={prescription} onIonChange={(e) => setPrescription(e.detail.value!)}></IonTextarea>
+                                    </IonItem>
+                                </IonCard>
+                            </IonCol>
+                        </IonRow>
+                        {
+                            !showFollowUpOption &&
                             <IonRow>
                                 <IonCol>
-                                <IonButton onClick={handleYes}>Yes</IonButton>
-                                <IonButton onClick={handleNo}>No</IonButton>
+                                    <IonButton onClick={submitDetails}>SUBMIT</IonButton>
                                 </IonCol>
                             </IonRow>
-                        </IonCol>
+                        }
+
+
+                        { showFollowUpOption &&
+                            <IonCol>
+                                <IonRow>
+                                    <IonCol>
+                                        <h3>Do you want to add followups for this patient?</h3>
+                                    </IonCol>
+                                </IonRow>
+
+
+                                <IonRow>
+                                    <IonCol>
+                                        <IonButton onClick={handleYes}>Yes</IonButton>
+                                        <IonButton onClick={handleNo}>No</IonButton>
+                                    </IonCol>
+                                </IonRow>
+                            </IonCol>
                         }
                         {showFollowUpOption &&
-                        <IonCol>
+                            <IonCol>
                                 <IonRow>
                                     <IonCol>
                                         <IonCard>
@@ -279,47 +282,39 @@ const Patient: React.FC<any> = props => {
                                         </IonCard>
                                     </IonCol>
                                 </IonRow>
-                                    <IonRow>
-                                        <IonCol>
+                                <IonRow>
+                                    <IonCol>
                                         <IonCardTitle>Follow-up Date: </IonCardTitle>
-                                        </IonCol>
-                                    </IonRow>
-                                    <IonRow>
-                                        <IonCol>
+                                    </IonCol>
+                                    {/*</IonRow>*/}
+                                    {/*<IonRow>*/}
+                                    <IonCol>
                                         <IonCardTitle class="ion-card-subtitle-style">
                                             <IonDatetime ref={followUpDate} display-format="MM/DD/YYYY" picker-format="MM DD YYYY"></IonDatetime>
                                         </IonCardTitle>
-                                        </IonCol>
-                                    </IonRow>
+                                    </IonCol>
+                                </IonRow>
 
-                            <IonRow>
-                                <IonCol>
-                                <IonButton onClick={handleSubmitFollowUps}>SUBMIT</IonButton>
-                                </IonCol>
-                            </IonRow>
-                        </IonCol>
+                                <IonRow>
+                                    <IonCol>
+                                        <IonButton onClick={handleSubmitFollowUps}>SUBMIT</IonButton>
+                                    </IonCol>
+                                </IonRow>
+                            </IonCol>
                         }
 
-                </IonGrid>
+                    </IonGrid>
                 </IonCard>
             </IonContent>
             <IonAlert
                 isOpen={showAlert}
                 onDidDismiss={() => setShowAlert(false)}
-                header= "Details submitted successfully"
-                message="Add followups if required"
-                buttons={['OK']}
-            />
-            <IonAlert
-                isOpen={showAlertErr}
-                onDidDismiss={() => setShowAlertErr(false)}
-                header="Alert"
-                subHeader="Unsuccessful"
-                message="Please fill all the required fields"
+                header= {alertHeader}
+                message={alertMessage}
                 buttons={['OK']}
             />
 
-            {!showAlert && redirect?<Redirect to='/doctorHome'/>
+            {!showAlert && redirect?<Redirect to='/doctors'/>
                 :null}
         </IonPage>
 
@@ -327,4 +322,4 @@ const Patient: React.FC<any> = props => {
     )
 };
 
-export default Patient; 
+export default Patient;
