@@ -103,9 +103,9 @@ const RegisterPatient: React.FC<any> = props => {
                 }
                 else {
                     setShowAlertNoSuchId(false);
-
-                    console.log(hospitalId);
-
+                    var changeDateFormat = dob.current!.value;
+                    if(changeDateFormat!=null && typeof(changeDateFormat)=='string')
+                        changeDateFormat = changeDateFormat.split('T')[0];
                     let data = {
                         'hospital': {'hospitalId': hospitalId},
                         'supervisor': {'supervisorId': supervisorId.userId},
@@ -114,7 +114,7 @@ const RegisterPatient: React.FC<any> = props => {
                         'gender': gender.current!.value,
                         'address': address.current!.value,
                         'phoneNo': phoneNo.current!.value,
-                        'dob': dob.current!.value
+                        'dob': changeDateFormat
                     };
                     console.log(JSON.stringify(data));
                     const addRecordEndpoint = "http://localhost:9090/api/patients/";
@@ -184,8 +184,8 @@ const RegisterPatient: React.FC<any> = props => {
 
             <IonContent className='ion-padding'/*class = "content-style"*/>
                 <IonCard class = "card-style">
-                    <IonGrid className='ion-text-center ion-margin' >
-                        {/* <IonRow className = "header-border">
+                    <IonGrid className='ion-text-center ion-margin'>
+                        <IonRow className = "header-border">
                             <IonCol>
                                 <IonCardTitle>Supervisor ID: </IonCardTitle>
                                 <IonCardTitle ><IonInput ref = {supervisorId} class = "card-input" type="number" placeholder="1234"></IonInput></IonCardTitle>
@@ -198,7 +198,7 @@ const RegisterPatient: React.FC<any> = props => {
                             subHeader="ID NOT FOUND..!"
                             message="!!UNSUCCESSFUL..!"
                             buttons={['OK']}
-                            /> */}
+                            />
 
                         <IonRow className = "header-border">
 

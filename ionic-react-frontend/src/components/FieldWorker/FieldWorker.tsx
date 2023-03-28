@@ -5,7 +5,7 @@ import {
     IonContent,
     IonHeader,
     IonTitle,
-    IonToolbar, IonButton, IonGrid, IonSegment, IonCol, IonRow, IonCardTitle
+    IonToolbar, IonButton, IonGrid, IonSegment, IonCol, IonRow, IonCardTitle, IonAlert
 } from '@ionic/react';
 
 /* Core CSS required for Ionic components to work properly */
@@ -31,18 +31,29 @@ import {useEffect, useState} from "react";
 import { useStorageFollowUp } from './useStorageFollowUp';
 import { Redirect } from 'react-router';
 
-const FieldWorker: React.FC = () => {
+import { Network } from "@capacitor/network";
+
+const FieldWorker: React.FC<any> = props => {
     
     const [useSt, setUseSt] = useState(false);
     const [redirect,setRedirect] = useState(false);
     const [currFollowup, setCurrFollowup] = useState(null);
+
+    const f = props.location.state;
+    const [fwid, setFwid] = useState(f);
+
+    //handling sync..
+    // const [on, setOn] = useState(true);
+    // const [off, setOff] = useState(false);
+    const [offlineAlert, showOfflineAlert] = useState(false);
+    //end..
+
     const {followups, addFollowups} = useStorageFollowUp();
 
     const review = (followup : any) => {
         setCurrFollowup(followup);
         setRedirect(true);
     }
-
 
     const handle = () => {
         console.log('Database updated..!');
@@ -53,14 +64,26 @@ const FieldWorker: React.FC = () => {
     }
 
     useEffect(() => {
-        fetch(`http://localhost:9090/api/followUps/1`)
-           .then((response) => response.json())
-           .then((json) => {
-               console.log(json);
-               addFollowups(json);
-           })
-    }, [useSt]);
+        let connection = async() => {
+            // console.log(fwid);
+            // console.log(on);
+            const connection = await Network.getStatus();
     
+            if(connection.connected){
+                showOfflineAlert(false);
+                fetch(`http://localhost:9090/api/followUps/${fwid.userId}`)
+                .then((response) => response.json())
+                .then((json) => {
+                    console.log("data fetched");
+                    addFollowups(json);
+                })
+            }
+            else{
+                showOfflineAlert(true);
+            }
+        }  
+        connection();
+    }, [useSt]);
 
     return(
         <IonPage>
@@ -108,6 +131,13 @@ const FieldWorker: React.FC = () => {
                             </IonCard>
                         )}
                 </IonGrid>
+
+                <IonAlert
+                    isOpen={offlineAlert}
+                    onDidDismiss={() => showOfflineAlert(false)}
+                    header= {"NO INTERNET CONNECTION"}
+                    buttons={['OK']}
+                />
             </IonContent>
 
         </IonPage>

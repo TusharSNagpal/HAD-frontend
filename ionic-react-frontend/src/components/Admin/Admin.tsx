@@ -7,7 +7,7 @@ import {
     IonToolbar,
     IonButton,
     IonPage,
-    IonSegment, IonList, IonItem, IonSelect, IonSelectOption, IonLabel, IonInput, generateId
+    IonSegment, IonList, IonItem, IonSelect, IonSelectOption, IonLabel, IonInput, generateId, IonAlert
 } from '@ionic/react';
 
 /* Core CSS required for Ionic components to work properly */
@@ -34,6 +34,7 @@ import './Admin.css';
 import { useState, useRef, useEffect } from "react";
 import { useStorageFillingRemarks } from '../../hooks/useStorageFillingRemarks';
 import {Redirect} from "react-router";
+import { Network } from "@capacitor/network";
 
 // setupIonicReact();
 
@@ -46,6 +47,9 @@ const Admin: React.FC = () => {
     // const [valid, setValid] = useState(false);
     const [mobileNo, setMobileNo] = useState("");
     const [auth, setAuth] = useState(false);
+    const [on, setOn] = useState(false);
+    const [offlineAlert, setOfflineAlert] = useState(false);
+    const [onlineAlert, setOnlineAlert] = useState(false);
 
     const handleChange = (event: any) => {
         setRole(event.target.value);
@@ -53,37 +57,36 @@ const Admin: React.FC = () => {
     }
 
     const generate = () => {
-
-        fetch(`http://localhost:9090/api/${role}/phoneNo/${userId.current!.value}`)
-            .then(function (response) {
-                // console.log(response.text());
-                if (response['status'] === 200) {
-                    console.log("Found entry");
-                    return response.text();
-                }
-                else {
-                    console.log("No such entry..!");
-                    return "-1";
-                }
-            })
-            .then(function (data) {
-                console.log(data);
-                if(data === "-1"){
-                    console.log("Try again..!");
-                }
-                else{
-                    setMobileNo(data);
-                    fetch(`http://localhost:9090/api/phoneNumber/generateOTP/${data}`)
-                    .then(function (response) {
-                        console.log(response);
-                        if (response['status'] === 200) {
-                            console.log("OTP Sent to Registered Mobile Number");
-                        }
-                        else {
-                            console.log("Please Enter a valid Phone Number");
-                        }
-                    }
-                )}})
+        // fetch(`http://localhost:9090/api/${role}/phoneNo/${userId.current!.value}`)
+        //     .then(function (response) {
+        //         // console.log(response.text());
+        //         if (response['status'] === 200) {
+        //             console.log("Found entry");
+        //             return response.text();
+        //         }
+        //         else {
+        //             console.log("No such entry..!");
+        //             return "-1";
+        //         }
+        //     })
+        //     .then(function (data) {
+        //         console.log(data);
+        //         if(data === "-1"){
+        //             console.log("Try again..!");
+        //         }
+        //         else{
+        //             setMobileNo(data);
+        //             fetch(`http://localhost:9090/api/phoneNumber/generateOTP/${data}`)
+        //             .then(function (response) {
+        //                 console.log(response);
+        //                 if (response['status'] === 200) {
+        //                     console.log("OTP Sent to Registered Mobile Number");
+        //                 }
+        //                 else {
+        //                     console.log("Please Enter a valid Phone Number");
+        //                 }
+        //             }
+        //         )}})
     }
 
     const authenticate = () => {
@@ -102,6 +105,31 @@ const Admin: React.FC = () => {
         //     })
         setAuth(true);
     }
+
+    // useEffect(() => {
+    //     if(Network.type == Network.Connection.NONE) {
+    //         setOn(false);
+    //         console.log(false);
+    //     } 
+    //     else {
+    //         setOn(true);
+    //         console.log(true);
+    //     }
+    // },[on])
+
+    Network.addListener('networkStatusChange', status => {
+        console.log('Network status changed', status);
+        if(status.connected === true){
+            setOnlineAlert(true);
+            setOfflineAlert(false);
+            setOn(true);
+        }
+        else{
+            setOfflineAlert(true);
+            setOnlineAlert(false);
+            setOn(false);
+        }
+    });
 
     return (
         <IonPage>
@@ -142,7 +170,7 @@ const Admin: React.FC = () => {
                                 <IonLabel position="floating">ID</IonLabel>
                                 <IonInput ref={userId} />
                             </IonItem>
-                            <IonButton className="ion-margin-top" expand="block" /*onClick={() => generate()}*/>
+                            <IonButton className="ion-margin-top" expand="block" onClick={() => generate()}>
                                 GENERATE OTP
                             </IonButton>
                             <IonItem>
@@ -157,7 +185,6 @@ const Admin: React.FC = () => {
                                 auth ?
                                 <Redirect to={{ pathname: `./${role}`, state: { userId: userId.current!.value } }}/>
                             :null}
-                            
                         </form>
                     </IonSegment>
 
