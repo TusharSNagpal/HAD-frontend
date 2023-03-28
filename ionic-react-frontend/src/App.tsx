@@ -1,4 +1,4 @@
-import { IonApp, IonHeader, IonTitle, IonToolbar, setupIonicReact, IonRouterOutlet } from '@ionic/react';
+import { IonApp, IonAlert, IonHeader, IonTitle, IonToolbar, setupIonicReact, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from "@ionic/react-router";
 import { Route } from "react-router-dom";
 import React from "react";
@@ -69,11 +69,12 @@ const App: React.FC = () => {
 
   const { remarks, addRemark, getRemarks, updateRemarks } = useStorageFillingRemarks();
 
-  const syncStart = () => {
+  const syncStart = async() => {
     let flag = 1;
+    let connection = await Network.getStatus();
     getRemarks().then(async offlineData => {
       console.log(offlineData);
-        while (on && offlineData!.length > 0 && flag === 1) {
+        while (connection.connected && offlineData!.length > 0 && flag === 1) {
           // console.log(offlineData[0]['reviewByFieldWorker']);
           // updateRemarks(offlineData);  
           // count--;
@@ -173,6 +174,21 @@ const App: React.FC = () => {
 
         </IonRouterOutlet>
       </IonReactRouter>
+
+      <IonAlert
+                    isOpen={offlineAlert}
+                    onDidDismiss={() => setOfflineAlert(false)}
+                    header= {"CONNECTION LOST..!"}
+                    subHeader="Please connect to Internet for Sync"
+                    buttons={['OK']}
+                />
+      <IonAlert
+                    isOpen={onlineAlert}
+                    onDidDismiss={() => setOnlineAlert(false)}
+                    header= {"CONNECTION IS BACK"}
+                    subHeader="CONNECTED"
+                    buttons={['OK']}
+                />
     </IonApp>
   )
 };

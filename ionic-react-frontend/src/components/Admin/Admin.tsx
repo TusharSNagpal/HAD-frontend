@@ -190,14 +190,6 @@ const Admin: React.FC = () => {
 
                 </IonGrid>
 
-                <IonAlert
-                    isOpen={offlineAlert}
-                    onDidDismiss={() => setOfflineAlert(false)}
-                    header= {"CONNECTION LOST..!"}
-                    subHeader="Please connect to Internet for Sync"
-                    buttons={['OK']}
-                />
-
             </IonContent>
         </IonPage>
     )
