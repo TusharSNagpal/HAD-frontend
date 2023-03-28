@@ -1,0 +1,3 @@
+/*! For license information please see 841.420c2cad.chunk.js.LICENSE.txt */
+"use strict";(self.webpackChunkionic_react_practice=self.webpackChunkionic_react_practice||[]).push([[841],{841:(e,t,n)=>{n.r(t),n.d(t,{startStatusTap:()=>i});var r=n(554),s=n(344),c=n(811);const i=()=>{const e=window;e.addEventListener("statusTap",(()=>{(0,r.wj)((()=>{const t=e.innerWidth,n=e.innerHeight,i=document.elementFromPoint(t/2,n/2);if(!i)return;const o=(0,s.a)(i);o&&new Promise((e=>(0,c.c)(o,e))).then((()=>{(0,r.Iu)((async()=>{o.style.setProperty("--overflow","hidden"),await(0,s.s)(o,300),o.style.removeProperty("--overflow")}))}))}))}))}}}]);
+//# sourceMappingURL=841.420c2cad.chunk.js.map
