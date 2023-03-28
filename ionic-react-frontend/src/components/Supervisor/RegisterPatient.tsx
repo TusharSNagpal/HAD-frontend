@@ -198,7 +198,7 @@ const RegisterPatient: React.FC<any> = props => {
                             subHeader="ID NOT FOUND..!"
                             message="!!UNSUCCESSFUL..!"
                             buttons={['OK']}
-                            /> */}
+                            />
 
                         <IonRow className = "header-border">
 
