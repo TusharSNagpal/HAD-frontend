@@ -34,7 +34,10 @@ import {Redirect} from "react-router";
 
 // setupIonicReact();
 
-const DoctorHome: React.FC = () => {
+const DoctorHome: React.FC<any> = props => {
+
+    const dId = props.location.state;
+    const [doctorId, setDoctorId] = useState(dId);
 
     const [activeCases, setActiveCases] = useState<any[]>([]);
     const [activeFollowUps, setActiveFollowUps] = useState<any[]>([]);
@@ -214,7 +217,7 @@ const DoctorHome: React.FC = () => {
                                                     <IonButton onClick={() => deactivate(cases)}>PICK</IonButton>
 
                                                     { redirectToPatient ? <Redirect
-                                                        to={{pathname: '/doctors/patient', state: {currCase}}}/> : null}
+                                                        to={{pathname: '/doctorInHospital/patient', state: {currCase}}}/> : null}
                                                 </IonCol>
                                             </IonRow>
                                         </IonGrid>
@@ -242,7 +245,7 @@ const DoctorHome: React.FC = () => {
                                                     <IonButton onClick={()=>pickFollowUp(followUp)}>PICK</IonButton>
 
                                                     {redirectToFollowUp ? <Redirect
-                                                        to={{pathname: '/doctors/oldFollowUp', state: {currFollowUp}}}/> : null}
+                                                        to={{pathname: '/doctorInHospital/oldFollowUp', state: {currFollowUp}}}/> : null}
                                                 </IonCol>
                                             </IonRow>
                                         </IonGrid>

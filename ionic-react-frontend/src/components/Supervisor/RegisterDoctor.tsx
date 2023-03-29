@@ -25,6 +25,7 @@ import './Supervisor.css';
 // setupIonicReact();
 
 const RegisterDoctor: React.FC = () => {
+   
     return(
         <IonPage>
             <IonHeader>

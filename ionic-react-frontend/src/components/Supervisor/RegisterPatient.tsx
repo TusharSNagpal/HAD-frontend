@@ -35,14 +35,14 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import '../../theme/variables.css';
 import './Supervisor.css';
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import { Redirect } from 'react-router';
 
 // setupIonicReact();
 
 const RegisterPatient: React.FC<any> = props => {
-    const supId = props.location.state;
-    const [supervisorId, setSupervisorId] = useState(supId);
+    const profile = props.location.state;
+    const [profileData, setProfileData] = useState(profile);
 
     // const navigate = useNavigate();
 
@@ -56,7 +56,7 @@ const RegisterPatient: React.FC<any> = props => {
     // const [hospitalId, setHospitalId] = useState(0);
     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
 
-    // const supervisorId = useRef<HTMLIonInputElement>(null);
+    // const profileData = useRef<HTMLIonInputElement>(null);
     const fname = useRef<HTMLIonInputElement>(null);
     const lname = useRef<HTMLIonInputElement>(null);
     const gender = useRef<HTMLIonInputElement>(null);
@@ -65,7 +65,7 @@ const RegisterPatient: React.FC<any> = props => {
     const phoneNo = useRef<HTMLIonInputElement>(null);
 
     const resetAll = () => {
-        // supervisorId.current!.value = null;
+        // profileData.current!.value = null;
         dob.current!.reset();
         fname.current!.value = null;
         lname.current!.value = null;
@@ -74,8 +74,13 @@ const RegisterPatient: React.FC<any> = props => {
         phoneNo.current!.value = null;
     }
 
+    useEffect(() => {
+        console.log(profileData.userData.supervisorId);
+    })
+
     const registerPatient = async() => {
-        fetch(`http://localhost:9090/api/supervisors/${supervisorId.userId}`)
+        //here
+        fetch(`http://localhost:9090/api/supervisors/${profileData.userData.supervisorId}`)
             .then(function(response){
                 console.log(response);
                 if(response['status'] === 200){
@@ -108,7 +113,7 @@ const RegisterPatient: React.FC<any> = props => {
                         changeDateFormat = changeDateFormat.split('T')[0];
                     let data = {
                         'hospital': {'hospitalId': hospitalId},
-                        'supervisor': {'supervisorId': supervisorId.userId},
+                        'supervisor': {'supervisorId': profileData.userData.supervisorId},
                         'fname': fname.current!.value,
                         'lname': lname.current!.value,
                         'gender': gender.current!.value,
@@ -188,7 +193,7 @@ const RegisterPatient: React.FC<any> = props => {
                         <IonRow className = "header-border">
                             <IonCol>
                                 <IonCardTitle>Supervisor ID: </IonCardTitle>
-                                <IonCardTitle ><IonInput ref = {supervisorId} class = "card-input" type="number" placeholder="1234"></IonInput></IonCardTitle>
+                                <IonCardTitle ><IonInput ref = {profileData.userData.supervisorId} class = "card-input" type="number" placeholder="1234"></IonInput></IonCardTitle>
                             </IonCol>
                         </IonRow>
                         <IonAlert

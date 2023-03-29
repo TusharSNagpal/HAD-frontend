@@ -39,19 +39,14 @@ import { useState, useEffect } from "react";
 import { Redirect } from 'react-router';
 
 const Supervisor: React.FC<any> = props => {
-    const supId = props.location.state;
-    const [supervisorId, setSupervisorId] = useState(supId);
+    const profile = props.location.state;
+    const [profileData, setProfileData] = useState(profile);
     const [service, setService] = useState("");
     
     const redirectIt = (pathTo:string) => {
         setService(pathTo);
     }
-
-    // useEffect(() => {
-    //     console.log("Suphome");
-    //     console.log(supId.userId);
-    // })
-
+    
     return (
     <IonPage>
         <IonHeader>
@@ -107,7 +102,7 @@ const Supervisor: React.FC<any> = props => {
             </IonGrid>
 
             {service !== "" ?
-                <Redirect to={{ pathname: `${service}`, state: { userId: supervisorId.userId } }}/>
+                <Redirect to={{ pathname: `${service}`, state: { userData: profileData.userData } }}/>
             :null}
 
         </IonContent>

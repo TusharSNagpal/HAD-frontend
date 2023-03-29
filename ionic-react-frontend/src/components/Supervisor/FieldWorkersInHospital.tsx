@@ -38,7 +38,10 @@ import {useEffect, useState} from "react";
 import {type} from "os";
 // setupIonicReact();
 
-const FieldWorkersInHospital: React.FC = () => {
+const FieldWorkersInHospital: React.FC<any> = props => {
+    const profile = props.location.state;
+    const [profileData, setProfileData] = useState(profile);
+
     const [fieldWorkers, setFieldWorkers] = useState<any[]>([]);
     const [currFieldWorker, setCurrFieldWorker] = useState(null);
 
@@ -51,7 +54,7 @@ const FieldWorkersInHospital: React.FC = () => {
 
 
     useEffect(() => {
-        fetch(`http://localhost:9090/api/fieldWorkerInHospital/hospital/1`)
+        fetch(`http://localhost:9090/api/fieldWorkerInHospital/hospital/${profileData.userData.hospital.hospitalId}`)
             .then((response) => response.json())
             .then((json) => {
                 // setUseSt(true);

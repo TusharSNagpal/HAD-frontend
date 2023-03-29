@@ -51,85 +51,69 @@ const Admin: React.FC = () => {
     const [offlineAlert, setOfflineAlert] = useState(false);
     const [onlineAlert, setOnlineAlert] = useState(false);
 
+    const [userData, setUserData] = useState();
+
     const handleChange = (event: any) => {
         setRole(event.target.value);
         // console.log(event.target.value);
     }
 
     const generate = () => {
-        // fetch(`http://localhost:9090/api/${role}/phoneNo/${userId.current!.value}`)
-        //     .then(function (response) {
-        //         // console.log(response.text());
-        //         if (response['status'] === 200) {
-        //             console.log("Found entry");
-        //             return response.text();
-        //         }
-        //         else {
-        //             console.log("No such entry..!");
-        //             return "-1";
-        //         }
-        //     })
-        //     .then(function (data) {
-        //         console.log(data);
-        //         if(data === "-1"){
-        //             console.log("Try again..!");
-        //         }
-        //         else{
-        //             setMobileNo(data);
-        //             fetch(`http://localhost:9090/api/phoneNumber/generateOTP/${data}`)
-        //             .then(function (response) {
-        //                 console.log(response);
-        //                 if (response['status'] === 200) {
-        //                     console.log("OTP Sent to Registered Mobile Number");
-        //                 }
-        //                 else {
-        //                     console.log("Please Enter a valid Phone Number");
-        //                 }
-        //             }
-        //         )}})
+        fetch(`http://localhost:9090/api/${role}/phoneNo/${userId.current!.value}`)
+            .then(function (response) {
+                // console.log(response.text());
+                if (response['status'] === 200) {
+                    console.log("Found entry");
+                    return response.text();
+                }
+                else {
+                    console.log("No such entry..!");
+                    return "-1";
+                }
+            })
+            .then(function (data) {
+                console.log(data);
+                if(data === "-1"){
+                    console.log("Try again..!");
+                }
+                else{
+                    setMobileNo(data);
+                    fetch(`http://localhost:9090/api/phoneNumber/generateOTP/${data}`)
+                    .then(function (response) {
+                        console.log(response);
+                        if (response['status'] === 200) {
+                            console.log("OTP Sent to Registered Mobile Number");
+                        }
+                        else {
+                            console.log("Please Enter a valid Phone Number");
+                        }
+                    }
+                )}})
     }
 
     const authenticate = () => {
         // verifyOTP:
-        // fetch(`http://localhost:9090/api/phoneNumber/verifyOTP/${otp.current!.value}/${mobileNo}`)
-        //     .then(function (response) {
-        //         console.log(response);
-        //         if (response['status'] === 200) {
-        //             console.log("OTP Validated");
-        //             setAuth(true);
-        //         }
-        //         else {
-        //             console.log("OTP mismatch Sorry..!");
-        //             setAuth(false);
-        //         }
-        //     })
-        setAuth(true);
+        fetch(`http://localhost:9090/api/phoneNumber/verifyOTP/${otp.current!.value}/${mobileNo}`)
+            .then(function (response) {
+                console.log(response);
+                if (response['status'] === 200) {
+                    fetch(`http://localhost:9090/api/${role}/${userId.current!.value}`)
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then((data) => {
+                        setUserData(data);
+                        console.log("OTP Validated");
+                        setAuth(true);
+                    })
+                }
+                else {
+                    console.log("OTP mismatch Sorry..!");
+                    setAuth(false);
+                }
+            })
+        // setAuth(true);
     }
-
-    // useEffect(() => {
-    //     if(Network.type == Network.Connection.NONE) {
-    //         setOn(false);
-    //         console.log(false);
-    //     } 
-    //     else {
-    //         setOn(true);
-    //         console.log(true);
-    //     }
-    // },[on])
-
-    Network.addListener('networkStatusChange', status => {
-        console.log('Network status changed', status);
-        if(status.connected === true){
-            setOnlineAlert(true);
-            setOfflineAlert(false);
-            setOn(true);
-        }
-        else{
-            setOfflineAlert(true);
-            setOnlineAlert(false);
-            setOn(false);
-        }
-    });
 
     return (
         <IonPage>
@@ -158,8 +142,8 @@ const Admin: React.FC = () => {
                             <IonSelect interface="action-sheet" placeholder="LOGIN AS" onIonChange={handleChange}>
                                 <IonSelectOption value="admin">ADMIN</IonSelectOption>
                                 <IonSelectOption value="supervisors">SUPERVISOR</IonSelectOption>
-                                <IonSelectOption value="doctors">DOCTOR</IonSelectOption>
-                                <IonSelectOption value="fieldworkers">FIELD WORKER</IonSelectOption>
+                                <IonSelectOption value="doctorInHospital">DOCTOR</IonSelectOption>
+                                <IonSelectOption value="fieldWorkerInHospital">FIELD WORKER</IonSelectOption>
                             </IonSelect>
                         </IonItem>
                     </IonList>
@@ -183,7 +167,7 @@ const Admin: React.FC = () => {
 
                             {
                                 auth ?
-                                <Redirect to={{ pathname: `./${role}`, state: { userId: userId.current!.value } }}/>
+                                <Redirect to={{ pathname: `./${role}`, state: { userData: userData } }}/>
                             :null}
                         </form>
                     </IonSegment>

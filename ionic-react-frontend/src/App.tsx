@@ -151,8 +151,8 @@ const App: React.FC = () => {
           <Route exact path = "/registerDoctor" component={RegisterDoctor}/>
           <Route exact path = "/registerPatient" component={RegisterPatient}/>
           <Route exact path = "/newCase" component={NewCase}/>
-          <Route exact path = "/doctors" component={DoctorHome}/>
-          <Route exact path = "/fieldWorkers" component={FieldWorker}/>
+          <Route exact path = "/doctorInHospital" component={DoctorHome}/>
+          <Route exact path = "/fieldWorkerInHospital" component={FieldWorker}/>
           <Route exact path = "/followup" component={FollowUp}/>
           <Route exact path = "/fieldWorkerHome" component={FWHome}/>
           <Route exact path = "/fillingRemarks" component={FillingRemarks}/>
@@ -167,8 +167,8 @@ const App: React.FC = () => {
           <Route exact path = "/globalUpdate/globalUpdateSupervisor" component={GlobalUpdateSupervisor} />
           <Route exact path = "/globalUpdate/globalUpdateDoctor" component={GlobalUpdateDoctor} />
           <Route exact path = "/globalUpdate/globalUpdateFieldWorker" component={GlobalUpdateFieldWorker} />
-          <Route exact path = "/doctors/patient" component={Patient}></Route>
-          <Route exact path ="/doctors/oldFollowUp" component={OldFollowUp}></Route>
+          <Route exact path = "/doctorInHospital/patient" component={Patient}></Route>
+          <Route exact path ="/doctorInHospital/oldFollowUp" component={OldFollowUp}></Route>
           <Route exact path ="/supervisors/fieldWorkersInHospital" component={FieldWorkersInHospital}></Route>
           <Route exact path ="/supervisors/fieldWorkersInHospital/assignTasks" component={AssignTasks}></Route>
 

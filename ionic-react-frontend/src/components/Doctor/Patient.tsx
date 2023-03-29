@@ -314,7 +314,7 @@ const Patient: React.FC<any> = props => {
                 buttons={['OK']}
             />
 
-            {!showAlert && redirect?<Redirect to='/doctors'/>
+            {!showAlert && redirect?<Redirect to='/doctorInHospital'/>
                 :null}
         </IonPage>
 
