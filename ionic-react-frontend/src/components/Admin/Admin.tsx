@@ -30,15 +30,15 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import '../../theme/variables.css';
-import './Admin.css';
+// import './Admin.css';
 import { useState, useRef, useEffect } from "react";
-import { useStorageFillingRemarks } from '../../hooks/useStorageFillingRemarks';
+// import { useStorageFillingRemarks } from '../../hooks/useStorageFillingRemarks';
 import {Redirect} from "react-router";
 import { Network } from "@capacitor/network";
 
 // setupIonicReact();
 
-const Admin: React.FC = () => {
+const Admin: React.FC<any> = () => {
     // const patientIdRef = useRef<HTMLIonInputElement>(null);
     // const [task, setTask] = useState('');
     const [role, setRole] = useState("");
@@ -59,7 +59,7 @@ const Admin: React.FC = () => {
     }
 
     const generate = () => {
-        fetch(`http://localhost:9090/api/${role}/phoneNo/${userId.current!.value}`)
+        fetch(`http://172.16.132.90:9090/api/${role}/phoneNo/${userId.current!.value}`)
             .then(function (response) {
                 // console.log(response.text());
                 if (response['status'] === 200) {
@@ -78,41 +78,41 @@ const Admin: React.FC = () => {
                 }
                 else{
                     setMobileNo(data);
-                    fetch(`http://localhost:9090/api/phoneNumber/generateOTP/${data}`)
-                    .then(function (response) {
-                        console.log(response);
-                        if (response['status'] === 200) {
-                            console.log("OTP Sent to Registered Mobile Number");
-                        }
-                        else {
-                            console.log("Please Enter a valid Phone Number");
-                        }
-                    }
-                )}})
+                    fetch(`http://172.16.132.90:9090/api/phoneNumber/generateOTP/${data}`)
+                        .then(function (response) {
+                                console.log(response);
+                                if (response['status'] === 200) {
+                                    console.log("OTP Sent to Registered Mobile Number");
+                                }
+                                else {
+                                    console.log("Please Enter a valid Phone Number");
+                                }
+                            }
+                        )}})
     }
 
     const authenticate = () => {
+        // setAuth(true);
         // verifyOTP:
-        fetch(`http://localhost:9090/api/phoneNumber/verifyOTP/${otp.current!.value}/${mobileNo}`)
+        fetch(`http://172.16.132.90:9090/api/phoneNumber/verifyOTP/${otp.current!.value}/${mobileNo}`)
             .then(function (response) {
                 console.log(response);
                 if (response['status'] === 200) {
-                    fetch(`http://localhost:9090/api/${role}/${userId.current!.value}`)
-                    .then(function (response) {
-                        return response.json();
-                    })
-                    .then((data) => {
-                        setUserData(data);
-                        console.log("OTP Validated");
-                        setAuth(true);
-                    })
+                    fetch(`http://172.16.132.90:9090/api/${role}/${userId.current!.value}`)
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then((data) => {
+                            setUserData(data);
+                            console.log("OTP Validated");
+                            setAuth(true);
+                        })
                 }
                 else {
                     console.log("OTP mismatch Sorry..!");
                     setAuth(false);
                 }
             })
-        // setAuth(true);
     }
 
     return (
@@ -167,8 +167,8 @@ const Admin: React.FC = () => {
 
                             {
                                 auth ?
-                                <Redirect to={{ pathname: `./${role}`, state: { userData: userData } }}/>
-                            :null}
+                                    <Redirect to={{ pathname: `./${role}`, state: { userData: userData } }}/>
+                                    :null}
                         </form>
                     </IonSegment>
 
