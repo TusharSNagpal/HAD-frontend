@@ -5,7 +5,7 @@ import {
     IonContent,
     IonHeader,
     IonTitle,
-    IonToolbar, IonButton, IonGrid, IonSegment, IonCol, IonRow, IonCardTitle, IonAlert
+    IonToolbar, IonButton, IonGrid, IonSegment, IonCol, IonRow, IonAlert
 } from '@ionic/react';
 
 /* Core CSS required for Ionic components to work properly */
@@ -34,13 +34,16 @@ import { Redirect } from 'react-router';
 import { Network } from "@capacitor/network";
 
 const FieldWorker: React.FC<any> = props => {
-    
+
     const [useSt, setUseSt] = useState(false);
     const [redirect,setRedirect] = useState(false);
     const [currFollowup, setCurrFollowup] = useState(null);
 
-    const f = props.location.state;
-    const [fwid, setFwid] = useState(f);
+    // const f = props.location.state;
+    // const [fwid, setFwid] = useState(f);
+
+    let profile = props.location.state;
+    const [profileData, setProfileData] = useState(profile.userData);
 
     //handling sync..
     // const [on, setOn] = useState(true);
@@ -64,24 +67,25 @@ const FieldWorker: React.FC<any> = props => {
     }
 
     useEffect(() => {
+        // console.log(profileData);
         let connection = async() => {
-            // console.log(fwid);
+            console.log(profileData.fwInHospId);
             // console.log(on);
             const connection = await Network.getStatus();
-    
+
             if(connection.connected){
                 showOfflineAlert(false);
-                fetch(`http://localhost:9090/api/followUps/${fwid.userId}`)
-                .then((response) => response.json())
-                .then((json) => {
-                    console.log("data fetched");
-                    addFollowups(json);
-                })
+                fetch(`http://172.16.132.90:9090/api/followUps/${profileData.fwInHospId}`)
+                    .then((response) => response.json())
+                    .then(async (json) => {
+                        console.log("data fetched");
+                        await addFollowups(json);
+                    })
             }
             else{
                 showOfflineAlert(true);
             }
-        }  
+        }
         connection();
     }, [useSt]);
 
@@ -96,40 +100,40 @@ const FieldWorker: React.FC<any> = props => {
 
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
-                    <b>FieldWorker</b>
+                        <b>FieldWorker</b>
                     </IonTitle>
                 </IonToolbar>
 
                 <IonHeader>
-                <IonToolbar>
-                    <IonTitle class="ion-text-center">
-                        <b>ASSIGNED FOLLOWUPS</b>
-                    </IonTitle>
-                </IonToolbar>
-            </IonHeader>
+                    <IonToolbar>
+                        <IonTitle class="ion-text-center">
+                            <b>ASSIGNED FOLLOWUPS</b>
+                        </IonTitle>
+                    </IonToolbar>
+                </IonHeader>
 
             </IonHeader>
-            
+
             <IonContent className='ion-padding'/*class = "content-style"*/>
                 <IonGrid className='ion-text-center ion-margin'>
-                <IonButton onClick = {handle}>DOWNLOAD</IonButton>
-                        {followups.filter(followup => followup.isActive == 1).map(followup =>
-                            <IonCard class = "card-style">
-                                <IonCardHeader>
-                                    <IonSegment value = {followup.follow_ups_id} key = {followup.follow_ups_id}>
-                                        <IonGrid>
-                                            <IonRow>
-                                                <IonCol><h5>{followup.visit.patient.fname}</h5></IonCol>   
-                                                <IonCol>
-                                                    <IonButton onClick={() => review(followup)}>PICK</IonButton>
-                                                    {redirect ? <Redirect from = '/fieldworkers' to={{ pathname: './followup', state: { fup: {currFollowup} } }} />:null}
-                                                </IonCol>
-                                            </IonRow>
-                                        </IonGrid>
-                                    </IonSegment>
-                                </IonCardHeader>
-                            </IonCard>
-                        )}
+                    <IonButton onClick = {handle}>DOWNLOAD</IonButton>
+                    {followups.filter(followup => followup.isActive == 1).map(followup =>
+                        <IonCard class = "card-style">
+                            <IonCardHeader>
+                                <IonSegment value = {followup.follow_ups_id} key = {followup.follow_ups_id}>
+                                    <IonGrid>
+                                        <IonRow>
+                                            <IonCol><h5>{followup.visit.patient.fname}</h5></IonCol>
+                                            <IonCol>
+                                                <IonButton onClick={() => review(followup)}>PICK</IonButton>
+                                                {redirect ? <Redirect from = '/fieldworkers' to={{ pathname: './followup', state: { fupAndProfile: {fup: {currFollowup}, userData:{profileData} }} }} />:null}
+                                            </IonCol>
+                                        </IonRow>
+                                    </IonGrid>
+                                </IonSegment>
+                            </IonCardHeader>
+                        </IonCard>
+                    )}
                 </IonGrid>
 
                 <IonAlert

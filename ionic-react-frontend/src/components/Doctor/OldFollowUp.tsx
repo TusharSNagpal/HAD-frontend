@@ -47,8 +47,6 @@ import DoctorHome from "./DoctorHome";
 import {Route} from "react-router-dom";
 
 
-
-
 // setupIonicReact();
 const OldFollowUp: React.FC<any> = props => {
     const f = props.location.state;

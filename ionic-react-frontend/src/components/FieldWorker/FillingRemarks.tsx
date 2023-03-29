@@ -36,16 +36,12 @@ interface PatientId {
 
 const FillingRemarks: React.FC<any> = props => {
     const followUpRow = props.location.state;
-    const [followUpCurr, setFollowUpCurr] = useState(followUpRow);
+    const [followUpCurr, setFollowUpCurr] = useState(followUpRow.userData.userData);
     const [redirect, setRedirect] = useState(false);
-
-    // useEffect(() => {
-    //     // console.log();
-    // },[])
 
     const [assigned, setAssigned] = useState({} as any);
     // const s = "BLOOD PRESSURE $ FEVER $ HEALTH RATE $ TEMPERATURE";
-    const [s,setS] = useState(followUpCurr.fup.newF.taskAssignedByDoctor);
+    const [s,setS] = useState(followUpCurr.fup.currFollowup.taskAssignedByDoctor);
 
     // const [on, setOn] = useState(false);
     // const [off, setOff] = useState(false);
@@ -102,7 +98,7 @@ const FillingRemarks: React.FC<any> = props => {
                 'reviewByFieldWorker': task
             };
 
-            const addRecordEndpoint = `http://localhost:9090/api/followUps/fieldWorker/${followUpCurr.fup.newF.followUpId}`;
+            const addRecordEndpoint = `http://172.16.132.90:9090/api/followUps/fieldWorker/${followUpCurr.fup.currFollowup.followUpId}`;
             const options = {
                 method: 'PUT',
                 headers: {
@@ -120,13 +116,13 @@ const FillingRemarks: React.FC<any> = props => {
                     } else {
                         console.log("ERROR");
                         await addRemark(false, 2, s, task, followUpCurr.fup.newF.followUpId);
-                        await updateFollowUp(followUpCurr.fup.newF.followUpId);
+                        await updateFollowUp(followUpCurr.fup.currFollowup.followUpId);
                     }
                 })
         } //if the internet is not on(OFFLINE): We will directly push in ionic storage..
         else {
-            await addRemark(false, 2, s, task, followUpCurr.fup.newF.followUpId);
-            await updateFollowUp(followUpCurr.fup.newF.followUpId);
+            await addRemark(false, 2, s, task, followUpCurr.fup.currFollowup.followUpId);
+            await updateFollowUp(followUpCurr.fup.currFollowup.followUpId);
         }
         setRedirect(true);
     }
@@ -217,8 +213,8 @@ const FillingRemarks: React.FC<any> = props => {
                     : null}
 
                 {redirect ?
-                    <Redirect to={{ pathname: "/fieldworkers", state: { userId: followUpCurr.fup.newF.fieldWorkerInHospital.fwInHospId } }}/>
-                :null}
+                    <Redirect to={{ pathname: "/fieldWorkerInHospital", state: { userData: followUpCurr.userData.profileData } }}/>
+                    :null}
 
             </IonContent>
         </IonPage>

@@ -31,18 +31,19 @@ import React, {useEffect, useState} from "react";
 import { Redirect } from 'react-router';
 
 const FollowUp: React.FC<any> = props => {
-    const followupDetails = props.location.state.fup.currFollowup;
-    const [newF,setNewF] = useState(followupDetails);
+    const followupDetails = props.location.state;
+    const [userData,setNewF] = useState(followupDetails.fupAndProfile);
+
     const [redirect, setRedirect] = useState(false);
 
     const review = () => {
         setRedirect(true);
-        console.log(props.location.state);
+        // console.log(newF);
     }
 
     return (
         <IonPage>
-             <IonHeader>
+            <IonHeader>
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
                         <b>HEALTHCARE SERVICES</b>
@@ -51,16 +52,16 @@ const FollowUp: React.FC<any> = props => {
 
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
-                    <b>Authenticate Patient</b>
+                        <b>Authenticate Patient</b>
                     </IonTitle>
                 </IonToolbar>
             </IonHeader>
 
             <IonContent>
                 <IonGrid class='ion-text-center'>
-                        <IonCol><h5>Patient Name: {newF.visit.patient.fname}</h5></IonCol>   
-                        <IonCol><h5>Address: {newF.visit.patient.address}</h5></IonCol>
-                        <IonSegment>
+                    <IonCol><h5>Patient Name: {userData.fup.currFollowup.visit.patient.fname}</h5></IonCol>
+                    <IonCol><h5>Address: {userData.fup.currFollowup.visit.patient.address}</h5></IonCol>
+                    <IonSegment>
                         <form className="ion-padding">
                             <IonItem>
                                 <IonLabel position="floating">Enter OTP</IonLabel>
@@ -69,9 +70,9 @@ const FollowUp: React.FC<any> = props => {
                             <IonButton className="ion-margin-top" expand="block" onClick={(review)}>
                                 Review
                             </IonButton>
-                            {redirect ? 
-                            <Redirect to={{ pathname: '/fillingRemarks', state: { fup: {newF} } }} />
-                            :null}
+                            {redirect ?
+                                <Redirect to={{ pathname: '/fillingRemarks', state: { userData: {userData} } }} />
+                                :null}
                         </form>
                     </IonSegment>
                 </IonGrid>
