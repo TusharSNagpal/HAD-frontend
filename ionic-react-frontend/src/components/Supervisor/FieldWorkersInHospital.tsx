@@ -41,7 +41,7 @@ import {type} from "os";
 const FieldWorkersInHospital: React.FC<any> = props => {
     const profile = props.location.state;
     const [profileData, setProfileData] = useState(profile);
-
+    console.log(props.location.state)
     const [fieldWorkers, setFieldWorkers] = useState<any[]>([]);
     const [currFieldWorker, setCurrFieldWorker] = useState(null);
 
@@ -112,7 +112,7 @@ const FieldWorkersInHospital: React.FC<any> = props => {
                                                         <IonButton onClick={()=>handlePickFieldWorker(fieldWorker)}>PICK</IonButton>
 
                                                         { redirectToAssignTasks ? <Redirect
-                                                            to={{pathname: '/supervisors/fieldWorkersInHospital/assignTasks', state: {currFieldWorker}}}/> : null}
+                                                            to={{pathname: '/supervisors/fieldWorkersInHospital/assignTasks', state: {currFieldWorker,userData:profile.userData}}}/> : null}
                                                     </IonCol>
 
 

@@ -46,7 +46,10 @@ const RegisterFieldWorker: React.FC<any> = props => {
     const [showAlertErr, setShowAlertErr] = useState(false);
     const [redirect, setRedirect] = useState(false);
     const [displayFieldWorkerId, setDisplayFieldWorkerId] = useState(0);
-
+    const [alertHeader,setAlertHeader] = useState<string>();
+    const [alertMessage,setAlertMessage] = useState<string>();
+    const profile = props.location.state;
+    const [profileData, setProfileData] = useState(profile);
 
 
 
@@ -59,55 +62,81 @@ const RegisterFieldWorker: React.FC<any> = props => {
 
     const registerFieldWorker = async() => {
 
-        let data = {
-            'hospital': {'hospitalId': hospId.current!.value},
-            'fieldWorker': {'fieldWorkerId': fwId.current!.value}
-
-        };
-        // console.log(data);
-        console.log(JSON.stringify(data));
-
-
-
-        const addRecordEndpoint = `http://localhost:9090/api/fieldWorkerInHospital/fwInHosp/${fwId.current!.value}/hospital/${hospId.current!.value}`;
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        }
-
-        await fetch(addRecordEndpoint, options)
-            .then(function (response) {
+        fetch(`http://localhost:9090/api/fieldworkers/${fwId.current!.value}`)
+            .then(function(response){
                 console.log(response);
-                if (response['status'] === 201) {
+                if(response['status'] === 200){
                     console.log("DONE");
-                } else {
+                }
+                else{
                     console.log("ERROR");
                 }
                 return response.json();
             })
-            .then(function (data) {
-                console.log(data);
-                const items = data;
-                if (data.size !== 0) {
-                    setDisplayFieldWorkerId(items.fwInHosp);
-                    console.log(displayFieldWorkerId);
-                    setShowAlert(true);
-                    setShowAlertErr(false);
-                    setRedirect(true);
-                    resetAll();
-                } else {
-                    setShowAlert(false);
-                    setShowAlertErr(true);
-                    setRedirect(false);
+            .then(function(data){
+                    console.log(data);
+                    const items  = data;
+                    console.log(items.success);
+                    if(items.success === false) {
+                        return -1;
+                    }
+                    // setShowAlertNoSuchId(false);
+                    return items.fieldWorkerId;
                 }
+            )
+            .then( async function (fieldWorkerId){
+                    if(fieldWorkerId === -1){
+                        setAlertHeader("No such ID");
+                        setAlertMessage("Kindly enter a correct field worker ID");
+                        setShowAlert(true);
+                    }
+                    else {
 
-                return items;
-            })
+                        let data = {
+                            'hospital': {'hospitalId': hospId.current!.value},
+                            'doctor': {'doctorId': fwId.current!.value}
 
+                        };
+                        console.log(JSON.stringify(data));
 
+                        const addRecordEndpoint = `http://localhost:9090/api/fieldWorkerInHospital/fwInHosp/${fwId.current!.value}/hospital/${hospId.current!.value}`;                        const options = {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        }
+                        await fetch(addRecordEndpoint, options)
+                            .then(function (response) {
+                                console.log(response);
+                                if (response['status'] === 201) {
+                                    console.log("DONE");
+                                } else {
+                                    console.log("ERROR");
+                                }
+                                return response.json();
+                            })
+                            .then(function (data) {
+                                console.log(data);
+                                const items = data;
+                                if (data.size !== 0) {
+                                    // setDisplayPatientId(items.patientId);
+                                    // console.log(displayPatientId);
+                                    setShowAlert(true);
+                                    setAlertHeader("Fieldworker registered successfully")
+                                    setAlertMessage("")
+                                    setRedirect(true);
+                                    resetAll();
+                                } else {
+                                    setShowAlert(false);
+                                    setRedirect(false);
+                                }
+
+                                return items;
+                            })
+                    }
+                }
+            )
 
     }
 
@@ -163,22 +192,14 @@ const RegisterFieldWorker: React.FC<any> = props => {
                 <IonAlert
                     isOpen={showAlert}
                     onDidDismiss={() => setShowAlert(false)}
-                    header= {`FIELDWORKER ID: ${displayFieldWorkerId}`}
-                    subHeader="Registration Successful..!"
-                    message="Please go to FieldWorker Login Tab to Login..!"
+                    header={alertHeader}
+                    message={alertMessage}
                     buttons={['OK']}
                 />
 
-                <IonAlert
-                    isOpen={showAlertErr}
-                    onDidDismiss={() => setShowAlertErr(false)}
-                    header="Alert"
-                    subHeader="Registration Unsuccessful..!"
-                    message="Please Go to FieldWorker Registration Tab and Register Again!"
-                    buttons={['OK']}
-                />
 
-                {!showAlert && redirect?<Redirect to='/supervisors' />
+
+                {!showAlert && redirect?<Redirect to={{ pathname: "/supervisors/register", state: { userData: profileData.userData } }}/>
                     :null}
 
             </IonContent>

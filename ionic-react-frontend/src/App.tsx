@@ -34,10 +34,10 @@ import FollowUp from './components/FollowUp/FollowUp';
 
 import Register from "./components/Supervisor/Register";
 import RegisterFieldWorker from "./components/Supervisor/RegisterFieldWorker";
-import Update from "./components/Supervisor/Update";
-import UpdateDoctor from "./components/Supervisor/UpdateDoctor";
+import Delete from "./components/Supervisor/Delete";
+import DeleteDoctor from "./components/Supervisor/DeleteDoctor";
 import UpdatePatient from "./components/Supervisor/UpdatePatient";
-import UpdateFieldWorker from "./components/Supervisor/UpdateFieldWorker";
+import DeleteFieldWorker from "./components/Supervisor/DeleteFieldWorker";
 
 import AdminHome from './components/Admin/AdminHome';
 import GlobalRegister from './components/Admin/GlobalRegister';
@@ -157,25 +157,24 @@ const App: React.FC = () => {
         <IonRouterOutlet>
           <Route exact path = "/" component={Admin}/>
 
-          <Route path = "/supervisors" component={Supervisor}/>
-          <Route path = "/registerDoctor" component={RegisterDoctor}/>
-          <Route path = "/updateDoctor" component={UpdateDoctor}/>
-          <Route path = "/register" component={Register}/>
-          <Route path = "/update" component={Update}/>
-          <Route path = "/registerPatient" component={RegisterPatient}/>
-          <Route path = "/registerFieldWorker" component={RegisterFieldWorker}/>
-          <Route path = "/updatePatient" component={UpdatePatient}/>
-          <Route path = "/updateFieldWorker" component={UpdateFieldWorker}/>
-          <Route path = "/newCase" component={NewCase}/>
-          <Route path = "/doctors" component={DoctorHome}/>
-          <Route path = "/fieldWorkers" component={FieldWorker}/>
-          <Route path = "/followup" component={FollowUp}/>
-          <Route path = "/fieldWorkerHome" component={FWHome}/>
-          <Route path = "/fillingRemarks" component={FillingRemarks}/>
-
           <Route exact path = "/supervisors" component={Supervisor}/>
           <Route exact path = "/registerDoctor" component={RegisterDoctor}/>
-          <Route exact path = "/registerPatient" component={RegisterPatient}/>
+          <Route exact path = "/supervisors/update/updateDoctor" component={DeleteDoctor}/>
+          <Route exact path = "/supervisors/register" component={Register}/>
+          <Route exact path = "/supervisors/delete" component={Delete}/>
+          <Route exact path = "/supervisors/register/registerFieldWorker" component={RegisterFieldWorker}/>
+          <Route exact path = "/supervisors/updatePatient" component={UpdatePatient}/>
+          <Route exact path = "/supervisors/delete/updateFieldWorker" component={DeleteFieldWorker}/>
+          <Route exact path = "/newCase" component={NewCase}/>
+          <Route exact path = "/doctors" component={DoctorHome}/>
+          <Route exact path = "/fieldWorkers" component={FieldWorker}/>
+          <Route exact path = "/followup" component={FollowUp}/>
+          <Route exact path = "/fieldWorkerHome" component={FWHome}/>
+          <Route exact path = "/fillingRemarks" component={FillingRemarks}/>
+
+          <Route exact path = "/supervisors" component={Supervisor}/>
+          <Route exact path = "/supervisors/register/registerDoctor" component={RegisterDoctor}/>
+          <Route exact path = "/supervisors/register/registerPatient" component={RegisterPatient}/>
           <Route exact path = "/newCase" component={NewCase}/>
           <Route exact path = "/doctorInHospital" component={DoctorHome}/>
           <Route exact path = "/fieldWorkerInHospital" component={FieldWorker}/>

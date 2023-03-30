@@ -29,14 +29,14 @@ const UpdatePatient= () => {
     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [id, setId] = useState(0);
-    const [doctor, setDoctor] = useState<any>([]);
+    const [patient, setPatient] = useState<any>([]);
     const [openForm, setOpenForm] = useState(false);
     const supId =useRef<HTMLIonInputElement>(null)
     const hospId= useRef<HTMLIonInputElement>(null)
     const fname = useRef<HTMLIonInputElement>(null);
     const lname = useRef<HTMLIonInputElement>(null);
     const gender = useRef<HTMLIonInputElement>(null);
-    const dob = useRef<HTMLIonDatetimeElement>(null);
+    const dob = useRef<HTMLIonInputElement>(null)
     const address = useRef<HTMLIonInputElement>(null);
     const phoneNo = useRef<HTMLIonInputElement>(null);
     const patient_id=useRef<HTMLIonInputElement>(null);
@@ -44,7 +44,7 @@ const UpdatePatient= () => {
 
     const resetAll = () => {
         // supervisorId.current!.value = null;
-        dob.current!.reset();
+        dob.current!.value=null;
         patient_id.current!.value=null;
         fname.current!.value = null;
         lname.current!.value = null;
@@ -55,13 +55,11 @@ const UpdatePatient= () => {
 
 
 
-    const updateDoctor = async() => {
+    const updatePatient = async() => {
         let data = {
 
 
-            'hospitalId': {'hospitalId': hospId.current!.value},
-            'supId': {'supervisorId': supId.current!.value},
-            'patientId': patient_id.current!.value,
+
             'fname': fname.current!.value,
             'lname': lname.current!.value,
             'gender': gender.current!.value,
@@ -71,7 +69,7 @@ const UpdatePatient= () => {
 
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `http://localhost:9090/api/patients/${patient_id.current!.value}`;
+        const addRecordEndpoint = `http://localhost:9090/api/patients/${patient.patientId}`;
         const options = {
             method: 'PUT',
             headers: {
@@ -103,7 +101,7 @@ const UpdatePatient= () => {
             .then(async (response) => {
                 if(response['status'] === 200) {
                     const data = await response.json();
-                    setDoctor(data)
+                    setPatient(data)
                     console.log(data)
                 }
                 else if(id !== 0) setShowAlertNoSuchId(true);
@@ -153,56 +151,45 @@ const UpdatePatient= () => {
                         </form>
                     </IonSegment>
                     {
-                        doctor.length != 0 ? (
+                        patient.length != 0 ? (
                             <><IonCard class="card-style">
                                 <IonGrid className='ion-text-center ion-margin'>
                                     <IonRow className = "header-border">
-                                        <IonCol>
-                                            <IonCardTitle>Patient Id: </IonCardTitle>
-                                            <IonCardTitle><IonInput ref={patient_id} class="card-input" placeholder="Id"></IonInput></IonCardTitle>
-                                        </IonCol>
-                                        <IonCol>
-                                            <IonCardTitle>Hospital Id: </IonCardTitle>
-                                            <IonCardTitle><IonInput ref={hospId} class="card-input" placeholder="Id"></IonInput></IonCardTitle>
-                                        </IonCol>
 
                                         <IonCol>
-                                            <IonCardTitle>Supervisor Id: </IonCardTitle>
-                                            <IonCardTitle><IonInput ref={supId} class="card-input" placeholder="Id"></IonInput></IonCardTitle>
-                                        </IonCol>
-                                        <IonCol>
                                             <IonCardTitle>First Name: </IonCardTitle>
-                                            <IonCardTitle><IonInput ref={fname} class="card-input" placeholder="Binod"></IonInput></IonCardTitle>
+                                            <IonCardTitle><IonInput ref={fname} class="card-input" value={patient.fname}></IonInput></IonCardTitle>
                                         </IonCol>
                                         <IonCol>
                                             <IonCardTitle>Last Name: </IonCardTitle>
-                                            <IonCardTitle><IonInput ref={lname} class="card-input" placeholder="Modi"></IonInput></IonCardTitle>
+                                            <IonCardTitle><IonInput ref={lname} class="card-input" value={patient.lname}></IonInput></IonCardTitle>
                                         </IonCol>
                                         <IonCol>
                                             <IonCardTitle>Gender: </IonCardTitle>
-                                            <IonCardTitle><IonInput ref={gender} class="card-input" placeholder="M"></IonInput></IonCardTitle>
+                                            <IonCardTitle><IonInput ref={gender} class="card-input" value={patient.gender}></IonInput></IonCardTitle>
+                                        </IonCol>
+                                        <IonCol>
+                                            <IonCardTitle>Date of Birth: </IonCardTitle>
+                                            <IonCardTitle><IonInput ref={dob} value={patient.dob} class="card-input"></IonInput></IonCardTitle>
                                         </IonCol>
 
                                     </IonRow>
-                                    <IonRow className = "header-border">
-                                        <IonCol><IonCardTitle>Date of Birth: </IonCardTitle></IonCol>
-                                        <IonCol><IonCardTitle class="ion-card-subtitle-style"><IonDatetime ref={dob} display-format="MM/DD/YYYY" picker-format="MM DD YYYY"></IonDatetime></IonCardTitle></IonCol>
-                                    </IonRow>
+
                                     <IonRow className = "header-border">
                                         <IonCol>
                                             <IonCardTitle>Address: </IonCardTitle>
-                                            <IonCardTitle><IonInput ref={address} class="card-input" placeholder="IIITB- Electronic City Phase 1"></IonInput></IonCardTitle>
+                                            <IonCardTitle><IonInput ref={address} class="card-input" value={patient.address}></IonInput></IonCardTitle>
                                         </IonCol>
                                         <IonCol>
                                             <IonCardTitle>Phone Number: </IonCardTitle>
-                                            <IonCardTitle><IonInput ref={phoneNo} class="card-input" type="tel" placeholder="888-888-8888"></IonInput></IonCardTitle>
+                                            <IonCardTitle><IonInput ref={phoneNo} class="card-input" type="tel" value={patient.phoneNo}></IonInput></IonCardTitle>
 
                                         </IonCol>
                                     </IonRow>
                                 </IonGrid>
                             </IonCard>
                                 <IonGrid className='ion-text-center ion-margin'>
-                                    <IonButton onClick={updateDoctor}>Submit</IonButton>
+                                    <IonButton onClick={updatePatient}>Submit</IonButton>
                                 </IonGrid>
 
                                 <IonAlert

@@ -43,7 +43,7 @@ import { Redirect } from 'react-router';
 const RegisterPatient: React.FC<any> = props => {
     const profile = props.location.state;
     const [profileData, setProfileData] = useState(profile);
-
+    // console.log(profileData)
     // const navigate = useNavigate();
 
     const [showAlert, setShowAlert] = useState(false);
@@ -63,7 +63,7 @@ const RegisterPatient: React.FC<any> = props => {
     const dob = useRef<HTMLIonDatetimeElement>(null);
     const address = useRef<HTMLIonInputElement>(null);
     const phoneNo = useRef<HTMLIonInputElement>(null);
-
+    const supervisorId = useRef<HTMLIonInputElement>(null);
     const resetAll = () => {
         // profileData.current!.value = null;
         dob.current!.reset();
@@ -187,15 +187,15 @@ const RegisterPatient: React.FC<any> = props => {
 
             </IonHeader>
 
-            <IonContent className='ion-padding'/*class = "content-style"*/>
+            <IonContent className='ion-padding'>
                 <IonCard class = "card-style">
                     <IonGrid className='ion-text-center ion-margin'>
-                        <IonRow className = "header-border">
-                            <IonCol>
-                                <IonCardTitle>Supervisor ID: </IonCardTitle>
-                                <IonCardTitle ><IonInput ref = {profileData.userData.supervisorId} class = "card-input" type="number" placeholder="1234"></IonInput></IonCardTitle>
-                            </IonCol>
-                        </IonRow>
+                        {/*<IonRow className = "header-border">*/}
+                        {/*    <IonCol>*/}
+                        {/*        <IonCardTitle>Supervisor ID: </IonCardTitle>*/}
+                        {/*        <IonCardTitle ><IonInput ref = {supervisorId} class = "card-input" type="number" placeholder="1234"></IonInput></IonCardTitle>*/}
+                        {/*    </IonCol>*/}
+                        {/*</IonRow>*/}
                         <IonAlert
                             isOpen={showAlertNoSuchId}
                             onDidDismiss={() => setShowAlertNoSuchId(false)}
@@ -241,30 +241,30 @@ const RegisterPatient: React.FC<any> = props => {
                     </IonGrid>
                 </IonCard>
 
-            <IonGrid className='ion-text-center ion-margin'>
-                <IonButton onClick = {registerPatient}>Submit</IonButton>
-            </IonGrid>
-                
-                <IonAlert
-                    isOpen={showAlert}
-                    onDidDismiss={() => setShowAlert(false)}
-                    header= {`PATIENT ID: ${displayPatientId}`}
-                    subHeader="Registration Successful..!"
-                    message="Please go to Patient Login Tab to Login..!"
-                    buttons={['OK']}
-                />
+            {/*<IonGrid className='ion-text-center ion-margin'>*/}
+            {/*    <IonButton onClick = {registerPatient}>Submit</IonButton>*/}
+            {/*</IonGrid>*/}
+            {/*    */}
+            {/*    <IonAlert*/}
+            {/*        isOpen={showAlert}*/}
+            {/*        onDidDismiss={() => setShowAlert(false)}*/}
+            {/*        header= {`PATIENT ID: ${displayPatientId}`}*/}
+            {/*        subHeader="Registration Successful..!"*/}
+            {/*        message="Please go to Patient Login Tab to Login..!"*/}
+            {/*        buttons={['OK']}*/}
+            {/*    />*/}
 
-                <IonAlert
-                    isOpen={showAlertErr}
-                    onDidDismiss={() => setShowAlertErr(false)}
-                    header="Alert"
-                    subHeader="Registration Unsuccessful..!"
-                    message="Please Go to Patient Registration Tab and Register Again!"
-                    buttons={['OK']}
-                />
+            {/*    <IonAlert*/}
+            {/*        isOpen={showAlertErr}*/}
+            {/*        onDidDismiss={() => setShowAlertErr(false)}*/}
+            {/*        header="Alert"*/}
+            {/*        subHeader="Registration Unsuccessful..!"*/}
+            {/*        message="Please Go to Patient Registration Tab and Register Again!"*/}
+            {/*        buttons={['OK']}*/}
+            {/*    />*/}
 
-                {!showAlert && redirect?<Redirect to='/supervisors' />
-                    :null}
+            {/*    {!showAlert && redirect?<Redirect to='/supervisors/register' />*/}
+            {/*        :null}*/}
 
             </IonContent>
 

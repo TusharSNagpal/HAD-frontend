@@ -46,9 +46,13 @@ const AssignTasks: React.FC<any> = props => {
     const [alertHeader,setAlertHeader] = useState<string>();
     const [alertMessage,setAlertMessage] = useState<string>();
     const [redirect, setRedirect] = useState<boolean>(false);
+
     const f = props.location.state;
-    const [fieldWorkerDetails,setFieldWorkerDetails] = useState(f)
-    const [tasksAssigned, setTasksAssigned] = useState(fieldWorkerDetails.currFieldWorker.numOfTasksPerDay)
+    console.log(f)
+    const [profileData, setProfileData] = useState(f.userData);
+    const [fieldWorkerDetails,setFieldWorkerDetails] = useState(f.currFieldWorker)
+    console.log(fieldWorkerDetails)
+    const [tasksAssigned, setTasksAssigned] = useState(fieldWorkerDetails.numOfTasksPerDay)
     // console.log(fieldWorkerDetails.currFieldWorker);
     // let count=0;
     const handleSelectFollowUp=(index:any)=>{
@@ -80,7 +84,7 @@ const AssignTasks: React.FC<any> = props => {
             if(picked[i]===true){
                 const followUpId = followUps[i].followUpId;
                 console.log(followUpId)
-                const addRecordEndpoint = `http://localhost:9090/api/followUps/${followUpId}/fwInHosp/${fieldWorkerDetails.currFieldWorker.fwInHospId}`;
+                const addRecordEndpoint = `http://localhost:9090/api/followUps/${followUpId}/fwInHosp/${fieldWorkerDetails.fwInHospId}`;
                 const options = {
                     method: 'PUT',
                 }
@@ -101,16 +105,16 @@ const AssignTasks: React.FC<any> = props => {
         }
         // .then(async function () {
             console.log(tasksAssigned);
-            console.log(fieldWorkerDetails.currFieldWorker.numOfTasksPerDay);
-            fieldWorkerDetails.currFieldWorker.numOfTasksPerDay=tasksAssigned;
+            // console.log(fieldWorkerDetails.currFieldWorker.numOfTasksPerDay);
+            fieldWorkerDetails.numOfTasksPerDay=tasksAssigned;
             console.log(JSON.stringify(fieldWorkerDetails));
-            const addRecordEndpoint = `http://localhost:9090/api/fieldWorkerInHospital/${fieldWorkerDetails.currFieldWorker.fwInHospId}`;
+            const addRecordEndpoint = `http://localhost:9090/api/fieldWorkerInHospital/${fieldWorkerDetails.fwInHospId}`;
             const options = {
                 method: 'PUT',
                 headers:{
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(fieldWorkerDetails.currFieldWorker)
+                body: JSON.stringify(fieldWorkerDetails)
             }
             //
             const response = await fetch(addRecordEndpoint, options);
@@ -183,9 +187,9 @@ const AssignTasks: React.FC<any> = props => {
                     <IonCard class="card-style">
                         <IonRow>
                             <IonCol>
-                                <h5>Name : {fieldWorkerDetails.currFieldWorker.fieldWorker.fname}</h5>
-                                <h5>Gender : {fieldWorkerDetails.currFieldWorker.fieldWorker.gender}</h5>
-                                <h5>Address : {fieldWorkerDetails.currFieldWorker.fieldWorker.address}</h5>
+                                <h5>Name : {fieldWorkerDetails.fieldWorker.fname}</h5>
+                                <h5>Gender : {fieldWorkerDetails.fieldWorker.gender}</h5>
+                                <h5>Address : {fieldWorkerDetails.fieldWorker.address}</h5>
                                 <h5>Tasks assigned : {tasksAssigned}</h5>
                             </IonCol>
                         </IonRow>
@@ -222,7 +226,7 @@ const AssignTasks: React.FC<any> = props => {
                     buttons={['OK']}
                 />
             </IonContent>
-            {!showAlert && redirect?<Redirect to='/supervisors/fieldWorkersInHospital'/>
+            {!showAlert && redirect?<Redirect to={{pathname:'/supervisors/fieldWorkersInHospital',state: { userData: profileData }}}/>
                 :null}
 
         </IonPage>
