@@ -1,3 +1,4 @@
+
 import {
     IonContent,
     IonGrid,
@@ -25,26 +26,24 @@ import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 import React, { useEffect, useRef, useState } from 'react';
 
-const UpdateFieldWorker= () => {
+const DeleteDoctor = () => {
     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [id, setId] = useState(0);
     const [doctor, setDoctor] = useState<any>([]);
     const [openForm, setOpenForm] = useState(false);
-    const fwInHospId =useRef<HTMLIonInputElement>(null)
+    const docInHospId =useRef<HTMLIonInputElement>(null)
 
 
 
-    const updateFieldWorker = async() => {
+    const updateDoctor = async() => {
         let data = {
 
-
-
-            'fieldWorkerId': {'fieldWorkerId': fwInHospId.current!.value},
+            'doctorId': {'doctorId': docInHospId.current!.value},
 
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `http://localhost:9090/api/fieldWorkerInHospital/del/${fwInHospId.current!.value}`;
+        const addRecordEndpoint = `http://localhost:9090/api/doctorInHospital/del/${docInHospId.current!.value}`;
         const options = {
             method: 'DELETE',
             headers: {
@@ -72,7 +71,7 @@ const UpdateFieldWorker= () => {
     }
 
     useEffect(() => {
-        fetch(`http://localhost:9090/api/fieldWorkerInHospital/fwId/${id}`)
+        fetch(`http://localhost:9090/api/doctorInHospital/${id}`)
             .then(async (response) => {
                 if(response['status'] === 200) {
                     const data = await response.json();
@@ -98,7 +97,7 @@ const UpdateFieldWorker= () => {
                 </IonToolbar>
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
-                        <b>UPDATE FIELDWORKER</b>
+                        <b>DELETE DOCTOR</b>
                     </IonTitle>
                 </IonToolbar>
             </IonHeader>
@@ -131,8 +130,8 @@ const UpdateFieldWorker= () => {
                                 <IonGrid className='ion-text-center ion-margin'>
                                     <IonRow className = "header-border">
                                         <IonCol>
-                                            <IonCardTitle>FieldWorker Id: </IonCardTitle>
-                                            <IonCardTitle><IonInput ref={fwInHospId} class="card-input" placeholder="Id"></IonInput></IonCardTitle>
+                                            <IonCardTitle>Doctor Id: </IonCardTitle>
+                                            <IonCardTitle><IonInput ref={docInHospId} class="card-input" placeholder="Id"></IonInput></IonCardTitle>
                                         </IonCol>
 
 
@@ -140,7 +139,7 @@ const UpdateFieldWorker= () => {
                                 </IonGrid>
                             </IonCard>
                                 <IonGrid className='ion-text-center ion-margin'>
-                                    <IonButton onClick={updateFieldWorker}>Submit</IonButton>
+                                    <IonButton onClick={updateDoctor}>Submit</IonButton>
                                 </IonGrid>
 
                                 <IonAlert
@@ -157,4 +156,4 @@ const UpdateFieldWorker= () => {
     )
 }
 
-export default UpdateFieldWorker;
+export default DeleteDoctor;

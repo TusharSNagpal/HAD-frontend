@@ -38,9 +38,9 @@ import {Redirect} from "react-router";
 
 // setupIonicReact();
 
-const Update: React.FC<any> = props => {
-    const supId = props.location.state;
-    const [supervisorId, setSupervisorId] = useState(supId);
+const Delete: React.FC<any> = props => {
+    const profile = props.location.state;
+    const [profileData, setProfileData] = useState(profile);
     const [service, setService] = useState("");
     const redirectIt = (pathTo:string) => {
         setService(pathTo);
@@ -56,7 +56,7 @@ const Update: React.FC<any> = props => {
 
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
-                        <b>UPDATE</b>
+                        <b>DELETE</b>
                     </IonTitle>
                 </IonToolbar>
 
@@ -71,24 +71,19 @@ const Update: React.FC<any> = props => {
 
                     <IonCard class = "card-style">
                         <IonCardHeader>
-                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("./updateDoctor")} /*routerLink = "./updateDoctor"*/>UPDATE DOCTOR</IonButton></IonCardTitle>
+                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("/supervisors/delete/updateDoctor")} /*routerLink = "./updateDoctor"*/>DELETE DOCTOR</IonButton></IonCardTitle>
                         </IonCardHeader>
                     </IonCard>
 
                     <IonCard class = "card-style">
                         <IonCardHeader>
-                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("./updateFieldWorker")} /*routerLink = "./updateDoctor"*/>UPDATE FIELD WORKER</IonButton></IonCardTitle>
+                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("/supervisors/delete/updateFieldWorker")} /*routerLink = "./updateDoctor"*/>DELETE FIELD WORKER</IonButton></IonCardTitle>
                         </IonCardHeader>
                     </IonCard>
 
-                    <IonCard class = "card-style">
-                        <IonCardHeader>
-                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("./updatePatient")}/*routerLink = "./updatePatient"*/>UPDATE PATIENT</IonButton></IonCardTitle>
-                        </IonCardHeader>
-                    </IonCard>
                 </IonGrid>
                 {service !== "" ?
-                    <Redirect to={{ pathname: `${service}`, state: { userId: supervisorId.userId } }}/>
+                    <Redirect to={{ pathname: `${service}`, state: { userData: profileData.userData } }}/>
                     :null}
 
             </IonContent>
@@ -97,4 +92,4 @@ const Update: React.FC<any> = props => {
     )
 };
 
-export default Update;
+export default Delete;

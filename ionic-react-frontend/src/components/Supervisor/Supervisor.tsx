@@ -42,7 +42,7 @@ const Supervisor: React.FC<any> = props => {
     const profile = props.location.state;
     const [profileData, setProfileData] = useState(profile);
     const [service, setService] = useState("");
-    
+
     const redirectIt = (pathTo:string) => {
         setService(pathTo);
     }
@@ -74,20 +74,26 @@ const Supervisor: React.FC<any> = props => {
 
                 <IonCard class = "card-style">
                 <IonCardHeader>
-                    <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("./register")} /*routerLink = "./registerDoctor"*/>REGISTER</IonButton></IonCardTitle>
+                    <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("/supervisors/register")} /*routerLink = "./registerDoctor"*/>REGISTER</IonButton></IonCardTitle>
                 </IonCardHeader>
                 </IonCard>
 
                 <IonCard class = "card-style">
                     <IonCardHeader>
-                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("./update")} /*routerLink = "./registerDoctor"*/>UPDATE</IonButton></IonCardTitle>
+                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("/supervisors/updatePatient")} /*routerLink = "./registerDoctor"*/>UPDATE PATIENT</IonButton></IonCardTitle>
+                    </IonCardHeader>
+                </IonCard>
+
+                <IonCard class = "card-style">
+                    <IonCardHeader>
+                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("/supervisors/delete")} /*routerLink = "./registerDoctor"*/>DELETE</IonButton></IonCardTitle>
                     </IonCardHeader>
                 </IonCard>
 
 
                 <IonCard class = "card-style">
                     <IonCardHeader>
-                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink="./supervisors/fieldWorkersInHospital">ASSIGN TASKS TO FIELD WORKER</IonButton></IonCardTitle>
+                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={()=>redirectIt("/supervisors/fieldWorkersInHospital")}>ASSIGN TASKS TO FIELD WORKER</IonButton></IonCardTitle>
                     </IonCardHeader>
                 </IonCard>
 

@@ -45,11 +45,13 @@ const RegisterDoctor: React.FC<any> = props => {
      const [supervisorId, setSupervisorId] = useState(supId);
      //onst [doctorId,setDoctorId] = useState(docId);
      const [showAlert, setShowAlert] = useState(false);
-     const [showAlertErr, setShowAlertErr] = useState(false);
+     const [alertHeader,setAlertHeader] = useState<string>();
+     const [alertMessage,setAlertMessage] = useState<string>();
      const [redirect, setRedirect] = useState(false);
      const [displayDoctorId, setDisplayDoctorId] = useState(0);
+    const profile = props.location.state;
+    const [profileData, setProfileData] = useState(profile);
      // const [hospitalId, setHospitalId] = useState(0);
-     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
 
 
      //const docId= useRef<HTMLIonInputElement>(null);
@@ -60,46 +62,43 @@ const RegisterDoctor: React.FC<any> = props => {
                            }
 
     const registerDoctor = async() => {
-        // fetch(`http://localhost:9090/api/supervisors/${supervisorId.userId}`)
-        //     .then(function(response){
-        //         console.log(response);
-        //         if(response['status'] === 200){
-        //             console.log("DONE");
-        //         }
-        //         else{
-        //             console.log("ERROR");
-        //         }
-        //         return response.json();
-        //     })
-        //     .then(function(data){
-        //             console.log(data);
-        //             const items  = data;
-        //             console.log(items.success);
-        //             if(items.success === false) {
-        //                 return -1;
-        //             }
-        //             setShowAlertNoSuchId(false);
-        //             return items.hospital.hospitalId;
-        //         }
-        //     )
-        //     .then( async function (hospitalId){
-        //             if(hospitalId === -1){
-        //                 setShowAlertNoSuchId(true);
-        //             }
-        //             else {
-        //                 setShowAlertNoSuchId(false);
-        //
-        //                 console.log(hospitalId);
+
+        fetch(`http://localhost:9090/api/doctors/${docId.current!.value}`)
+            .then(function(response){
+                console.log(response);
+                if(response['status'] === 200){
+                    console.log("DONE");
+                }
+                else{
+                    console.log("ERROR");
+                }
+                return response.json();
+            })
+            .then(function(data){
+                    console.log(data);
+                    const items  = data;
+                    console.log(items.success);
+                    if(items.success === false) {
+                        return -1;
+                    }
+                    // setShowAlertNoSuchId(false);
+                    return items.doctorId;
+                }
+            )
+            .then( async function (doctorId){
+                    if(doctorId === -1){
+                        setAlertHeader("No such ID");
+                        setAlertMessage("Kindly enter a correct doctor ID");
+                        setShowAlert(true);
+                    }
+                    else {
 
                         let data = {
                             'hospital': {'hospitalId': hospId.current!.value},
                             'doctor': {'doctorId': docId.current!.value}
 
                         };
-                        // console.log(data);
                         console.log(JSON.stringify(data));
-
-
 
                         const addRecordEndpoint = `http://localhost:9090/api/doctorInHospital/docInHosp/${docId.current!.value}/hospital/${hospId.current!.value}`;
                         const options = {
@@ -109,7 +108,6 @@ const RegisterDoctor: React.FC<any> = props => {
                             },
                             body: JSON.stringify(data)
                         }
-
                         await fetch(addRecordEndpoint, options)
                             .then(function (response) {
                                 console.log(response);
@@ -124,22 +122,23 @@ const RegisterDoctor: React.FC<any> = props => {
                                 console.log(data);
                                 const items = data;
                                 if (data.size !== 0) {
-                                    setDisplayDoctorId(items.docInHospId);
-                                    console.log(displayDoctorId);
+                                    // setDisplayPatientId(items.patientId);
+                                    // console.log(displayPatientId);
                                     setShowAlert(true);
-                                    setShowAlertErr(false);
+                                    setAlertHeader("Doctor registered successfully")
+                                    setAlertMessage("")
                                     setRedirect(true);
                                     resetAll();
                                 } else {
                                     setShowAlert(false);
-                                    setShowAlertErr(true);
                                     setRedirect(false);
                                 }
 
                                 return items;
                             })
-
-
+                    }
+                }
+            )
 
     }
 
@@ -194,23 +193,16 @@ const RegisterDoctor: React.FC<any> = props => {
                 <IonAlert
                     isOpen={showAlert}
                     onDidDismiss={() => setShowAlert(false)}
-                    header= {`DOCTOR ID: ${displayDoctorId}`}
-                    subHeader="Registration Successful..!"
-                    message="Please go to Doctor Login Tab to Login..!"
+                    header= {alertHeader}
+                    message={alertMessage}
                     buttons={['OK']}
                 />
 
-                <IonAlert
-                    isOpen={showAlertErr}
-                    onDidDismiss={() => setShowAlertErr(false)}
-                    header="Alert"
-                    subHeader="Registration Unsuccessful..!"
-                    message="Please Go to Doctor Registration Tab and Register Again!"
-                    buttons={['OK']}
-                />
 
-                {!showAlert && redirect?<Redirect to='/supervisors' />
+
+                {!showAlert && redirect?<Redirect to={{ pathname: "/supervisors/register", state: { userData: profileData.userData } }}/>
                     :null}
+
 
             </IonContent>
 
