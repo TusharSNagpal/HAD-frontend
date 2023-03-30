@@ -39,81 +39,68 @@ import {Redirect} from "react-router";
 
 const RegisterDoctor: React.FC<any> = props => {
      const supId = props.location.state;
+     const docId= useRef<HTMLIonInputElement>(null);
+     const hospId= useRef<HTMLIonInputElement>(null);
      const [supervisorId, setSupervisorId] = useState(supId);
+     //onst [doctorId,setDoctorId] = useState(docId);
+     const [showAlert, setShowAlert] = useState(false);
+     const [showAlertErr, setShowAlertErr] = useState(false);
+     const [redirect, setRedirect] = useState(false);
+     const [displayDoctorId, setDisplayDoctorId] = useState(0);
+     // const [hospitalId, setHospitalId] = useState(0);
+     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
 
-    // const navigate = useNavigate();
 
-    const [showAlert, setShowAlert] = useState(false);
-    const [showAlertErr, setShowAlertErr] = useState(false);
+     //const docId= useRef<HTMLIonInputElement>(null);
 
-    const [redirect, setRedirect] = useState(false);
-
-    const [displayDoctorId, setDisplayDoctorId] = useState(0);
-
-    const [hospitalId, setHospitalId] = useState(0);
-    const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
-
-    // const supervisorId = useRef<HTMLIonInputElement>(null);
-    const fname= useRef<HTMLIonInputElement>(null);
-    const lname = useRef<HTMLIonInputElement>(null);
-    const gender = useRef<HTMLIonInputElement>(null);
-    const dob = useRef<HTMLIonDatetimeElement>(null);
-    const address = useRef<HTMLIonInputElement>(null);
-    const phoneNo = useRef<HTMLIonInputElement>(null);
 
     const resetAll = () => {
-        // supervisorId.current!.value = null;
-        dob.current!.reset();
-        fname.current!.value = null;
-        lname.current!.value = null;
-        gender.current!.value = null;
-        address.current!.value = null;
-        phoneNo.current!.value = null;
-    }
+        docId.current!.value = null;
+                           }
 
     const registerDoctor = async() => {
-        fetch(`http://localhost:9090/api/supervisors/${supervisorId.userId}`)
-            .then(function(response){
-                console.log(response);
-                if(response['status'] === 200){
-                    console.log("DONE");
-                }
-                else{
-                    console.log("ERROR");
-                }
-                return response.json();
-            })
-            .then(function(data){
-                    console.log(data);
-                    const items  = data;
-                    console.log(items.success);
-                    if(items.success === false) {
-                        return -1;
-                    }
-                    setShowAlertNoSuchId(false);
-                    return items.hospital.hospitalId;
-                }
-            )
-            .then( async function (hospitalId){
-                    if(hospitalId === -1){
-                        setShowAlertNoSuchId(true);
-                    }
-                    else {
-                        setShowAlertNoSuchId(false);
-
-                        console.log(hospitalId);
+        // fetch(`http://localhost:9090/api/supervisors/${supervisorId.userId}`)
+        //     .then(function(response){
+        //         console.log(response);
+        //         if(response['status'] === 200){
+        //             console.log("DONE");
+        //         }
+        //         else{
+        //             console.log("ERROR");
+        //         }
+        //         return response.json();
+        //     })
+        //     .then(function(data){
+        //             console.log(data);
+        //             const items  = data;
+        //             console.log(items.success);
+        //             if(items.success === false) {
+        //                 return -1;
+        //             }
+        //             setShowAlertNoSuchId(false);
+        //             return items.hospital.hospitalId;
+        //         }
+        //     )
+        //     .then( async function (hospitalId){
+        //             if(hospitalId === -1){
+        //                 setShowAlertNoSuchId(true);
+        //             }
+        //             else {
+        //                 setShowAlertNoSuchId(false);
+        //
+        //                 console.log(hospitalId);
 
                         let data = {
+                            'hospital': {'hospitalId': hospId.current!.value},
+                            'doctor': {'doctorId': docId.current!.value}
 
-                            'fname': fname.current!.value,
-                            'lname': lname.current!.value,
-                            'gender': gender.current!.value,
-                            'address': address.current!.value,
-                            'phoneNo': phoneNo.current!.value,
-                            'dob': dob.current!.value
                         };
+                        // console.log(data);
                         console.log(JSON.stringify(data));
-                        const addRecordEndpoint = "http://localhost:9090/api/doctors/";
+
+
+
+                        const addRecordEndpoint = `http://localhost:9090/api/doctorInHospital/docInHosp/${docId.current!.value}/hospital/${hospId.current!.value}`;
                         const options = {
                             method: 'POST',
                             headers: {
@@ -136,8 +123,8 @@ const RegisterDoctor: React.FC<any> = props => {
                                 console.log(data);
                                 const items = data;
                                 if (data.size !== 0) {
-                                    setDisplayDoctorId(items.doctorId);
-                                     console.log(displayDoctorId);
+                                    setDisplayDoctorId(items.docInHospId);
+                                    console.log(displayDoctorId);
                                     setShowAlert(true);
                                     setShowAlertErr(false);
                                     setRedirect(true);
@@ -150,9 +137,9 @@ const RegisterDoctor: React.FC<any> = props => {
 
                                 return items;
                             })
-                    }
-                }
-            )
+
+
+
     }
 
 
@@ -186,53 +173,19 @@ const RegisterDoctor: React.FC<any> = props => {
             <IonContent className='ion-padding'/*class = "content-style"*/>
                 <IonCard class = "card-style">
                     <IonGrid className='ion-text-center ion-margin' >
-                        {/* <IonRow className = "header-border">
-                            <IonCol>
-                                <IonCardTitle>Supervisor ID: </IonCardTitle>
-                                <IonCardTitle ><IonInput ref = {supervisorId} class = "card-input" type="number" placeholder="1234"></IonInput></IonCardTitle>
-                            </IonCol>
-                        </IonRow>
-                        <IonAlert
-                            isOpen={showAlertNoSuchId}
-                            onDidDismiss={() => setShowAlertNoSuchId(false)}
-                            header= "No such supervisor ID found please try again..!"
-                            subHeader="ID NOT FOUND..!"
-                            message="!!UNSUCCESSFUL..!"
-                            buttons={['OK']}
-                            /> */}
+
 
                         <IonRow className = "header-border">
 
                             <IonCol>
-                                <IonCardTitle>First Name: </IonCardTitle>
-                                <IonCardTitle><IonInput ref={fname} class="card-input" placeholder="Binod"></IonInput></IonCardTitle>
+                                <IonCardTitle>Doctor Id: </IonCardTitle>
+                                <IonCardTitle><IonInput ref={docId} class="card-input" placeholder="Id"></IonInput></IonCardTitle>
                             </IonCol>
                             <IonCol>
-                                <IonCardTitle>Last Name: </IonCardTitle>
-                                <IonCardTitle><IonInput ref={lname} class="card-input" placeholder="Modi"></IonInput></IonCardTitle>
-                            </IonCol>
-                            <IonCol>
-                                <IonCardTitle>Gender: </IonCardTitle>
-                                <IonCardTitle><IonInput ref={gender} class="card-input" placeholder="M"></IonInput></IonCardTitle>
+                                <IonCardTitle>Hospital Id: </IonCardTitle>
+                                <IonCardTitle><IonInput ref={hospId} class="card-input" placeholder="Id"></IonInput></IonCardTitle>
                             </IonCol>
 
-                        </IonRow>
-
-                        <IonRow className = "header-border">
-                            <IonCol><IonCardTitle>Date of Birth: </IonCardTitle></IonCol>
-                            <IonCol><IonCardTitle class="ion-card-subtitle-style"><IonDatetime ref={dob} display-format="MM/DD/YYYY" picker-format="MM DD YYYY"></IonDatetime></IonCardTitle></IonCol>
-                        </IonRow>
-
-                        <IonRow className = "header-border">
-                            <IonCol>
-                                <IonCardTitle>Address: </IonCardTitle>
-                                <IonCardTitle><IonInput ref={address} class="card-input" placeholder="IIITB- Electronic City Phase 1"></IonInput></IonCardTitle>
-                            </IonCol>
-                            <IonCol>
-                                <IonCardTitle>Phone Number: </IonCardTitle>
-                                <IonCardTitle><IonInput ref={phoneNo} class="card-input" type="tel" placeholder="888-888-8888"></IonInput></IonCardTitle>
-
-                            </IonCol>
                         </IonRow>
                     </IonGrid>
                 </IonCard>
