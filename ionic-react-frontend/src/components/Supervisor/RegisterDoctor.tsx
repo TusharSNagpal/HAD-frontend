@@ -37,6 +37,7 @@ import {Redirect} from "react-router";
 
 // setupIonicReact();
 
+
 const RegisterDoctor: React.FC<any> = props => {
      const supId = props.location.state;
      const docId= useRef<HTMLIonInputElement>(null);
@@ -141,10 +142,6 @@ const RegisterDoctor: React.FC<any> = props => {
 
 
     }
-
-
-
-
 
 
     return(

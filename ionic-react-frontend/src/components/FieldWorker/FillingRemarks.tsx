@@ -22,8 +22,11 @@ import '@ionic/react/css/display.css';
 import '../../theme/variables.css';
 import './FieldWorker.css';
 
-import { useStorage } from '../../hooks/useStorage';
+import { useStorageFillingRemarks } from '../../hooks/useStorageFillingRemarks';
+import { useStorageFollowUp } from './useStorageFollowUp';
+
 import { useEffect, useState } from 'react';
+import { Network } from "@capacitor/network";
 
 // setupIonicReact();
 
@@ -33,12 +36,15 @@ interface PatientId {
 
 const FillingRemarks: React.FC<any> = props => {
     const followUpRow = props.location.state;
-    const [followUpCurr, setFollowUpCurr] = useState(followUpRow);
+    const [followUpCurr, setFollowUpCurr] = useState(followUpRow.userData.userData);
     const [redirect, setRedirect] = useState(false);
 
     const [assigned, setAssigned] = useState({} as any);
     // const s = "BLOOD PRESSURE $ FEVER $ HEALTH RATE $ TEMPERATURE";
-    const [s,setS] = useState(followUpCurr.fup.newF.taskAssignedByDoctor);
+    const [s,setS] = useState(followUpCurr.fup.currFollowup.taskAssignedByDoctor);
+
+    // const [on, setOn] = useState(false);
+    // const [off, setOff] = useState(false);
 
     const [save, setSave] = useState(false);
 
@@ -52,7 +58,9 @@ const FillingRemarks: React.FC<any> = props => {
     ))
 
     // OFFLINE START..!
-    const { remarks, addRemark } = useStorage();
+    const { remarks, addRemark } = useStorageFillingRemarks();
+    const { followups, addFollowups, updateFollowUp } = useStorageFollowUp();
+
     const [task, setTask] = useState('');
     // console.log(output);
 
@@ -82,40 +90,45 @@ const FillingRemarks: React.FC<any> = props => {
         console.log(assigned);
         console.log(task);
 
-        await addRemark(false, 2, s, task);
+        const connection = await Network.getStatus();
 
-        let data = {
-            'reviewByFieldWorker': task
-        };
+        if(connection.connected){ //if internet is ON (ONLINE): We will direct update details on server.. also, even if it is active but api failed we will push the data in ionic storage
 
-        const addRecordEndpoint = `http://localhost:9090/api/followUps/fieldWorker/${followUpCurr.fup.newF.followUpId}`;
-        const options = {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
+            let data = {
+                'reviewByFieldWorker': task
+            };
+
+            const addRecordEndpoint = `http://172.16.132.90:9090/api/followUps/fieldWorker/${followUpCurr.fup.currFollowup.followUpId}`;
+            const options = {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }
+
+            fetch(addRecordEndpoint, options)
+                .then(async function (response) {
+                    console.log(response);
+                    if (response['status'] === 200) {
+                        console.log("DONE");
+                        // console.log(task);
+                    } else {
+                        console.log("ERROR");
+                        await addRemark(false, 2, s, task, followUpCurr.fup.newF.followUpId);
+                        await updateFollowUp(followUpCurr.fup.currFollowup.followUpId);
+                    }
+                })
+        } //if the internet is not on(OFFLINE): We will directly push in ionic storage..
+        else {
+            await addRemark(false, 2, s, task, followUpCurr.fup.currFollowup.followUpId);
+            await updateFollowUp(followUpCurr.fup.currFollowup.followUpId);
         }
-
-        fetch(addRecordEndpoint, options)
-            .then(function (response) {
-                console.log(response);
-                if (response['status'] === 200) {
-                    console.log("DONE");
-                    setRedirect(true);
-                    // console.log(task);
-                } else {
-                    console.log("ERROR");
-                }
-            })
+        setRedirect(true);
     }
     // OFFLINE END..!
 
     // setOut(output);
-
-    useEffect(() => {
-        console.log(followUpCurr.fup.newF);
-    }, [])
 
     const handleFormChange = (event: any, key: string) => {
         // console.log(event.target.value);
@@ -200,7 +213,8 @@ const FillingRemarks: React.FC<any> = props => {
                     : null}
 
                 {redirect ?
-                <Redirect from = "/fillingRemarks" to = "/fieldworkers"/> : null}
+                    <Redirect to={{ pathname: "/fieldWorkerInHospital", state: { userData: followUpCurr.userData.profileData } }}/>
+                    :null}
 
             </IonContent>
         </IonPage>

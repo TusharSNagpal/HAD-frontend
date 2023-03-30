@@ -5,6 +5,7 @@ import { Storage } from "@ionic/storage";
 const REMARKS_KEY = 'followup-remarks';
 
 export interface FollowUpRemarks {
+    followUpId:number,
     urgentFlag: boolean;
     isActive: number;
     taskAssignedByDoctor: string;
@@ -14,7 +15,7 @@ export interface FollowUpRemarks {
     id: string;
 }
 
-export function useStorage() {
+export function useStorageFillingRemarks() {
     const [store, setStore] = useState<Storage>();
     const [remarks, setRemarks] = useState<FollowUpRemarks[]>([]);
 
@@ -36,9 +37,11 @@ export function useStorage() {
     const addRemark = async (urgentFlag: boolean,
                             isActive: number,
                             taskAssignedByDoctor: string,
-                            reviewByFieldWorker: string) => 
+                            reviewByFieldWorker: string,
+                            follow_ups_id: number) => 
     {
         const newRemark = {
+            followUpId:follow_ups_id,
             urgentFlag,
             isActive,
             taskAssignedByDoctor,
@@ -57,7 +60,16 @@ export function useStorage() {
         setRemarks(storedFollowups);
     }
 
+    const getRemarks = async() => {
+        const sentRemarks = await store!.get(REMARKS_KEY) || [];
+        return sentRemarks;
+    }
+
+    const updateRemarks = async(downRemarks: any) => {
+        await store?.set(REMARKS_KEY, downRemarks);
+    }
+
     return {
-        remarks, addRemark
+        remarks, addRemark, getRemarks, updateRemarks
     }
 }
