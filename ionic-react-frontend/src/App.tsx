@@ -31,6 +31,14 @@ import FWHome from './components/FieldWorker/FWHome';
 import FillingRemarks from './components/FieldWorker/FillingRemarks';
 import FieldWorker from './components/FieldWorker/FieldWorker';
 import FollowUp from './components/FollowUp/FollowUp';
+
+import Register from "./components/Supervisor/Register";
+import RegisterFieldWorker from "./components/Supervisor/RegisterFieldWorker";
+import Update from "./components/Supervisor/Update";
+import UpdateDoctor from "./components/Supervisor/UpdateDoctor";
+import UpdatePatient from "./components/Supervisor/UpdatePatient";
+import UpdateFieldWorker from "./components/Supervisor/UpdateFieldWorker";
+
 import AdminHome from './components/Admin/AdminHome';
 import GlobalRegister from './components/Admin/GlobalRegister';
 import { register } from './serviceWorkerRegistration';
@@ -54,6 +62,7 @@ import Patient from "./components/Doctor/Patient";
 import OldFollowUp from "./components/Doctor/OldFollowUp";
 import FieldWorkersInHospital from "./components/Supervisor/FieldWorkersInHospital";
 import AssignTasks from "./components/Supervisor/AssignTasks";
+
 
 setupIonicReact();
 
@@ -147,6 +156,23 @@ const App: React.FC = () => {
       <IonReactRouter>
         <IonRouterOutlet>
           <Route exact path = "/" component={Admin}/>
+
+          <Route path = "/supervisors" component={Supervisor}/>
+          <Route path = "/registerDoctor" component={RegisterDoctor}/>
+          <Route path = "/updateDoctor" component={UpdateDoctor}/>
+          <Route path = "/register" component={Register}/>
+          <Route path = "/update" component={Update}/>
+          <Route path = "/registerPatient" component={RegisterPatient}/>
+          <Route path = "/registerFieldWorker" component={RegisterFieldWorker}/>
+          <Route path = "/updatePatient" component={UpdatePatient}/>
+          <Route path = "/updateFieldWorker" component={UpdateFieldWorker}/>
+          <Route path = "/newCase" component={NewCase}/>
+          <Route path = "/doctors" component={DoctorHome}/>
+          <Route path = "/fieldWorkers" component={FieldWorker}/>
+          <Route path = "/followup" component={FollowUp}/>
+          <Route path = "/fieldWorkerHome" component={FWHome}/>
+          <Route path = "/fillingRemarks" component={FillingRemarks}/>
+
           <Route exact path = "/supervisors" component={Supervisor}/>
           <Route exact path = "/registerDoctor" component={RegisterDoctor}/>
           <Route exact path = "/registerPatient" component={RegisterPatient}/>
@@ -171,6 +197,7 @@ const App: React.FC = () => {
           <Route exact path ="/doctorInHospital/oldFollowUp" component={OldFollowUp}></Route>
           <Route exact path ="/supervisors/fieldWorkersInHospital" component={FieldWorkersInHospital}></Route>
           <Route exact path ="/supervisors/fieldWorkersInHospital/assignTasks" component={AssignTasks}></Route>
+
 
         </IonRouterOutlet>
       </IonReactRouter>

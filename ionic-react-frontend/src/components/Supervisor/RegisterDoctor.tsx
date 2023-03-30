@@ -1,4 +1,15 @@
-import { IonPage, IonGrid, IonCard, IonCardHeader, IonCardTitle, IonContent, IonHeader, IonTitle, IonToolbar} from '@ionic/react';
+import {
+    IonPage,
+    IonGrid,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonRow, IonCol, IonInput, IonDatetime, IonButton, IonAlert
+} from '@ionic/react';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -21,11 +32,118 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import '../../theme/variables.css';
 import './Supervisor.css';
+import {useRef, useState} from "react";
+import {Redirect} from "react-router";
 
 // setupIonicReact();
 
-const RegisterDoctor: React.FC = () => {
-   
+
+const RegisterDoctor: React.FC<any> = props => {
+     const supId = props.location.state;
+     const docId= useRef<HTMLIonInputElement>(null);
+     const hospId= useRef<HTMLIonInputElement>(null);
+     const [supervisorId, setSupervisorId] = useState(supId);
+     //onst [doctorId,setDoctorId] = useState(docId);
+     const [showAlert, setShowAlert] = useState(false);
+     const [showAlertErr, setShowAlertErr] = useState(false);
+     const [redirect, setRedirect] = useState(false);
+     const [displayDoctorId, setDisplayDoctorId] = useState(0);
+     // const [hospitalId, setHospitalId] = useState(0);
+     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
+
+
+     //const docId= useRef<HTMLIonInputElement>(null);
+
+
+    const resetAll = () => {
+        docId.current!.value = null;
+                           }
+
+    const registerDoctor = async() => {
+        // fetch(`http://localhost:9090/api/supervisors/${supervisorId.userId}`)
+        //     .then(function(response){
+        //         console.log(response);
+        //         if(response['status'] === 200){
+        //             console.log("DONE");
+        //         }
+        //         else{
+        //             console.log("ERROR");
+        //         }
+        //         return response.json();
+        //     })
+        //     .then(function(data){
+        //             console.log(data);
+        //             const items  = data;
+        //             console.log(items.success);
+        //             if(items.success === false) {
+        //                 return -1;
+        //             }
+        //             setShowAlertNoSuchId(false);
+        //             return items.hospital.hospitalId;
+        //         }
+        //     )
+        //     .then( async function (hospitalId){
+        //             if(hospitalId === -1){
+        //                 setShowAlertNoSuchId(true);
+        //             }
+        //             else {
+        //                 setShowAlertNoSuchId(false);
+        //
+        //                 console.log(hospitalId);
+
+                        let data = {
+                            'hospital': {'hospitalId': hospId.current!.value},
+                            'doctor': {'doctorId': docId.current!.value}
+
+                        };
+                        // console.log(data);
+                        console.log(JSON.stringify(data));
+
+
+
+                        const addRecordEndpoint = `http://localhost:9090/api/doctorInHospital/docInHosp/${docId.current!.value}/hospital/${hospId.current!.value}`;
+                        const options = {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        }
+
+                        await fetch(addRecordEndpoint, options)
+                            .then(function (response) {
+                                console.log(response);
+                                if (response['status'] === 201) {
+                                    console.log("DONE");
+                                } else {
+                                    console.log("ERROR");
+                                }
+                                return response.json();
+                            })
+                            .then(function (data) {
+                                console.log(data);
+                                const items = data;
+                                if (data.size !== 0) {
+                                    setDisplayDoctorId(items.docInHospId);
+                                    console.log(displayDoctorId);
+                                    setShowAlert(true);
+                                    setShowAlertErr(false);
+                                    setRedirect(true);
+                                    resetAll();
+                                } else {
+                                    setShowAlert(false);
+                                    setShowAlertErr(true);
+                                    setRedirect(false);
+                                }
+
+                                return items;
+                            })
+
+
+
+    }
+
+
     return(
         <IonPage>
             <IonHeader>
@@ -37,30 +155,66 @@ const RegisterDoctor: React.FC = () => {
 
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
-                    <b>SUPERVISOR</b>
+                        <b>SUPERVISOR</b>
                     </IonTitle>
                 </IonToolbar>
 
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
-                    <b>DOCTOR REGISTRATION</b>
+                        <b>DOCTOR REGISTRATION</b>
                     </IonTitle>
                 </IonToolbar>
 
             </IonHeader>
-            
-            <IonContent className='ion-padding' /*class = "content-style"*/>
+
+            <IonContent className='ion-padding'/*class = "content-style"*/>
+                <IonCard class = "card-style">
+                    <IonGrid className='ion-text-center ion-margin' >
+
+
+                        <IonRow className = "header-border">
+
+                            <IonCol>
+                                <IonCardTitle>Doctor Id: </IonCardTitle>
+                                <IonCardTitle><IonInput ref={docId} class="card-input" placeholder="Id"></IonInput></IonCardTitle>
+                            </IonCol>
+                            <IonCol>
+                                <IonCardTitle>Hospital Id: </IonCardTitle>
+                                <IonCardTitle><IonInput ref={hospId} class="card-input" placeholder="Id"></IonInput></IonCardTitle>
+                            </IonCol>
+
+                        </IonRow>
+                    </IonGrid>
+                </IonCard>
+
                 <IonGrid className='ion-text-center ion-margin'>
-                    <IonCard class = "card-style">
-                        <IonCardHeader>
-                            <IonCardTitle>THIS PAGE IS UNDER DEVELOPMENT..! </IonCardTitle>
-                        </IonCardHeader>
-                    </IonCard>
+                    <IonButton onClick = {registerDoctor}>Submit</IonButton>
                 </IonGrid>
+
+                <IonAlert
+                    isOpen={showAlert}
+                    onDidDismiss={() => setShowAlert(false)}
+                    header= {`DOCTOR ID: ${displayDoctorId}`}
+                    subHeader="Registration Successful..!"
+                    message="Please go to Doctor Login Tab to Login..!"
+                    buttons={['OK']}
+                />
+
+                <IonAlert
+                    isOpen={showAlertErr}
+                    onDidDismiss={() => setShowAlertErr(false)}
+                    header="Alert"
+                    subHeader="Registration Unsuccessful..!"
+                    message="Please Go to Doctor Registration Tab and Register Again!"
+                    buttons={['OK']}
+                />
+
+                {!showAlert && redirect?<Redirect to='/supervisors' />
+                    :null}
+
             </IonContent>
 
-        </IonPage>
-    )
+        </IonPage>    )
 };
 
 export default RegisterDoctor; 
