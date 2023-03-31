@@ -29,7 +29,7 @@ import '@ionic/react/css/display.css';
 // import RegisterDoctor from "./RegisterDoctor"
 
 /* Theme variables */
-import '../../theme/variables.css';
+import '../theme/variables.css';
 // import './Admin.css';
 import { useState, useRef, useEffect } from "react";
 // import { useStorageFillingRemarks } from '../../hooks/useStorageFillingRemarks';
@@ -38,7 +38,7 @@ import { Network } from "@capacitor/network";
 
 // setupIonicReact();
 
-const Admin: React.FC<any> = () => {
+const Home: React.FC<any> = () => {
     // const patientIdRef = useRef<HTMLIonInputElement>(null);
     // const [task, setTask] = useState('');
     const [role, setRole] = useState("");
@@ -98,15 +98,15 @@ const Admin: React.FC<any> = () => {
         //     .then(function (response) {
         //         console.log(response);
         //         if (response['status'] === 200) {
-                    fetch(`http://localhost:9090/api/${role}/${userId.current!.value}`)
-                        .then(function (response) {
-                            return response.json();
-                        })
-                        .then((data) => {
-                            setUserData(data);
-                            console.log("OTP Validated");
-                            setAuth(true);
-                        })
+        fetch(`http://localhost:9090/api/${role}/${userId.current!.value}`)
+            .then(function (response) {
+                return response.json();
+            })
+            .then((data) => {
+                setUserData(data);
+                console.log("OTP Validated");
+                setAuth(true);
+            })
         //         }
         //         else {
         //             console.log("OTP mismatch Sorry..!");
@@ -179,4 +179,4 @@ const Admin: React.FC<any> = () => {
     )
 };
 
-export default Admin;
+export default Home;

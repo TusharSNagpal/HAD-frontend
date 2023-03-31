@@ -28,7 +28,10 @@ import RegisterHospital from './GlobalRegisterHospital';
 import RegisterDoctor from './GlobalRegisterDoctor';
 import RegisterSupervisor from './GlobalRegisterSupervisor';
 import RegisterFieldWorker from './GlobalRegisterFieldWorker';
+import BackButton from "../BackButton";
+import AdminBackButton from "./AdminBackButton";
 
+const path="/admin"
 const GlobalUpdate: React.FC = () => {
    
     return(
@@ -44,6 +47,11 @@ const GlobalUpdate: React.FC = () => {
                     <b>ADMIN</b>
                     </IonTitle>
                 </IonToolbar>
+
+                <IonRow>
+                    <AdminBackButton path={path}/>
+                </IonRow>
+
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
                         <b>UPDATE</b>
@@ -61,19 +69,19 @@ const GlobalUpdate: React.FC = () => {
 
                     <IonCard class = "card-style">
                         <IonCardHeader>
-                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./globalUpdate/globalUpdateSupervisor">SUPERVISOR</IonButton></IonCardTitle>
+                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "/admin/globalUpdate/globalUpdateSupervisor">SUPERVISOR</IonButton></IonCardTitle>
                         </IonCardHeader>
                     </IonCard>
 
                     <IonCard class = "card-style">
                         <IonCardHeader>
-                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./globalUpdate/globalUpdateDoctor">DOCTOR</IonButton></IonCardTitle>
+                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "/admin/globalUpdate/globalUpdateDoctor">DOCTOR</IonButton></IonCardTitle>
                         </IonCardHeader>
                     </IonCard>
 
                     <IonCard class = "card-style">
                         <IonCardHeader>
-                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./globalUpdate/globalUpdateFieldWorker">FIELD WORKER</IonButton></IonCardTitle>
+                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "/admin/globalUpdate/globalUpdateFieldWorker">FIELD WORKER</IonButton></IonCardTitle>
                         </IonCardHeader>
                     </IonCard>
                 </IonGrid>

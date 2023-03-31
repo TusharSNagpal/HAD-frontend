@@ -28,16 +28,17 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import '../../theme/variables.css';
 import './Doctor.css';
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import {Redirect} from "react-router";
+import BackButton from "../BackButton";
 
 // setupIonicReact();
 
 const DoctorHome: React.FC<any> = props => {
 
-    const dId = props.location.state;
-    const [doctorId, setDoctorId] = useState(dId);
+    const profile = props.location.state;
+    const [profileData, setProfileData] = useState(profile);
 
     const [activeCases, setActiveCases] = useState<any[]>([]);
     const [activeFollowUps, setActiveFollowUps] = useState<any[]>([]);
@@ -53,6 +54,8 @@ const DoctorHome: React.FC<any> = props => {
 
     const [newPatient,setNewPatient] = useState(false);
     const [oldFollowUps, setOldFollowUps] = useState(false);
+    const path = "/"
+
 
     const deactivate = (cases:any) => {
         setCurrCase(cases);
@@ -104,7 +107,7 @@ const DoctorHome: React.FC<any> = props => {
     }
 
     useEffect(() => {
-        fetch(`http://localhost:9090/api/visits/activeVisits/hospital/1`)
+        fetch(`http://localhost:9090/api/visits/activeVisits/hospital/${profileData.userData.hospital.hospitalId}`)
             .then((response) => response.json())
             .then((json) => {
                 // setUseSt(true);
@@ -117,7 +120,7 @@ const DoctorHome: React.FC<any> = props => {
     }, []);
 
     useEffect(() => {
-         fetch(`http://localhost:9090/api/visits/activeVisits/hospital/1`)
+         fetch(`http://localhost:9090/api/visits/activeVisits/hospital/${profileData.userData.hospital.hospitalId}`)
             .then((response) => response.json())
             .then((json) => {
                 // setUseSt(true);
@@ -131,7 +134,21 @@ const DoctorHome: React.FC<any> = props => {
     },[useSt]);
 
     useEffect(() => {
-        fetch(`http://localhost:9090/api/followUps/doctor/review/1`)
+        fetch(`http://localhost:9090/api/followUps/doctor/review/${profileData.userData.docInHospId}`)
+            .then((response) => response.json())
+            .then((json) => {
+                // setUseSt(true);
+                setActiveFollowUps(json);
+                // console.log(json);
+                // console.log(json.length);
+                // setUseSt(1);
+                // console.log(activeCases);
+                return json;
+            })
+    },[]);
+
+    useEffect(() => {
+        fetch(`http://localhost:9090/api/followUps/doctor/review/${profileData.userData.docInHospId}`)
             .then((response) => response.json())
             .then((json) => {
                 // setUseSt(true);
@@ -168,6 +185,9 @@ const DoctorHome: React.FC<any> = props => {
                     </IonTitle>
                 </IonToolbar>
             </IonHeader>
+            <IonRow>
+                <BackButton path={path} data={profileData.userData}></BackButton>
+            </IonRow>
                     {/*<IonGrid>*/}
             <IonContent className='ion-padding'/*class = "content-style"*/>
 
@@ -217,7 +237,7 @@ const DoctorHome: React.FC<any> = props => {
                                                     <IonButton onClick={() => deactivate(cases)}>PICK</IonButton>
 
                                                     { redirectToPatient ? <Redirect
-                                                        to={{pathname: '/doctorInHospital/patient', state: {currCase}}}/> : null}
+                                                        to={{pathname: '/doctorInHospital/patient', state: {currCase,userData:profile.userData}}}/> : null}
                                                 </IonCol>
                                             </IonRow>
                                         </IonGrid>
@@ -245,7 +265,7 @@ const DoctorHome: React.FC<any> = props => {
                                                     <IonButton onClick={()=>pickFollowUp(followUp)}>PICK</IonButton>
 
                                                     {redirectToFollowUp ? <Redirect
-                                                        to={{pathname: '/doctorInHospital/oldFollowUp', state: {currFollowUp}}}/> : null}
+                                                        to={{pathname: '/doctorInHospital/oldFollowUp', state: {currFollowUp,userData:profile.userData}}}/> : null}
                                                 </IonCol>
                                             </IonRow>
                                         </IonGrid>

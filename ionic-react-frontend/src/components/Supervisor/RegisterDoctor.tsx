@@ -34,6 +34,7 @@ import '../../theme/variables.css';
 import './Supervisor.css';
 import {useRef, useState} from "react";
 import {Redirect} from "react-router";
+import BackButton from "../BackButton";
 
 // setupIonicReact();
 
@@ -51,6 +52,7 @@ const RegisterDoctor: React.FC<any> = props => {
      const [displayDoctorId, setDisplayDoctorId] = useState(0);
     const profile = props.location.state;
     const [profileData, setProfileData] = useState(profile);
+    const path = "/supervisors/register"
      // const [hospitalId, setHospitalId] = useState(0);
 
 
@@ -157,6 +159,11 @@ const RegisterDoctor: React.FC<any> = props => {
                         <b>SUPERVISOR</b>
                     </IonTitle>
                 </IonToolbar>
+
+
+                <IonRow>
+                    <BackButton path={path} data={profileData.userData}></BackButton>
+                </IonRow>
 
                 <IonToolbar>
                     <IonTitle class="ion-text-center">

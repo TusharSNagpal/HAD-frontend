@@ -24,8 +24,9 @@ import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 import React, { useEffect, useRef, useState } from 'react';
+import BackButton from "../BackButton";
 
-const DeleteFieldWorker= () => {
+const DeleteFieldWorker: React.FC<any> = props => {
     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [alertHeader, setAlertHeader] = useState<string>();
@@ -34,6 +35,9 @@ const DeleteFieldWorker= () => {
     const [doctor, setDoctor] = useState<any>([]);
     const [openForm, setOpenForm] = useState(false);
     const fwInHospId =useRef<HTMLIonInputElement>(null)
+    const profile = props.location.state;
+    const [profileData, setProfileData] = useState(profile);
+    const path = "/supervisors/delete"
 
 
 
@@ -98,6 +102,9 @@ const DeleteFieldWorker= () => {
                         <b>SUPERVISOR</b>
                     </IonTitle>
                 </IonToolbar>
+                <IonRow>
+                    <BackButton path={path} data={profileData.userData}></BackButton>
+                </IonRow>
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
                         <b>DELETE FIELDWORKER</b>

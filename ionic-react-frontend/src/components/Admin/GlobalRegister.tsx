@@ -28,7 +28,9 @@ import RegisterHospital from './GlobalRegisterHospital';
 import RegisterDoctor from './GlobalRegisterDoctor';
 import RegisterSupervisor from './GlobalRegisterSupervisor';
 import RegisterFieldWorker from './GlobalRegisterFieldWorker';
-
+import BackButton from "../BackButton";
+import AdminBackButton from "./AdminBackButton";
+const path = "/admin"
 const GlobalRegister: React.FC = () => {
    
     return(
@@ -44,6 +46,10 @@ const GlobalRegister: React.FC = () => {
                     <b>ADMIN</b>
                     </IonTitle>
                 </IonToolbar>
+                <IonRow>
+                    <AdminBackButton path={path}/>
+                </IonRow>
+
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
                         <b>REGISTER</b>
@@ -55,25 +61,25 @@ const GlobalRegister: React.FC = () => {
                 <IonGrid className='ion-text-center ion-margin ion-padding'>
                     <IonCard class = "card-style">
                         <IonCardHeader>
-                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./globalRegister/globalRegisterHospital">HOSPTIAL</IonButton></IonCardTitle>
+                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "/admin/globalRegister/globalRegisterHospital">HOSPTIAL</IonButton></IonCardTitle>
                         </IonCardHeader>
                     </IonCard>
 
                     <IonCard class = "card-style">
                         <IonCardHeader>
-                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./globalRegister/globalRegisterSupervisor">SUPERVISOR</IonButton></IonCardTitle>
+                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "/admin/globalRegister/globalRegisterSupervisor">SUPERVISOR</IonButton></IonCardTitle>
                         </IonCardHeader>
                     </IonCard>
 
                     <IonCard class = "card-style">
                         <IonCardHeader>
-                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./globalRegister/globalRegisterDoctor">DOCTOR</IonButton></IonCardTitle>
+                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "/admin/globalRegister/globalRegisterDoctor">DOCTOR</IonButton></IonCardTitle>
                         </IonCardHeader>
                     </IonCard>
 
                     <IonCard class = "card-style">
                         <IonCardHeader>
-                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./globalRegister/globalRegisterFieldWorker">FIELD WORKER</IonButton></IonCardTitle>
+                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "/admin/globalRegister/globalRegisterFieldWorker">FIELD WORKER</IonButton></IonCardTitle>
                         </IonCardHeader>
                     </IonCard>
                 </IonGrid>

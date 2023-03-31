@@ -24,8 +24,9 @@ import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 import React, { useEffect, useRef, useState } from 'react';
+import BackButton from "../BackButton";
 
-const UpdatePatient= () => {
+const UpdatePatient:React.FC<any> = props => {
     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [id, setId] = useState(0);
@@ -40,6 +41,9 @@ const UpdatePatient= () => {
     const address = useRef<HTMLIonInputElement>(null);
     const phoneNo = useRef<HTMLIonInputElement>(null);
     const patient_id=useRef<HTMLIonInputElement>(null);
+    const profile = props.location.state;
+    const [profileData, setProfileData] = useState(profile);
+    const path="/supervisors"
 
 
     const resetAll = () => {
@@ -121,6 +125,9 @@ const UpdatePatient= () => {
                         <b>SUPERVISOR</b>
                     </IonTitle>
                 </IonToolbar>
+                <IonRow>
+                    <BackButton path={path} data={profileData.userData}></BackButton>
+                </IonRow>
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
                         <b>UPDATE PATIENT</b>

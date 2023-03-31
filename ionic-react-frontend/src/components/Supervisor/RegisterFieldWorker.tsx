@@ -34,6 +34,7 @@ import '../../theme/variables.css';
 import './Supervisor.css';
 import {useRef, useState} from "react";
 import {Redirect} from "react-router";
+import BackButton from "../BackButton";
 
 // setupIonicReact();
 
@@ -50,7 +51,7 @@ const RegisterFieldWorker: React.FC<any> = props => {
     const [alertMessage,setAlertMessage] = useState<string>();
     const profile = props.location.state;
     const [profileData, setProfileData] = useState(profile);
-
+    const path = "/supervisors/register"
 
 
 
@@ -156,6 +157,10 @@ const RegisterFieldWorker: React.FC<any> = props => {
                         <b>SUPERVISOR</b>
                     </IonTitle>
                 </IonToolbar>
+
+                <IonRow>
+                    <BackButton path={path} data={profileData.userData}></BackButton>
+                </IonRow>
 
                 <IonToolbar>
                     <IonTitle class="ion-text-center">

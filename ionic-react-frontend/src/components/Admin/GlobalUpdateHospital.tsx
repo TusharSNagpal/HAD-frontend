@@ -24,7 +24,10 @@ import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 import React, { useEffect, useRef, useState } from 'react';
+import BackButton from "../BackButton";
+import AdminBackButton from "./AdminBackButton";
 
+const path = "/admin/globalUpdate"
 const GlobalUpdateHospital = () => {
 
     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
@@ -99,6 +102,11 @@ const GlobalUpdateHospital = () => {
                     <b>ADMIN</b>
                     </IonTitle>
                 </IonToolbar>
+
+                <IonRow>
+                    <AdminBackButton path={path}/>
+                </IonRow>
+
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
                         <b>UPDATE HOSPITAL</b>

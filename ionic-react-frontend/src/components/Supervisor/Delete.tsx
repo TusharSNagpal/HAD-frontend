@@ -9,7 +9,7 @@ import {
     IonHeader,
     IonTitle,
     IonToolbar,
-    IonButton
+    IonButton, IonRow
 } from '@ionic/react';
 
 /* Core CSS required for Ionic components to work properly */
@@ -35,6 +35,7 @@ import '../../theme/variables.css';
 import './Supervisor.css';
 import {useState} from "react";
 import {Redirect} from "react-router";
+import BackButton from "../BackButton";
 
 // setupIonicReact();
 
@@ -42,6 +43,7 @@ const Delete: React.FC<any> = props => {
     const profile = props.location.state;
     const [profileData, setProfileData] = useState(profile);
     const [service, setService] = useState("");
+    const path = "/supervisors"
     const redirectIt = (pathTo:string) => {
         setService(pathTo);
     }
@@ -53,6 +55,16 @@ const Delete: React.FC<any> = props => {
                         <b>HEALTHCARE SERVICES</b>
                     </IonTitle>
                 </IonToolbar>
+
+                <IonToolbar>
+                    <IonTitle class="ion-text-center">
+                        <b>SUPERVISOR</b>
+                    </IonTitle>
+                </IonToolbar>
+
+                <IonRow>
+                    <BackButton path={path} data={profileData.userData}></BackButton>
+                </IonRow>
 
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
@@ -71,13 +83,13 @@ const Delete: React.FC<any> = props => {
 
                     <IonCard class = "card-style">
                         <IonCardHeader>
-                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("/supervisors/delete/updateDoctor")} /*routerLink = "./updateDoctor"*/>DELETE DOCTOR</IonButton></IonCardTitle>
+                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("/supervisors/delete/deleteDoctor")} /*routerLink = "./updateDoctor"*/>DELETE DOCTOR</IonButton></IonCardTitle>
                         </IonCardHeader>
                     </IonCard>
 
                     <IonCard class = "card-style">
                         <IonCardHeader>
-                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("/supervisors/delete/updateFieldWorker")} /*routerLink = "./updateDoctor"*/>DELETE FIELD WORKER</IonButton></IonCardTitle>
+                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("/supervisors/delete/deleteFieldWorker")} /*routerLink = "./updateDoctor"*/>DELETE FIELD WORKER</IonButton></IonCardTitle>
                         </IonCardHeader>
                     </IonCard>
 

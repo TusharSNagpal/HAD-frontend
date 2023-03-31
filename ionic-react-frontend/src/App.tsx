@@ -23,7 +23,6 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import NewCase from "./components/Supervisor/NewCase";
 import DoctorHome from "./components/Doctor/DoctorHome";
-import Admin from "./components/Admin/Admin";
 import Supervisor from "./components/Supervisor/Supervisor";
 import RegisterDoctor from './components/Supervisor/RegisterDoctor';
 import RegisterPatient from "./components/Supervisor/RegisterPatient";
@@ -62,6 +61,7 @@ import Patient from "./components/Doctor/Patient";
 import OldFollowUp from "./components/Doctor/OldFollowUp";
 import FieldWorkersInHospital from "./components/Supervisor/FieldWorkersInHospital";
 import AssignTasks from "./components/Supervisor/AssignTasks";
+import Home from "./components/Home";
 
 
 setupIonicReact();
@@ -155,47 +155,61 @@ const App: React.FC = () => {
       </IonHeader>
       <IonReactRouter>
         <IonRouterOutlet>
-          <Route exact path = "/" component={Admin}/>
+          <Route exact path = "/" component={Home}/>
+
+          {/*ADMIN ROUTES*/}
+
+          <Route exact path = "/admin" component={AdminHome} />
+          <Route exact path = "/admin/globalRegister" component={GlobalRegister} />
+          <Route exact path = "/admin/globalRegister/globalRegisterHospital" component={GlobalRegisterHospital} />
+          <Route exact path = "/admin/globalRegister/globalRegisterSupervisor" component={GlobalRegisterSupervisor} />
+          <Route exact path = "/admin/globalRegister/globalRegisterDoctor" component={GlobalRegisterDoctor} />
+          <Route exact path = "/admin/globalRegister/globalRegisterFieldWorker" component={GlobalRegisterFieldWorker} />
+          <Route exact path = "/admin/globalUpdate" component={GlobalUpdate} />
+          <Route exact path = "/admin/globalUpdate/globalUpdateHospital" component={GlobalUpdateHospital} />
+          <Route exact path = "/admin/globalUpdate/globalUpdateSupervisor" component={GlobalUpdateSupervisor} />
+          <Route exact path = "/admin/globalUpdate/globalUpdateDoctor" component={GlobalUpdateDoctor} />
+          <Route exact path = "/admin/globalUpdate/globalUpdateFieldWorker" component={GlobalUpdateFieldWorker} />
+
+          {/*SUPERVISOR ROUTES*/}
 
           <Route exact path = "/supervisors" component={Supervisor}/>
-          <Route exact path = "/registerDoctor" component={RegisterDoctor}/>
-          <Route exact path = "/supervisors/update/updateDoctor" component={DeleteDoctor}/>
           <Route exact path = "/supervisors/register" component={Register}/>
-          <Route exact path = "/supervisors/delete" component={Delete}/>
-          <Route exact path = "/supervisors/register/registerFieldWorker" component={RegisterFieldWorker}/>
-          <Route exact path = "/supervisors/updatePatient" component={UpdatePatient}/>
-          <Route exact path = "/supervisors/delete/updateFieldWorker" component={DeleteFieldWorker}/>
-          <Route exact path = "/newCase" component={NewCase}/>
-          <Route exact path = "/doctors" component={DoctorHome}/>
-          <Route exact path = "/fieldWorkers" component={FieldWorker}/>
-          <Route exact path = "/followup" component={FollowUp}/>
-          <Route exact path = "/fieldWorkerHome" component={FWHome}/>
-          <Route exact path = "/fillingRemarks" component={FillingRemarks}/>
-
-          <Route exact path = "/supervisors" component={Supervisor}/>
           <Route exact path = "/supervisors/register/registerDoctor" component={RegisterDoctor}/>
-          <Route exact path = "/supervisors/register/registerPatient" component={RegisterPatient}/>
-          <Route exact path = "/newCase" component={NewCase}/>
+          <Route exact path = "/supervisors/register/registerFieldWorker" component={RegisterFieldWorker}/>
+          <Route exact path = "/supervisors/register/registerPatient" component={RegisterPatient}></Route>
+
+          <Route exact path = "/supervisors/updatePatient" component={UpdatePatient}/>
+
+          <Route exact path = "/supervisors/delete" component={Delete}/>
+          <Route exact path = "/supervisors/delete/deleteDoctor" component={DeleteDoctor}/>
+          <Route exact path = "/supervisors/delete/deleteFieldWorker" component={DeleteFieldWorker}/>
+
+          <Route exact path ="/supervisors/fieldWorkersInHospital" component={FieldWorkersInHospital}></Route>
+          <Route exact path ="/supervisors/fieldWorkersInHospital/assignTasks" component={AssignTasks}></Route>
+
+          <Route exact path = "/supervisors/newCase" component={NewCase}/>
+
+          {/*DOCTOR ROUTES*/}
           <Route exact path = "/doctorInHospital" component={DoctorHome}/>
+          <Route exact path = "/doctorInHospital/patient" component={Patient}></Route>
+          <Route exact path ="/doctorInHospital/oldFollowUp" component={OldFollowUp}></Route>
+
+
+          {/*<Route exact path = "/doctors" component={DoctorHome}/>*/}
+          {/*<Route exact path = "/fieldWorkers" component={FieldWorker}/>*/}
+          {/*<Route exact path = "/followup" component={FollowUp}/>*/}
+          {/*<Route exact path = "/fieldWorkerHome" component={FWHome}/>*/}
+          {/*<Route exact path = "/fillingRemarks" component={FillingRemarks}/>*/}
+
+
           <Route exact path = "/fieldWorkerInHospital" component={FieldWorker}/>
           <Route exact path = "/followup" component={FollowUp}/>
           <Route exact path = "/fieldWorkerHome" component={FWHome}/>
           <Route exact path = "/fillingRemarks" component={FillingRemarks}/>
-          <Route exact path = "/admin" component={AdminHome} />
-          <Route exact path = "/globalRegister" component={GlobalRegister} />
-          <Route exact path = "/globalRegister/globalRegisterHospital" component={GlobalRegisterHospital} />
-          <Route exact path = "/globalRegister/globalRegisterSupervisor" component={GlobalRegisterSupervisor} />
-          <Route exact path = "/globalRegister/globalRegisterDoctor" component={GlobalRegisterDoctor} />
-          <Route exact path = "/globalRegister/globalRegisterFieldWorker" component={GlobalRegisterFieldWorker} />
-          <Route exact path = "/globalUpdate" component={GlobalUpdate} />
-          <Route exact path = "/globalUpdate/globalUpdateHospital" component={GlobalUpdateHospital} />
-          <Route exact path = "/globalUpdate/globalUpdateSupervisor" component={GlobalUpdateSupervisor} />
-          <Route exact path = "/globalUpdate/globalUpdateDoctor" component={GlobalUpdateDoctor} />
-          <Route exact path = "/globalUpdate/globalUpdateFieldWorker" component={GlobalUpdateFieldWorker} />
-          <Route exact path = "/doctorInHospital/patient" component={Patient}></Route>
-          <Route exact path ="/doctorInHospital/oldFollowUp" component={OldFollowUp}></Route>
-          <Route exact path ="/supervisors/fieldWorkersInHospital" component={FieldWorkersInHospital}></Route>
-          <Route exact path ="/supervisors/fieldWorkersInHospital/assignTasks" component={AssignTasks}></Route>
+
+
+
 
 
         </IonRouterOutlet>

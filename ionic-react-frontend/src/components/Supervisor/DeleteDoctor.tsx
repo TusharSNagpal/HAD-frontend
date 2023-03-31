@@ -25,14 +25,18 @@ import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 import React, { useEffect, useRef, useState } from 'react';
+import BackButton from "../BackButton";
 
-const DeleteDoctor = () => {
+const DeleteDoctor: React.FC<any> = props=> {
     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [id, setId] = useState(0);
     const [doctor, setDoctor] = useState<any>([]);
     const [openForm, setOpenForm] = useState(false);
     const docInHospId =useRef<HTMLIonInputElement>(null)
+    const profile = props.location.state;
+    const [profileData, setProfileData] = useState(profile);
+    const path = "/supervisors/delete"
 
 
 
@@ -95,6 +99,10 @@ const DeleteDoctor = () => {
                         <b>SUPERVISOR</b>
                     </IonTitle>
                 </IonToolbar>
+
+                <IonRow>
+                    <BackButton path={path} data={profileData.userData}></BackButton>
+                </IonRow>
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
                         <b>DELETE DOCTOR</b>
