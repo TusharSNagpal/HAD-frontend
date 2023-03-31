@@ -8,7 +8,7 @@ import {
     IonHeader,
     IonTitle,
     IonToolbar,
-    IonButton
+    IonButton, IonRow
 } from '@ionic/react';
 
 /* Core CSS required for Ionic components to work properly */
@@ -34,6 +34,7 @@ import '../../theme/variables.css';
 import './Supervisor.css';
 import {useState} from "react";
 import {Redirect} from "react-router";
+import BackButton from "../BackButton";
 
 // setupIonicReact();
 
@@ -41,7 +42,7 @@ const Register: React.FC<any> = props => {
     const profile = props.location.state;
     const [profileData, setProfileData] = useState(profile);
     const [service, setService] = useState("");
-
+    const path="/supervisors"
     // console.log(supervisorId.userData)
 
     const redirectIt = (pathTo:string) => {
@@ -55,6 +56,16 @@ const Register: React.FC<any> = props => {
                         <b>HEALTHCARE SERVICES</b>
                     </IonTitle>
                 </IonToolbar>
+
+                <IonToolbar>
+                    <IonTitle class="ion-text-center">
+                        <b>SUPERVISOR</b>
+                    </IonTitle>
+                </IonToolbar>
+
+                <IonRow>
+                    <BackButton path={path} data={profileData.userData}></BackButton>
+                </IonRow>
 
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
@@ -79,13 +90,13 @@ const Register: React.FC<any> = props => {
 
                     <IonCard class = "card-style">
                         <IonCardHeader>
-                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("/supervisors/register/registerFieldWorker")} /*routerLink = "./registerDoctor"*/>REGISTER FIELD WORKER</IonButton></IonCardTitle>
+                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("/supervisors/register/registerFieldWorker")}>REGISTER FIELD WORKER</IonButton></IonCardTitle>
                         </IonCardHeader>
                     </IonCard>
 
                     <IonCard class = "card-style">
                         <IonCardHeader>
-                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("/supervisors/register/registerPatient")}/*routerLink = "./registerPatient"*/>REGISTER PATIENT</IonButton></IonCardTitle>
+                            <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("/supervisors/register/registerPatient")}>REGISTER PATIENT</IonButton></IonCardTitle>
                         </IonCardHeader>
                     </IonCard>
                 </IonGrid>

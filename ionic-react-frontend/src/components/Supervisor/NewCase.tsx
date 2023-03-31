@@ -9,7 +9,7 @@ import {
     IonHeader,
     IonTitle,
     IonToolbar,
-    IonButton, IonAlert, IonGrid
+    IonButton, IonAlert, IonGrid, IonRow
 } from '@ionic/react';
 
 /* Core CSS required for Ionic components to work properly */
@@ -33,13 +33,16 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import '../../theme/variables.css';
 import './Supervisor.css';
-import {useRef, useState} from "react";
+import React, {useRef, useState} from "react";
 import {Redirect} from "react-router";
+import BackButton from "../BackButton";
 
 // setupIonicReact();
 
-const NewCase: React.FC = () => {
+const NewCase:React.FC<any> = props=> {
     const patientIdRef = useRef<HTMLIonInputElement>(null);
+    const profile = props.location.state;
+    const [profileData, setProfileData] = useState(profile);
 
     const [loginSuccess, setLoginSuccess] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
@@ -47,6 +50,7 @@ const NewCase: React.FC = () => {
     const [redirect, setRedirect] = useState(false);
     const [showAlertCase, setShowAlertCase] = useState(false);
     const [showAlertCaseErr, setShowAlertCaseErr] = useState(false);
+    const path="/supervisors"
 
     const loginPatient = async() => {
         const response = await fetch(`http://localhost:9090/api/patients/${patientIdRef.current!.value}`)
@@ -130,6 +134,9 @@ const NewCase: React.FC = () => {
                         <b>SUPERVISOR</b>
                     </IonTitle>
                 </IonToolbar>
+                <IonRow>
+                    <BackButton path={path} data={profileData.userData}></BackButton>
+                </IonRow>
 
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
@@ -191,7 +198,7 @@ const NewCase: React.FC = () => {
                     />
                 </IonGrid>
                 {!showAlertCase && redirect ?
-                    <Redirect to='/' />
+                    <Redirect to='/supervisors' />
                 :null}
 
             </IonContent>

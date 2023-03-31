@@ -35,7 +35,7 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
-import {useEffect, useState, useRef} from "react";
+import React, {useEffect, useState, useRef} from "react";
 
 // import Date from "../items/Date";
 
@@ -45,12 +45,14 @@ import './Doctor.css';
 import {Redirect} from "react-router";
 import DoctorHome from "./DoctorHome";
 import {Route} from "react-router-dom";
+import BackButton from "../BackButton";
 
 
 // setupIonicReact();
 const OldFollowUp: React.FC<any> = props => {
     const f = props.location.state;
-    const [followUpDetails, setFollowUpDetails] = useState(f);
+    const [followUpDetails, setFollowUpDetails] = useState(f.currFollowUp);
+    const [profileData, setProfileData] = useState(f.userData);
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState<string>();
     const [alertHeader, setAlertHeader] = useState<string>()
@@ -63,12 +65,14 @@ const OldFollowUp: React.FC<any> = props => {
     const [save, setSave] = useState(false);
     const followUpDate = useRef<HTMLIonDatetimeElement>(null);
 
-    const currTaskList = followUpDetails.currFollowUp.taskAssignedByDoctor.split("$")
-    const currReviewList = followUpDetails.currFollowUp.reviewByFieldWorker.split("$")
+    const currTaskList = followUpDetails.taskAssignedByDoctor.split("$")
+    const currReviewList = followUpDetails.reviewByFieldWorker.split("$")
 
     const [oldTaskList,setOldTaskList] = useState<string[]>([])
     const [oldReviewList,setOldReviewList] = useState<string[]>([])
-    // console.log(followUpDetails.currFollowUp)
+
+    const path = "/doctorInHospital"
+    // console.log(followUpDetails)
     const handleExpandFollowUp = (index:any)=>{
         const tasks = followUps[index].taskAssignedByDoctor.split("$")
         const reviews = followUps[index].reviewByFieldWorker.split("$")
@@ -117,9 +121,9 @@ const OldFollowUp: React.FC<any> = props => {
         let newFollowUp = {
             'followUpDate':changeDateFormat,
             'taskAssignedByDoctor':temp,
-            'visit':{'visitId':followUpDetails.currFollowUp.visit.visitId},
+            'visit':{'visitId':followUpDetails.visit.visitId},
             'isActive':1,
-            'fieldWorkerInHospital':{'fwInHospId':followUpDetails.currFollowUp.fieldWorkerInHospital.fwInHospId},
+            'fieldWorkerInHospital':{'fwInHospId':followUpDetails.fieldWorkerInHospital.fwInHospId},
             'reviewByFieldWorker':""
         };
         // console.log(newFollowUp)
@@ -160,7 +164,7 @@ const OldFollowUp: React.FC<any> = props => {
     }
 
     useEffect(() => {
-        fetch(`http://localhost:9090/api/followUps/visit/${followUpDetails.currFollowUp.visit.visitId}`)
+        fetch(`http://localhost:9090/api/followUps/visit/${followUpDetails.visit.visitId}/followUpId/${followUpDetails.followUpId}`)
             .then((response) => response.json())
             .then((json) => {
                 // setUseSt(true);
@@ -188,6 +192,10 @@ const OldFollowUp: React.FC<any> = props => {
                     </IonTitle>
                 </IonToolbar>
 
+                <IonRow>
+                    <BackButton path={path} data={profileData}></BackButton>
+                </IonRow>
+
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
                         <b>FOLLOW-UP DETAILS</b>
@@ -210,7 +218,7 @@ const OldFollowUp: React.FC<any> = props => {
                                             {
                                                 currFollowUpExpanded &&
                                                 <IonCol>
-                                                    <h5>Follow-up Date: {followUpDetails.currFollowUp.followUpDate}</h5>
+                                                    <h5>Follow-up Date: {followUpDetails.followUpDate}</h5>
                                                     <h5>Tasks Assigned:</h5>
                                                     {currTaskList.map((task:any)=>
                                                         <IonRow>
@@ -347,7 +355,7 @@ const OldFollowUp: React.FC<any> = props => {
                             buttons={['OK']}
                         />
 
-                        {!showAlert && redirect?<Redirect to='/doctorInHospital'/>
+                        {!showAlert && redirect?<Redirect to={{pathname:'/doctorInHospital',state: { userData: profileData }}}/>
                             :null}
 
                     </IonGrid>

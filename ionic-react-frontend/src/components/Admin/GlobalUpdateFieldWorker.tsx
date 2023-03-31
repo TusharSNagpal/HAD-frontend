@@ -24,7 +24,10 @@ import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 import React, { useEffect, useRef, useState } from 'react';
+import BackButton from "../BackButton";
+import AdminBackButton from "./AdminBackButton";
 
+const path = "/admin/globalUpdate"
 const GlobalUpdateFieldWorker = () => {
     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
@@ -105,6 +108,11 @@ const GlobalUpdateFieldWorker = () => {
                     <b>ADMIN</b>
                     </IonTitle>
                 </IonToolbar>
+
+                <IonRow>
+                    <AdminBackButton path={path}/>
+                </IonRow>
+
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
                         <b>UPDATE FIELDWORKER</b>

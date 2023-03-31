@@ -34,8 +34,9 @@ import '@ionic/react/css/display.css';
 import '../../theme/variables.css';
 import './Supervisor.css';
 import {Redirect} from "react-router";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {type} from "os";
+import BackButton from "../BackButton";
 // setupIonicReact();
 
 const FieldWorkersInHospital: React.FC<any> = props => {
@@ -46,6 +47,7 @@ const FieldWorkersInHospital: React.FC<any> = props => {
     const [currFieldWorker, setCurrFieldWorker] = useState(null);
 
     const [redirectToAssignTasks, setRedirectToAssignTasks] = useState(false);
+    const path="/supervisors"
 
     const handlePickFieldWorker=(fieldWorker:any)=>{
         setCurrFieldWorker(fieldWorker);
@@ -82,6 +84,10 @@ const FieldWorkersInHospital: React.FC<any> = props => {
                         <b>SUPERVISOR</b>
                     </IonTitle>
                 </IonToolbar>
+
+                <IonRow>
+                    <BackButton path={path} data={profileData.userData}></BackButton>
+                </IonRow>
 
                  {/*<IonHeader>*/}
                 <IonToolbar>

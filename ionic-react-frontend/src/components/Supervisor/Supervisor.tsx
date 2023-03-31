@@ -9,7 +9,7 @@ import {
     IonTitle,
     IonToolbar,
     IonButton,
-    IonPage
+    IonPage, IonRow
 } from '@ionic/react';
 
 /* Core CSS required for Ionic components to work properly */
@@ -37,11 +37,13 @@ import './Supervisor.css';
 
 import { useState, useEffect } from "react";
 import { Redirect } from 'react-router';
+import BackButton from "../BackButton";
 
 const Supervisor: React.FC<any> = props => {
     const profile = props.location.state;
     const [profileData, setProfileData] = useState(profile);
     const [service, setService] = useState("");
+    const path="/"
 
     const redirectIt = (pathTo:string) => {
         setService(pathTo);
@@ -62,6 +64,9 @@ const Supervisor: React.FC<any> = props => {
                 <b>SUPERVISOR</b>
                 </IonTitle>
             </IonToolbar>
+            <IonRow>
+                <BackButton path={path} data={profileData.userData}></BackButton>
+            </IonRow>
 
         </IonHeader>
 
@@ -99,7 +104,7 @@ const Supervisor: React.FC<any> = props => {
 
                 <IonCard class = "card-style">
                     <IonCardHeader>
-                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("./newCase")} /*routerLink = "./newCase"*/>NEW CASE</IonButton></IonCardTitle>
+                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" onClick={() => redirectIt("/supervisors/newCase")} /*routerLink = "./newCase"*/>NEW CASE</IonButton></IonCardTitle>
                     </IonCardHeader>
                 </IonCard>
             </IonGrid>

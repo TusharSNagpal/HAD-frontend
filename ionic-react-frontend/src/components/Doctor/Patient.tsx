@@ -35,7 +35,7 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
-import {useEffect, useState, useRef} from "react";
+import React, {useEffect, useState, useRef} from "react";
 
 // import Date from "../items/Date";
 
@@ -45,6 +45,7 @@ import './Doctor.css';
 import {Redirect} from "react-router";
 import DoctorHome from "./DoctorHome";
 import {Route} from "react-router-dom";
+import BackButton from "../BackButton";
 
 
 
@@ -52,7 +53,8 @@ import {Route} from "react-router-dom";
 // setupIonicReact();
 const Patient: React.FC<any> = props => {
     const v = props.location.state;
-    const [visitDetails, setVisitDetails] = useState(v);
+    const [visitDetails, setVisitDetails] = useState(v.currCase);
+    const [profileData, setProfileData] = useState(v.userData);
     const [showAlert, setShowAlert] = useState(false);
     const [redirect, setRedirect] = useState(false);
     const [showFollowUpOption, setShowFollowUpOption] = useState(false);
@@ -62,7 +64,8 @@ const Patient: React.FC<any> = props => {
     const [symptoms, setSymptoms] = useState<string>();
     const [tasksAssigned, setTasksAssigned] = useState<string>();
     const followUpDate = useRef<HTMLIonDatetimeElement>(null);
-
+    const path = "/doctorInHospital"
+    // console.log(profileData)
 
     //  useEffect(() => {
     //
@@ -78,16 +81,17 @@ const Patient: React.FC<any> = props => {
             return;
         }
 
-        visitDetails.currCase.symptoms = symptoms;
-        visitDetails.currCase.prescription = prescription;
-        // console.log(JSON.stringify(visitDetails.currCase));
-        const addRecordEndpoint = `http://localhost:9090/api/visits/visited/${visitDetails.currCase.visitId}`;
+        visitDetails.symptoms = symptoms;
+        visitDetails.prescription = prescription;
+        visitDetails.doctorInHospital= {'docInHospId':profileData.docInHospId};
+        console.log(JSON.stringify(visitDetails));
+        const addRecordEndpoint = `http://localhost:9090/api/visits/visited/${visitDetails.visitId}`;
         const options = {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(visitDetails.currCase)
+            body: JSON.stringify(visitDetails)
         }
 
         await fetch(addRecordEndpoint, options)
@@ -142,7 +146,7 @@ const Patient: React.FC<any> = props => {
         let newFollowUp = {
             'followUpDate':changeDateFormat,
             'taskAssignedByDoctor':temp,
-            'visit':{'visitId':visitDetails.currCase.visitId},
+            'visit':{'visitId':visitDetails.visitId},
             'isActive':1,
             'fieldWorkerInHospital':{'fwInHospId':-1},
             'reviewByFieldWorker':""
@@ -204,6 +208,10 @@ const Patient: React.FC<any> = props => {
                     </IonTitle>
                 </IonToolbar>
 
+                <IonRow>
+                    <BackButton path={path} data={profileData}></BackButton>
+                </IonRow>
+
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
                         <b>PATIENT DETAILS AND PRESCRIPTION</b>
@@ -217,9 +225,9 @@ const Patient: React.FC<any> = props => {
                     <IonGrid className='ion-text-center ion-margin'>
                         <IonRow>
                             <IonCol>
-                                <h2>Name : {visitDetails.currCase.patient.fname} {visitDetails.currCase.patient.lname}</h2>
-                                <h2>Gender : {visitDetails.currCase.patient.gender}</h2>
-                                <h2>Age : {visitDetails.currCase.patient.age}</h2>
+                                <h2>Name : {visitDetails.patient.fname} {visitDetails.patient.lname}</h2>
+                                <h2>Gender : {visitDetails.patient.gender}</h2>
+                                <h2>Age : {visitDetails.patient.age}</h2>
                             </IonCol>
 
                         </IonRow>
@@ -253,23 +261,7 @@ const Patient: React.FC<any> = props => {
                         }
 
 
-                        { showFollowUpOption &&
-                            <IonCol>
-                                <IonRow>
-                                    <IonCol>
-                                        <h3>Do you want to add followups for this patient?</h3>
-                                    </IonCol>
-                                </IonRow>
 
-
-                                <IonRow>
-                                    <IonCol>
-                                        <IonButton onClick={handleYes}>Yes</IonButton>
-                                        <IonButton onClick={handleNo}>No</IonButton>
-                                    </IonCol>
-                                </IonRow>
-                            </IonCol>
-                        }
                         {showFollowUpOption &&
                             <IonCol>
                                 <IonRow>
@@ -314,7 +306,7 @@ const Patient: React.FC<any> = props => {
                 buttons={['OK']}
             />
 
-            {!showAlert && redirect?<Redirect to='/doctorInHospital'/>
+            {!showAlert && redirect?<Redirect to={{pathname:'/doctorInHospital',state: { userData: profileData }}}/>
                 :null}
         </IonPage>
 

@@ -24,15 +24,18 @@ import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 import React from 'react';
-
+import BackButton from "../BackButton";
+import AdminBackButton from "./AdminBackButton";
+const path='/'
 const AdminHome: React.FC = () => {
     return(
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle class="ion-text-center">
-                        <b>HEALTH CARE SERVICES</b>
-                    </IonTitle>
+                <IonTitle class="ion-text-center">
+                    <b>HEALTH CARE SERVICES</b>
+                </IonTitle>
+
                 </IonToolbar>
 
                 <IonToolbar>
@@ -40,7 +43,12 @@ const AdminHome: React.FC = () => {
                     <b>Admin</b>
                     </IonTitle>
                 </IonToolbar>
+                <IonRow>
+                    <AdminBackButton path={path}/>
+                </IonRow>
             </IonHeader>
+
+
 
             <IonContent className='ion-padding'/*class = "content-style"*/>
 
@@ -48,13 +56,13 @@ const AdminHome: React.FC = () => {
 
                 <IonCard class = "card-style">
                     <IonCardHeader>
-                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./globalRegister">REGISTER</IonButton></IonCardTitle>
+                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "/admin/globalRegister">REGISTER</IonButton></IonCardTitle>
                     </IonCardHeader>
                 </IonCard>
 
                 <IonCard class = "card-style">
                     <IonCardHeader>
-                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "./globalUpdate">UPDATE</IonButton></IonCardTitle>
+                        <IonCardTitle class = "ion-card-title-style"><IonButton fill = "clear" size = "large" class = "btn" routerLink = "/admin/globalUpdate">UPDATE</IonButton></IonCardTitle>
                     </IonCardHeader>
                 </IonCard>
 
