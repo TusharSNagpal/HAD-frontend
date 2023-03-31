@@ -92,7 +92,7 @@ const FillingRemarks: React.FC<any> = props => {
 
         const connection = await Network.getStatus();
 
-        if(connection.connected){ //if internet is ON (ONLINE): We will direct update details on server.. also, even if it is active but api failed we will push the data in ionic storage
+        if(connection.connected){ //if internet is ON (ONLINE): We will directly update details on server.. also, even if it is active but api failed we will push the data in ionic storage
 
             let data = {
                 'reviewByFieldWorker': task
@@ -113,7 +113,8 @@ const FillingRemarks: React.FC<any> = props => {
                     if (response['status'] === 200) {
                         console.log("DONE");
                         // console.log(task);
-                    } else {
+                    } 
+                    else {
                         console.log("ERROR");
                         await addRemark(false, 2, s, task, followUpCurr.fup.newF.followUpId);
                         await updateFollowUp(followUpCurr.fup.currFollowup.followUpId);
