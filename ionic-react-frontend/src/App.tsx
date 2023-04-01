@@ -21,47 +21,47 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import NewCase from "./components/Supervisor/NewCase";
-import DoctorHome from "./components/Doctor/DoctorHome";
-import Supervisor from "./components/Supervisor/Supervisor";
-import RegisterDoctor from './components/Supervisor/RegisterDoctor';
-import RegisterPatient from "./components/Supervisor/RegisterPatient";
-import FWHome from './components/FieldWorker/FWHome';
-import FillingRemarks from './components/FieldWorker/FillingRemarks';
-import FieldWorker from './components/FieldWorker/FieldWorker';
-import FollowUp from './components/FollowUp/FollowUp';
+import NewCase from "./pages/Supervisor/NewCase";
+import DoctorHome from "./pages/Doctor/DoctorHome";
+import Supervisor from "./pages/Supervisor/Supervisor";
+import RegisterDoctor from './pages/Supervisor/RegisterDoctor';
+import RegisterPatient from "./pages/Supervisor/RegisterPatient";
+import FWHome from './pages/FieldWorker/FWHome';
+import FillingRemarks from './pages/FieldWorker/FillingRemarks';
+import FieldWorker from './pages/FieldWorker/FieldWorker';
+import FollowUp from './pages/FieldWorker/FollowUp';
 
-import Register from "./components/Supervisor/Register";
-import RegisterFieldWorker from "./components/Supervisor/RegisterFieldWorker";
-import Delete from "./components/Supervisor/Delete";
-import DeleteDoctor from "./components/Supervisor/DeleteDoctor";
-import UpdatePatient from "./components/Supervisor/UpdatePatient";
-import DeleteFieldWorker from "./components/Supervisor/DeleteFieldWorker";
+import Register from "./pages/Supervisor/Register";
+import RegisterFieldWorker from "./pages/Supervisor/RegisterFieldWorker";
+import Delete from "./pages/Supervisor/Delete";
+import DeleteDoctor from "./pages/Supervisor/DeleteDoctor";
+import UpdatePatient from "./pages/Supervisor/UpdatePatient";
+import DeleteFieldWorker from "./pages/Supervisor/DeleteFieldWorker";
 
-import AdminHome from './components/Admin/AdminHome';
-import GlobalRegister from './components/Admin/GlobalRegister';
+import AdminHome from './pages/Admin/AdminHome';
+import GlobalRegister from './pages/Admin/GlobalRegister';
 import { register } from './serviceWorkerRegistration';
-import GlobalRegisterHospital from './components/Admin/GlobalRegisterHospital';
-import GlobalRegisterSupervisor from './components/Admin/GlobalRegisterSupervisor';
-import GlobalRegisterFieldWorker from './components/Admin/GlobalRegisterFieldWorker';
-import GlobalRegisterDoctor from './components/Admin/GlobalRegisterDoctor';
-import GlobalUpdate from './components/Admin/GlobalUpdate';
-import GlobalUpdateHospital from './components/Admin/GlobalUpdateHospital';
-import GlobalUpdateSupervisor from './components/Admin/GlobalUpdateSupervisor';
-import GlobalUpdateDoctor from './components/Admin/GlobalUpdateDoctor';
-import GlobalUpdateFieldWorker from './components/Admin/GlobalUpdateFieldWorker';
+import GlobalRegisterHospital from './pages/Admin/GlobalRegisterHospital';
+import GlobalRegisterSupervisor from './pages/Admin/GlobalRegisterSupervisor';
+import GlobalRegisterFieldWorker from './pages/Admin/GlobalRegisterFieldWorker';
+import GlobalRegisterDoctor from './pages/Admin/GlobalRegisterDoctor';
+import GlobalUpdate from './pages/Admin/GlobalUpdate';
+import GlobalUpdateHospital from './pages/Admin/GlobalUpdateHospital';
+import GlobalUpdateSupervisor from './pages/Admin/GlobalUpdateSupervisor';
+import GlobalUpdateDoctor from './pages/Admin/GlobalUpdateDoctor';
+import GlobalUpdateFieldWorker from './pages/Admin/GlobalUpdateFieldWorker';
 
 
 
 import { useState, useEffect } from 'react';
 import { Network } from "@capacitor/network";
 
-import { useStorageFillingRemarks } from './hooks/useStorageFillingRemarks';
-import Patient from "./components/Doctor/Patient";
-import OldFollowUp from "./components/Doctor/OldFollowUp";
-import FieldWorkersInHospital from "./components/Supervisor/FieldWorkersInHospital";
-import AssignTasks from "./components/Supervisor/AssignTasks";
-import Home from "./components/Home";
+import { useStorageFillingRemarks } from './StorageHooks/useStorageFillingRemarks';
+import Patient from "./pages/Doctor/Patient";
+import OldFollowUp from "./pages/Doctor/OldFollowUp";
+import FieldWorkersInHospital from "./pages/Supervisor/FieldWorkersInHospital";
+import AssignTasks from "./pages/Supervisor/AssignTasks";
+import Home from "./pages/Home";
 
 
 setupIonicReact();
