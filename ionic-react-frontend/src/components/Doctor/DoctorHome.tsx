@@ -104,7 +104,7 @@ const DoctorHome: React.FC<any> = props => {
     }
 
     useEffect(() => {
-        fetch(`http://localhost:9090/api/visits/activeVisits/hospital/1`)
+        fetch(`http://localhost:9090/api/visits/activeVisits/hospital/3`)
             .then((response) => response.json())
             .then((json) => {
                 // setUseSt(true);
@@ -117,7 +117,7 @@ const DoctorHome: React.FC<any> = props => {
     }, []);
 
     useEffect(() => {
-         fetch(`http://localhost:9090/api/visits/activeVisits/hospital/1`)
+         fetch(`http://localhost:9090/api/visits/activeVisits/hospital/3`)
             .then((response) => response.json())
             .then((json) => {
                 // setUseSt(true);
@@ -131,7 +131,7 @@ const DoctorHome: React.FC<any> = props => {
     },[useSt]);
 
     useEffect(() => {
-        fetch(`http://localhost:9090/api/followUps/doctor/review/1`)
+        fetch(`http://localhost:9090/api/followUps/doctor/review/2`)
             .then((response) => response.json())
             .then((json) => {
                 // setUseSt(true);
@@ -173,10 +173,10 @@ const DoctorHome: React.FC<any> = props => {
 
             <IonRow>
                         <IonCol>
-                            <IonButton expand = "full" color="dark" onClick={handleNewPatientList}>New Patient</IonButton>
+                            <IonButton expand = "full" color="dark" onClick={handleNewPatientList}>New Cases</IonButton>
                         </IonCol>
                         <IonCol>
-                            <IonButton expand = "full" color="dark" onClick={handleOldFollowUpList}>Old followups</IonButton>
+                            <IonButton expand = "full" color="dark" onClick={handleOldFollowUpList}>Review Followups</IonButton>
                         </IonCol>
                     </IonRow>
                     {/*</IonGrid>*/}
@@ -185,7 +185,7 @@ const DoctorHome: React.FC<any> = props => {
                 // <IonHeader>
                     <IonToolbar>
                         <IonTitle class="ion-text-center">
-                            <b>ASSIGNED CASES</b>
+                            <b>NEW CASES</b>
                         </IonTitle>
                     </IonToolbar>
                 // </IonHeader>
@@ -195,7 +195,7 @@ const DoctorHome: React.FC<any> = props => {
                 // <IonHeader>
                     <IonToolbar>
                         <IonTitle class="ion-text-center">
-                            <b>REVIEW OLD FOLLOWUPS</b>
+                            <b>REVIEW FOLLOWUPS</b>
                         </IonTitle>
                     </IonToolbar>
                 // </IonHeader>

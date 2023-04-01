@@ -27,7 +27,8 @@ import React, { useEffect, useRef, useState } from 'react';
 
 const GlobalRegisterSupervisor: React.FC = () => {
     const [showAlert, setShowAlert] = useState(false);
-    const [showAlertErr, setShowAlertErr] = useState(false);
+    const [alertMessage, setAlertMessage] = useState<string>();
+    const [alertHeader, setAlertHeader] = useState<string>()
     const [hospitalOptions, setHospitalOptions] = useState<any[]>([]);
     const [useSt, setUseSt] = useState(false);
     const [hospitalId, setHospitalId] = useState(null);
@@ -68,6 +69,12 @@ const GlobalRegisterSupervisor: React.FC = () => {
     }
 
     const registerSupervisor = async () => {
+        if(hospitalId==null || fname.current!.value==null || lname.current!.value==null || gender.current!.value==null || dob.current!.value==null || phoneNo.current!.value==null || address.current!.value==null){
+            setShowAlert(true);
+            setAlertHeader("Unsuccessful");
+            setAlertMessage("Please fill required data..");
+            return;
+        }
         let data = {
             'hospital': {'hospitalId': hospitalId},
             'fname': fname.current!.value,
@@ -100,12 +107,14 @@ const GlobalRegisterSupervisor: React.FC = () => {
                 console.log(data);
                 const items = data;
                 if (data.size !== 0) {
-                setShowAlert(true);
-                setShowAlertErr(false);
-                resetAll();
+                    setShowAlert(true);
+                    setAlertHeader("Registration Successfull..")
+                    setAlertMessage("");
+                    resetAll();
                 } else {
-                    setShowAlert(false);
-                    setShowAlertErr(true);
+                    setShowAlert(true);
+                    setAlertHeader("Registration unsuccessfull..")
+                    setAlertMessage("");
                 }
 
                 return items;
@@ -194,16 +203,8 @@ const GlobalRegisterSupervisor: React.FC = () => {
                         <IonAlert
                         isOpen={showAlert}
                         onDidDismiss={() => setShowAlert(false)}
-                        subHeader="Registration Successful..!"
-                        buttons={['OK']}
-                        />
-
-                        <IonAlert
-                        isOpen={showAlertErr}
-                        onDidDismiss={() => setShowAlertErr(false)}
-                        header="Alert"
-                        subHeader="Registration Unsuccessful..!"
-                        message="Please Go to Doctor Registration Tab and Register Again!"
+                        header={alertHeader}
+                        message={alertMessage}
                         buttons={['OK']}
                         />
                 </IonContent>   

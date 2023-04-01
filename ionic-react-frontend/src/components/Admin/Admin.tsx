@@ -94,26 +94,27 @@ const Admin: React.FC<any> = () => {
     const authenticate = () => {
         // setAuth(true);
         // verifyOTP:
-        fetch(`http://172.16.132.90:9090/api/phoneNumber/verifyOTP/${otp.current!.value}/${mobileNo}`)
-            .then(function (response) {
-                console.log(response);
-                if (response['status'] === 200) {
-                    fetch(`http://172.16.132.90:9090/api/${role}/${userId.current!.value}`)
-                        .then(function (response) {
-                            return response.json();
-                        })
-                        .then((data) => {
-                            setUserData(data);
-                            console.log("OTP Validated");
+        // fetch(`http://172.16.132.90:9090/api/phoneNumber/verifyOTP/${otp.current!.value}/${mobileNo}`)
+        //     .then(function (response) {
+        //         console.log(response);
+        //         if (response['status'] === 200) {
+                    // fetch(`http://localhost:9090/api/${role}/${userId.current!.value}`)
+                    //     .then(function (response) {
+                    //         console.log(response)
+                    //         return response.json();
+                    //     })
+                    //     .then((data) => {
+                    //         setUserData(data);
+                    //         console.log("OTP Validated");
                             setAuth(true);
-                        })
+                        // })
                 }
-                else {
-                    console.log("OTP mismatch Sorry..!");
-                    setAuth(false);
-                }
-            })
-    }
+    //             else {
+    //                 console.log("OTP mismatch Sorry..!");
+    //                 setAuth(false);
+    //             }
+    //         })
+    // }
 
     return (
         <IonPage>
@@ -154,14 +155,14 @@ const Admin: React.FC<any> = () => {
                                 <IonLabel position="floating">ID</IonLabel>
                                 <IonInput ref={userId} />
                             </IonItem>
-                            <IonButton className="ion-margin-top" expand="block" onClick={() => generate()}>
+                            <IonButton className="ion-margin-top" expand="block" /* onClick={() => generate()} */>
                                 GENERATE OTP
                             </IonButton>
                             <IonItem>
                                 <IonLabel position="floating">OTP</IonLabel>
                                 <IonInput ref={otp} type="password" />
                             </IonItem>
-                            <IonButton className="ion-margin-top" expand="block" onClick={() => authenticate()}/*routerLink = {`./${role}`}*/>
+                            <IonButton className="ion-margin-top" expand="block" onClick={() => authenticate()} /*routerLink = {`./${role}`}*/>
                                 Login
                             </IonButton>
 

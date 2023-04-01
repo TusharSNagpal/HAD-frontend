@@ -26,8 +26,10 @@ import '@ionic/react/css/display.css';
 import React, { useEffect, useRef, useState } from 'react';
 
 const GlobalUpdateFieldWorker = () => {
-    const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
-    const [showAlert, setShowAlert] = useState(false);
+    const[showAlertNoSuchId,setShowAlertNoSuchId] = useState(false);
+    const [showAlert, setShowAlert] = useState<boolean>(false);
+    const [alertMessage, setAlertMessage] = useState<string>();
+    const [alertHeader, setAlertHeader] = useState<string>()
     const [id, setId] = useState(0);
     const [fieldWorker, setFieldWorker] = useState<any>([]);
     const [openForm, setOpenForm] = useState(false);
@@ -40,7 +42,17 @@ const GlobalUpdateFieldWorker = () => {
     const address = useRef<HTMLIonInputElement>(null)
     const registrationDate = useRef<HTMLIonInputElement>(null)
 
+    const resetAll = () => {
+        setFieldWorker([])
+    }
+
     const updateFieldWorker = async() => {
+        if(fname.current!.value=="" || lname.current!.value=="" || gender.current!.value=="" || dob.current!.value=="" || phoneNo.current!.value=="" || address.current!.value=="" || registrationDate.current!.value==""){
+            setShowAlert(true);
+            setAlertHeader("Unsuccessful");
+            setAlertMessage("Please fill required data..");
+            return;
+        }
         let data = {
             'fwId': fieldWorker.doctorId,
             'fname': fname.current!.value,
@@ -66,10 +78,15 @@ const GlobalUpdateFieldWorker = () => {
             console.log(response);
             if (response['status'] === 200) {
                 console.log("DONE");
-                setShowAlert(true)
+                setShowAlert(true);
+                setAlertHeader("Data Updated Successfully..")
+                setAlertMessage("");
+                resetAll();
             } else {
                 console.log("ERROR");
-                console.log(response)
+                setShowAlert(true);
+                setAlertHeader("Data Updation unsuccessfull..")
+                setAlertMessage("");
             }
             return response.json();
         })
@@ -177,15 +194,15 @@ const GlobalUpdateFieldWorker = () => {
                                 <IonGrid className='ion-text-center ion-margin'>
                                     <IonButton onClick={updateFieldWorker}>Submit</IonButton>
                                 </IonGrid>
-                            
-                            <IonAlert
-                            isOpen={showAlert}
-                            onDidDismiss={() => setShowAlertNoSuchId(false)}
-                            subHeader="DATA UPDATED SUCCESSFULLY..!"
-                            buttons={['OK']}
-                            /> </>
+                             </>
                         ) : null
                     }
+                    <IonAlert
+                            isOpen={showAlert}
+                            onDidDismiss={() => setShowAlert(false)}
+                            header={alertHeader}
+                            message={alertMessage}
+                            buttons={['OK']}/>
                     </IonGrid>
                     </IonContent>
         </IonPage>

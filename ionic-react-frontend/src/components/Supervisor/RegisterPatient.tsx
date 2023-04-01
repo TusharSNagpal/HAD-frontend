@@ -75,7 +75,7 @@ const RegisterPatient: React.FC<any> = props => {
     }
 
     useEffect(() => {
-        console.log(profileData.userData.supervisorId);
+        console.log(profileData);
     })
 
     const registerPatient = async() => {
