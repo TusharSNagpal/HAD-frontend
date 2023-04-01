@@ -29,7 +29,7 @@ import RegisterDoctor from './GlobalRegisterDoctor';
 import RegisterSupervisor from './GlobalRegisterSupervisor';
 import RegisterFieldWorker from './GlobalRegisterFieldWorker';
 import BackButton from "../../components/BackButton";
-import AdminBackButton from "./AdminBackButton";
+import AdminBackButton from "../../components/AdminBackButton";
 
 const path="/admin"
 const GlobalUpdate: React.FC = () => {
