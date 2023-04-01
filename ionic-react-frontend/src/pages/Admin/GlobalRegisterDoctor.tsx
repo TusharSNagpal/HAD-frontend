@@ -29,7 +29,8 @@ import AdminBackButton from "../../components/AdminBackButton";
 const path = "/admin/globalRegister"
 const GlobalRegisterDoctor: React.FC = () => {
     const [showAlert, setShowAlert] = useState(false);
-    const [showAlertErr, setShowAlertErr] = useState(false);
+    const [alertMessage, setAlertMessage] = useState<string>();
+    const [alertHeader, setAlertHeader] = useState<string>()
 
     const fname = useRef<HTMLIonInputElement>(null)
     const lname = useRef<HTMLIonInputElement>(null)
@@ -48,6 +49,12 @@ const GlobalRegisterDoctor: React.FC = () => {
     }
 
     const registerDoctor = async () => {
+        if(fname.current!.value==null || lname.current!.value==null || gender.current!.value==null || dob.current!.value==null || phoneNo.current!.value==null || address.current!.value==null){
+            setShowAlert(true);
+            setAlertHeader("Unsuccessful");
+            setAlertMessage("Please fill required data..");
+            return;
+        }
         let data = {
             'fname': fname.current!.value,
             'lname': lname.current!.value,
@@ -79,14 +86,15 @@ const GlobalRegisterDoctor: React.FC = () => {
                 console.log(data);
                 const items = data;
                 if (data.size !== 0) {
-                    setShowAlert(true);
-                    setShowAlertErr(false);
-                    resetAll();
+                setShowAlert(true);
+                setAlertHeader("Registration Successfull..")
+                setAlertMessage("");
+                resetAll();
                 } else {
-                    setShowAlert(false);
-                    setShowAlertErr(true);
+                    setShowAlert(true);
+                    setAlertHeader("Registration unsuccessfull..")
+                    setAlertMessage("");
                 }
-
                 return items;
             })
     }
@@ -156,23 +164,14 @@ const GlobalRegisterDoctor: React.FC = () => {
                 <IonGrid className='ion-text-center ion-margin'>
                     <IonButton onClick={registerDoctor}>Submit</IonButton>
                 </IonGrid>
-
-                <IonAlert
-                    isOpen={showAlert}
-                    onDidDismiss={() => setShowAlert(false)}
-                    subHeader="Registration Successful..!"
-                    buttons={['OK']}
-                />
-
-                <IonAlert
-                    isOpen={showAlertErr}
-                    onDidDismiss={() => setShowAlertErr(false)}
-                    header="Alert"
-                    subHeader="Registration Unsuccessful..!"
-                    message="Please Go to Doctor Registration Tab and Register Again!"
-                    buttons={['OK']}
-                />
-            </IonContent>
+                        <IonAlert
+                        isOpen={showAlert}
+                        onDidDismiss={() => setShowAlert(false)}
+                        header={alertHeader}
+                        message={alertMessage}
+                        buttons={['OK']}
+                        />
+                </IonContent>          
         </IonPage>
     )
 }

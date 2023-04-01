@@ -1,4 +1,3 @@
-
 import {
     IonContent,
     IonGrid,
@@ -102,15 +101,15 @@ const Home: React.FC = () => {
         //     .then(function (response) {
         //         console.log(response);
         //         if (response['status'] === 200) {
-        fetch(`http://localhost:9090/api/${role}/${userId.current!.value}`)
-            .then(function (response) {
-                return response.json();
-            })
-            .then((data) => {
-                setUserData(data);
-                console.log("OTP Validated");
+        // fetch(`http://localhost:9090/api/${role}/${userId.current!.value}`)
+        //     .then(function (response) {
+        //         return response.json();
+        //     })
+        //     .then((data) => {
+        //         setUserData(data);
+        //         console.log("OTP Validated");
                 setAuth(true);
-            })
+        //     })
         //         }
         //         else {
         //             console.log("OTP mismatch Sorry..!");
