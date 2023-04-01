@@ -25,7 +25,7 @@ import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 import React, { useEffect, useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
-import AdminBackButton from "./AdminBackButton";
+import AdminBackButton from "../../components/AdminBackButton";
 
 const path = "/admin/globalUpdate"
 const GlobalUpdateFieldWorker = () => {

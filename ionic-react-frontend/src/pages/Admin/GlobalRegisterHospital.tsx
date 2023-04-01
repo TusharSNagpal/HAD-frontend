@@ -25,7 +25,7 @@ import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 import React, { useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
-import AdminBackButton from "./AdminBackButton";
+import AdminBackButton from "../../components/AdminBackButton";
 
 const path = "/admin/globalRegister"
 const GlobalRegisterHospital: React.FC = () => {
