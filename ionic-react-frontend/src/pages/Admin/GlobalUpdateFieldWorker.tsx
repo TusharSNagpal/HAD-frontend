@@ -68,7 +68,7 @@ const GlobalUpdateFieldWorker = () => {
             'numOfTasksPerDay': fieldWorker.numOfTasksPerDay
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `http://localhost:9090/api/fieldworkers/${fieldWorker.fwId}`;
+        const addRecordEndpoint = `http://172.16.132.90:9090/api/fieldworkers/${fieldWorker.fwId}`;
         const options = {
             method: 'PUT',
             headers: {
@@ -101,7 +101,7 @@ const GlobalUpdateFieldWorker = () => {
     }
 
     useEffect(() => {
-        fetch(`http://localhost:9090/api/fieldworkers/${id}`)
+        fetch(`http://172.16.132.90:9090/api/fieldworkers/${id}`)
            .then(async (response) => {
             if(response['status'] === 200) {
                 const data = await response.json();

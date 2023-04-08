@@ -35,16 +35,16 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
-import React, {useEffect, useState, useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 // import Date from "../items/Date";
 
 /* Theme variables */
 import '../../theme/variables.css';
 import './Doctor.css';
-import {Redirect} from "react-router";
+import { Redirect } from "react-router";
 import DoctorHome from "./DoctorHome";
-import {Route} from "react-router-dom";
+import { Route } from "react-router-dom";
 import BackButton from "../../components/BackButton";
 
 
@@ -68,12 +68,12 @@ const OldFollowUp: React.FC<any> = props => {
     const currTaskList = followUpDetails.taskAssignedByDoctor.split("$")
     const currReviewList = followUpDetails.reviewByFieldWorker.split("$")
 
-    const [oldTaskList,setOldTaskList] = useState<string[]>([])
-    const [oldReviewList,setOldReviewList] = useState<string[]>([])
+    const [oldTaskList, setOldTaskList] = useState<string[]>([])
+    const [oldReviewList, setOldReviewList] = useState<string[]>([])
 
     const path = "/doctorInHospital"
     // console.log(followUpDetails)
-    const handleExpandFollowUp = (index:any)=>{
+    const handleExpandFollowUp = (index: any) => {
         const tasks = followUps[index].taskAssignedByDoctor.split("$")
         const reviews = followUps[index].reviewByFieldWorker.split("$")
         setOldTaskList(tasks)
@@ -81,54 +81,56 @@ const OldFollowUp: React.FC<any> = props => {
         console.log(oldTaskList)
         console.log(oldReviewList)
         let newArray = [...expanded];
-        if(newArray[index]===true)
-            newArray[index]=false;
+        if (newArray[index] === true)
+            newArray[index] = false;
 
         else
-            newArray[index]=true;
+            newArray[index] = true;
         setExpanded(newArray);
     }
 
-    const handleCurrentFollowupExpand=()=>{
-        if(currFollowUpExpanded===true)
+    const handleCurrentFollowupExpand = () => {
+        if (currFollowUpExpanded === true)
             setCurrFollowUpExpanded(false);
         else
             setCurrFollowUpExpanded(true);
     }
 
-    const handleYes = ()=>{
+    const handleYes = () => {
         setShowFollowUpOption(true);
     }
 
 
-    const handleSubmitFollowUps = async()=>{
-        if(tasksAssigned==null || followUpDate.current!.value==null){
+    const handleSubmitFollowUps = async () => {
+        if (tasksAssigned == null || followUpDate.current!.value == null) {
             setShowAlert(true);
             setAlertHeader("Unsuccessful");
             setAlertMessage("Please assign some task and follow-up date");
             return;
         }
         let temp;
-        if(tasksAssigned!=null)
+        if (tasksAssigned != null)
             temp = tasksAssigned.replace(/\n/g, "$");
+
+
         var changeDateFormat = followUpDate.current!.value;
         console.log(changeDateFormat);
-        if(changeDateFormat!=null && typeof(changeDateFormat)=='string')
+        if (changeDateFormat != null && typeof (changeDateFormat) == 'string')
             changeDateFormat = changeDateFormat.split('T')[0];
         console.log(changeDateFormat);
 
         // setTasksAssigned(temp);
         let newFollowUp = {
-            'followUpDate':changeDateFormat,
-            'taskAssignedByDoctor':temp,
-            'visit':{'visitId':followUpDetails.visit.visitId},
-            'isActive':1,
-            'fieldWorkerInHospital':{'fwInHospId':followUpDetails.fieldWorkerInHospital.fwInHospId},
-            'reviewByFieldWorker':""
+            'followUpDate': changeDateFormat,
+            'taskAssignedByDoctor': temp,
+            'visit': { 'visitId': followUpDetails.visit.visitId },
+            'isActive': 1,
+            'fieldWorkerInHospital': { 'fwInHospId': followUpDetails.fieldWorkerInHospital.fwInHospId },
+            'reviewByFieldWorker': ""
         };
         // console.log(newFollowUp)
         console.log(JSON.stringify(newFollowUp));
-        const addRecordEndpoint = `http://localhost:9090/api/followUps/`;
+        const addRecordEndpoint = `http://172.16.132.90:9090/api/followUps/`;
         const options = {
             method: 'POST',
             headers: {
@@ -159,12 +161,12 @@ const OldFollowUp: React.FC<any> = props => {
 
     }
 
-    const handleEndFollowUp =()=>{
+    const handleEndFollowUp = () => {
         setRedirect(true);
     }
 
     useEffect(() => {
-        fetch(`http://localhost:9090/api/followUps/visit/${followUpDetails.visit.visitId}/followUpId/${followUpDetails.followUpId}`)
+        fetch(`http://172.16.132.90:9090/api/followUps/visit/${followUpDetails.visit.visitId}/followUpId/${followUpDetails.followUpId}`)
             .then((response) => response.json())
             .then((json) => {
                 // setUseSt(true);
@@ -175,9 +177,56 @@ const OldFollowUp: React.FC<any> = props => {
                 // console.log(activeCases);
                 return json;
             })
-    },[]);
+    }, []);
 
-    return(
+    //dynamic task by doctor:
+
+    let count = 1;
+
+    const [mapTask, setMapTask] = useState(['']);
+
+    const addNew = (key:number) => {
+        console.log(key);
+        let pseudo = mapTask;
+        pseudo = [...pseudo, ''];
+        setMapTask(pseudo);
+        console.log(mapTask);
+    }
+
+    const [changeState, setChangeState] = useState(false);
+
+    const deleteIt = (index:number) => {
+        let pseudo = mapTask;
+        pseudo.splice(index,1);
+        setMapTask(pseudo);
+        console.log(mapTask);
+        console.log("Hi");
+        if(changeState)
+            setChangeState(false);
+        else
+        setChangeState(true);
+    }
+
+    useEffect(() => {
+        console.log(mapTask.length);
+    },[changeState]);
+
+    const handleChangeOfTask = (event:any, index:number) => {
+        mapTask[index] = event!.target!.value;
+        setMapTask(mapTask);
+        // console.log(mapTask);
+        let assignedTask = "";
+
+        mapTask.map((data) => {
+            assignedTask += data;
+            assignedTask += '$';
+        })
+        assignedTask = assignedTask.substring(0,assignedTask.length-1);
+
+        setTasksAssigned(assignedTask);
+    }
+
+    return (
         <IonPage>
             <IonHeader>
                 <IonToolbar>
@@ -220,7 +269,7 @@ const OldFollowUp: React.FC<any> = props => {
                                                 <IonCol>
                                                     <h5>Follow-up Date: {followUpDetails.followUpDate}</h5>
                                                     <h5>Tasks Assigned:</h5>
-                                                    {currTaskList.map((task:any)=>
+                                                    {currTaskList.map((task: any) =>
                                                         <IonRow>
                                                             <IonCol>
                                                                 <h6>{task}</h6>
@@ -228,7 +277,7 @@ const OldFollowUp: React.FC<any> = props => {
                                                         </IonRow>
                                                     )}
                                                     <h5>Reviews:</h5>
-                                                    {currReviewList.map((review:any)=>
+                                                    {currReviewList.map((review: any) =>
                                                         <IonRow>
                                                             <IonCol>
                                                                 <h6>{review}</h6>
@@ -255,19 +304,19 @@ const OldFollowUp: React.FC<any> = props => {
                             </IonCol>
                         </IonRow>
 
-                        {followUps.map((followUp,index) =>
+                        {followUps.map((followUp, index) =>
                             <IonCard class="card-style">
                                 <IonCardHeader>
                                     <IonSegment>
                                         <IonGrid>
                                             <IonRow>
                                                 <IonCol>
-                                                    <IonButton onClick={()=>handleExpandFollowUp(index)}>Follow-up {index+1} details</IonButton>
-                                                    { expanded[index] &&
+                                                    <IonButton onClick={() => handleExpandFollowUp(index)}>Follow-up {index + 1} details</IonButton>
+                                                    {expanded[index] &&
                                                         <IonCol>
                                                             <h5>Follow-up Date: {followUp.followUpDate}</h5>
                                                             <h5>Tasks Assigned:</h5>
-                                                            {oldTaskList.map((task:any)=>
+                                                            {oldTaskList.map((task: any) =>
                                                                 <IonRow>
                                                                     <IonCol>
                                                                         <h6>{task}</h6>
@@ -275,7 +324,7 @@ const OldFollowUp: React.FC<any> = props => {
                                                                 </IonRow>
                                                             )}
                                                             <h5>Reviews:</h5>
-                                                            {oldReviewList.map((review:any)=>
+                                                            {oldReviewList.map((review: any) =>
                                                                 <IonRow>
                                                                     <IonCol>
                                                                         <h6>{review}</h6>
@@ -321,7 +370,12 @@ const OldFollowUp: React.FC<any> = props => {
                                         <IonCard>
                                             <IonItem>
                                                 <IonLabel class="ion-text-center" position="floating">ADD FOLLOW UP INSTRUCTIONS FOR THE FIELD WORKER</IonLabel>
-                                                <IonTextarea value={tasksAssigned} onIonChange={(e) => setTasksAssigned(e.detail.value!)}></IonTextarea>
+                                                
+                                                {/* <IonTextarea value={tasksAssigned} onIonChange={(e) => setTasksAssigned(e.detail.value!)}></IonTextarea> */}
+                                                {mapTask.map((value: any, index: any) => (
+                                                    <IonTextarea key = {index} value={mapTask[index]} onIonChange={(e) => handleChangeOfTask(e, index)}><IonButton onClick={()=> {addNew(index)}}>+</IonButton><IonButton onClick={() => deleteIt(index)}>-</IonButton></IonTextarea>
+                                                // <IonTextarea value={tasksAssigned} onIonChange={(e) => setTasksAssigned(e.detail.value!)}></IonTextarea>
+                                                 ))}
                                             </IonItem>
                                         </IonCard>
                                     </IonCol>
@@ -350,13 +404,13 @@ const OldFollowUp: React.FC<any> = props => {
                         <IonAlert
                             isOpen={showAlert}
                             onDidDismiss={() => setShowAlert(false)}
-                            header= {alertHeader}
+                            header={alertHeader}
                             message={alertMessage}
                             buttons={['OK']}
                         />
 
-                        {!showAlert && redirect?<Redirect to={{pathname:'/doctorInHospital',state: { userData: profileData }}}/>
-                            :null}
+                        {!showAlert && redirect ? <Redirect to={{ pathname: '/doctorInHospital', state: { userData: profileData } }} />
+                            : null}
 
                     </IonGrid>
 

@@ -65,7 +65,7 @@ const GlobalRegisterFieldWorker: React.FC = () => {
             'address': address.current!.value
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = "http://localhost:9090/api/fieldworkers/";
+        const addRecordEndpoint = "http://172.16.132.90:9090/api/fieldworkers/";
         const options = {
             method: 'POST',
             headers: {

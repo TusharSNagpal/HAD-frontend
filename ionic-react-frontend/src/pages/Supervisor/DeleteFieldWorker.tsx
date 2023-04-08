@@ -50,7 +50,7 @@ const DeleteFieldWorker: React.FC<any> = props => {
 
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `http://localhost:9090/api/fieldWorkerInHospital/del/${fwInHospId.current!.value}`;
+        const addRecordEndpoint = `http://172.16.132.90:9090/api/fieldWorkerInHospital/del/${fwInHospId.current!.value}`;
         const options = {
             method: 'DELETE',
             headers: {
@@ -78,7 +78,7 @@ const DeleteFieldWorker: React.FC<any> = props => {
     }
 
     useEffect(() => {
-        fetch(`http://localhost:9090/api/fieldWorkerInHospital/${id}`)
+        fetch(`http://172.16.132.90:9090/api/fieldWorkerInHospital/${id}`)
             .then(async (response) => {
                 if (response['status'] === 200) {
                     const data = await response.json();

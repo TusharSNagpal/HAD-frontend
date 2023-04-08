@@ -47,7 +47,7 @@ const DeleteDoctor: React.FC<any> = props=> {
 
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `http://localhost:9090/api/doctorInHospital/del/${docInHospId.current!.value}`;
+        const addRecordEndpoint = `http://172.16.132.90:9090/api/doctorInHospital/del/${docInHospId.current!.value}`;
         const options = {
             method: 'DELETE',
             headers: {
@@ -75,7 +75,7 @@ const DeleteDoctor: React.FC<any> = props=> {
     }
 
     useEffect(() => {
-        fetch(`http://localhost:9090/api/doctorInHospital/${id}`)
+        fetch(`http://172.16.132.90:9090/api/doctorInHospital/${id}`)
             .then(async (response) => {
                 if(response['status'] === 200) {
                     const data = await response.json();

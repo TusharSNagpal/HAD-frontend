@@ -95,28 +95,29 @@ const Home: React.FC = () => {
     }
 
     const authenticate = () => {
-        // setAuth(true);
-
+        if(role === 'admin')
+            setAuth(true);
         // fetch(`http://172.16.132.90:9090/api/phoneNumber/verifyOTP/${otp.current!.value}/${mobileNo}`)
-        //     .then(function (response) {
-        //         console.log(response);
-        //         if (response['status'] === 200) {
-        // fetch(`http://localhost:9090/api/${role}/${userId.current!.value}`)
-        //     .then(function (response) {
-        //         return response.json();
-        //     })
-        //     .then((data) => {
-        //         setUserData(data);
-        //         console.log("OTP Validated");
-                setAuth(true);
-        //     })
-        //         }
-        //         else {
-        //             console.log("OTP mismatch Sorry..!");
-        //             setAuth(false);
-        //         }
-        //     })
-    }
+            // .then(function (response) {
+                // console.log(response);
+                // if (response['status'] === 200) {
+                    fetch(`http://172.16.132.90:9090/api/${role}/${userId.current!.value}`)
+                        .then(function (response) {
+                            console.log(response);
+                            return response.json();
+                        })
+                        .then((data) => {
+                            setUserData(data);
+                            console.log("OTP Validated");
+                            setAuth(true);
+                        })
+                }
+            //     else {
+            //         console.log("OTP mismatch Sorry..!");
+            //         setAuth(false);
+            //     }
+            // })
+    // }
 
     return (
         <IonPage>
@@ -136,7 +137,7 @@ const Home: React.FC = () => {
                 </IonToolbar>
             </IonHeader>
 
-            <IonContent className='ion-padding'/*class = "content-style"*/>
+            <IonContent className='ion-padding back'/*class = "content-style"*/>
 
                 <IonGrid className='ion-text-center ion-margin'>
 

@@ -71,7 +71,7 @@ const FieldWorker: React.FC<any> = props => {
     useEffect(() => {
         // console.log(profileData);
         let connection = async() => {
-            console.log(profileData.fwInHospId);
+            // console.log(profileData.fwInHospId);
             // console.log(on);
             const connection = await Network.getStatus();
 

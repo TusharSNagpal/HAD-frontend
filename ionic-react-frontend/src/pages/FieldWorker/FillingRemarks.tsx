@@ -28,6 +28,11 @@ import { useStorageFollowUp } from '../../StorageHooks/useStorageFollowUp';
 import { useEffect, useState } from 'react';
 import { Network } from "@capacitor/network";
 
+//print prescription:
+import * as pdfMake from "pdfmake/build/pdfmake";
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+(pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
+
 // setupIonicReact();
 
 interface PatientId {
@@ -47,6 +52,10 @@ const FillingRemarks: React.FC<any> = props => {
     // const [off, setOff] = useState(false);
 
     const [save, setSave] = useState(false);
+    
+    useEffect(()=> {
+        console.log(followUpCurr.fup.currFollowup.visit.prescription);
+    })
 
     let temp = {} as any;
     let output = s.split('$');
@@ -116,13 +125,13 @@ const FillingRemarks: React.FC<any> = props => {
                     } 
                     else {
                         console.log("ERROR");
-                        await addRemark(false, 2, s, task, followUpCurr.fup.newF.followUpId);
+                        await addRemark(false, 2, s, task, followUpCurr.fup.currFollowup.followUpId, followUpCurr.fup.currFollowup.visit.prescription, followUpCurr.fup.currFollowup.visit.symptoms);
                         await updateFollowUp(followUpCurr.fup.currFollowup.followUpId);
                     }
                 })
         } //if the internet is not on(OFFLINE): We will directly push in ionic storage..
         else {
-            await addRemark(false, 2, s, task, followUpCurr.fup.currFollowup.followUpId);
+            await addRemark(false, 2, s, task, followUpCurr.fup.currFollowup.followUpId, followUpCurr.fup.currFollowup.visit.prescription, followUpCurr.fup.currFollowup.visit.symptoms);
             await updateFollowUp(followUpCurr.fup.currFollowup.followUpId);
         }
         setRedirect(true);
@@ -138,6 +147,46 @@ const FillingRemarks: React.FC<any> = props => {
         setAssigned({ ...assigned, [key]: temp[key[0]] });
         setSave(false);
     }
+
+    //printing prescription:
+    const pdfDownload = () => {
+        console.log("print");
+        const docDef = {
+          content: [
+            'HOSPITAL DETAILS:',
+            {
+              ul: [
+                `HOSPITAL NAME: ${followUpCurr.fup.currFollowup.fieldWorkerInHospital.hospital.name}`,
+                `HOSPITAL ADDRESS: ${followUpCurr.fup.currFollowup.fieldWorkerInHospital.hospital.address}`,
+              ]
+            },
+            'PATIENT DETAILS:',
+            {
+                ul: [
+                    `PATIENT NAME: ${followUpCurr.fup.currFollowup.visit.patient.fname} ${followUpCurr.fup.currFollowup.visit.patient.lname}`,
+                ]
+            },
+            'FOLLOW-UP DETAILS:',
+            {
+                ul: [
+                    `FOLLOW UP ID: ${followUpCurr.fup.currFollowup.followUpId}`,
+                ]
+            },
+            'HEALTH DETAILS:',
+            {
+                ul:[
+                `SYMPTOMS: ${followUpCurr.fup.currFollowup.visit.symptoms}`,
+                {text:
+                    `PRESCRIPTION: ${followUpCurr.fup.currFollowup.visit.prescription}`,
+                    bold:true
+                },
+                ]
+            },
+          ],
+        };
+    
+        pdfMake.createPdf(docDef).print();
+      }
 
     return (
         <IonPage>
@@ -203,6 +252,9 @@ const FillingRemarks: React.FC<any> = props => {
                     </IonGrid>
                 </IonCard>
 
+                <IonButton onClick = {()=>pdfDownload()}>Print Prescription</IonButton>
+
+                <IonGrid>
                 <IonButton className="ion-margin-top" onClick={() => { saveRemarks(); }}>
                     SAVE
                 </IonButton>
@@ -216,6 +268,8 @@ const FillingRemarks: React.FC<any> = props => {
                 {redirect ?
                     <Redirect to={{ pathname: "/fieldWorkerInHospital", state: { userData: followUpCurr.userData.profileData } }}/>
                     :null}
+
+                </IonGrid>
 
             </IonContent>
         </IonPage>

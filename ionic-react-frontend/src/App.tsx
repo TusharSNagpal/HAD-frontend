@@ -62,6 +62,7 @@ import OldFollowUp from "./pages/Doctor/OldFollowUp";
 import FieldWorkersInHospital from "./pages/Supervisor/FieldWorkersInHospital";
 import AssignTasks from "./pages/Supervisor/AssignTasks";
 import Home from "./pages/Home";
+import Prescription from './pages/FieldWorker/Prescription';
 
 
 setupIonicReact();
@@ -92,7 +93,7 @@ const App: React.FC = () => {
             'reviewByFieldWorker': offlineData[0]['reviewByFieldWorker']
           };
 
-          const addRecordEndpoint = `http://localhost:9090/api/followUps/fieldWorker/${offlineData[0]['followUpId']}`;
+          const addRecordEndpoint = `http://172.16.132.90:9090/api/followUps/fieldWorker/${offlineData[0]['followUpId']}`;
           const options = {
             method: 'PUT',
             headers: {
@@ -207,7 +208,7 @@ const App: React.FC = () => {
           <Route exact path = "/followup" component={FollowUp}/>
           <Route exact path = "/fieldWorkerHome" component={FWHome}/>
           <Route exact path = "/fillingRemarks" component={FillingRemarks}/>
-
+          <Route exact path = "/prescription" component={Prescription}/>
 
 
 

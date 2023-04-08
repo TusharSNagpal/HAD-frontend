@@ -68,7 +68,7 @@ const GlobalUpdateDoctor = () => {
             'registrationDate': registrationDate.current!.value
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `http://localhost:9090/api/doctors/${doctor.doctorId}`;
+        const addRecordEndpoint = `http://172.16.132.90:9090/api/doctors/${doctor.doctorId}`;
         const options = {
             method: 'PUT',
             headers: {
@@ -101,7 +101,7 @@ const GlobalUpdateDoctor = () => {
     }
 
     useEffect(() => {
-        fetch(`http://localhost:9090/api/doctors/${id}`)
+        fetch(`http://172.16.132.90:9090/api/doctors/${id}`)
            .then(async (response) => {
             if(response['status'] === 200) {
                 const data = await response.json();

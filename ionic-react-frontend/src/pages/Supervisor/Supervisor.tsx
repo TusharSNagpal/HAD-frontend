@@ -54,6 +54,7 @@ const Supervisor: React.FC<any> = props => {
     // }
 
     useEffect(() => {
+        console.log(profileData);
         if(!profileData){
             console.log("Login Again..!");
             setAuth(false);
