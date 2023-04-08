@@ -31,7 +31,8 @@ const path = "/admin/globalRegister"
 const GlobalRegisterHospital: React.FC = () => {
 
     const [showAlert, setShowAlert] = useState(false);
-    const [showAlertErr, setShowAlertErr] = useState(false);
+    const [alertMessage, setAlertMessage] = useState<string>();
+    const [alertHeader, setAlertHeader] = useState<string>()
 
     const name = useRef<HTMLIonInputElement>(null)
     const address = useRef<HTMLIonInputElement>(null)
@@ -42,6 +43,12 @@ const GlobalRegisterHospital: React.FC = () => {
     }
 
     const registerHospital = async() => {
+        if(name.current!.value==null || address.current!.value==null){
+            setShowAlert(true);
+            setAlertHeader("Unsuccessful");
+            setAlertMessage("Please fill required data..");
+            return;
+        }
         let data = {
             'name': name.current!.value,
             'address': address.current!.value
@@ -70,11 +77,13 @@ const GlobalRegisterHospital: React.FC = () => {
                 const items = data;
                 if (data.size !== 0) {
                 setShowAlert(true);
-                setShowAlertErr(false);
+                setAlertHeader("Registration Successfull..")
+                setAlertMessage("");
                 resetAll();
                 } else {
-                    setShowAlert(false);
-                    setShowAlertErr(true);
+                    setShowAlert(true);
+                    setAlertHeader("Registration unsuccessfull..")
+                    setAlertMessage("");
                 }
 
                 return items;
@@ -128,16 +137,8 @@ const GlobalRegisterHospital: React.FC = () => {
                 <IonAlert
                     isOpen={showAlert}
                     onDidDismiss={() => setShowAlert(false)}
-                    subHeader="Registration Successful..!"
-                    buttons={['OK']}
-                />
-
-                <IonAlert
-                    isOpen={showAlertErr}
-                    onDidDismiss={() => setShowAlertErr(false)}
-                    header="Alert"
-                    subHeader="Registration Unsuccessful..!"
-                    message="Please Go to Hospital Tab and Register Again!"
+                    header={alertHeader}
+                    message={alertMessage}
                     buttons={['OK']}
                 />
             </IonContent>

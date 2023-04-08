@@ -29,8 +29,10 @@ import AdminBackButton from "../../components/AdminBackButton";
 
 const path = "/admin/globalUpdate"
 const GlobalUpdateDoctor = () => {
-    const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
-    const [showAlert, setShowAlert] = useState(false);
+    const[showAlertNoSuchId,setShowAlertNoSuchId] = useState(false);
+    const [showAlert, setShowAlert] = useState<boolean>(false);
+    const [alertMessage, setAlertMessage] = useState<string>();
+    const [alertHeader, setAlertHeader] = useState<string>()
     const [id, setId] = useState(0);
     const [doctor, setDoctor] = useState<any>([]);
     const [openForm, setOpenForm] = useState(false);
@@ -43,7 +45,18 @@ const GlobalUpdateDoctor = () => {
     const address = useRef<HTMLIonInputElement>(null)
     const registrationDate = useRef<HTMLIonInputElement>(null)
 
+    const resetAll = () => {
+        setDoctor([])
+    }
+
+
     const updateDoctor = async() => {
+        if(fname.current!.value=="" || lname.current!.value=="" || gender.current!.value=="" || dob.current!.value=="" || phoneNo.current!.value=="" || address.current!.value=="" || registrationDate.current!.value==""){
+            setShowAlert(true);
+            setAlertHeader("Unsuccessful");
+            setAlertMessage("Please fill required data..");
+            return;
+        }
         let data = {
             'doctorId': doctor.doctorId,
             'fname': fname.current!.value,
@@ -66,12 +79,17 @@ const GlobalUpdateDoctor = () => {
         await fetch(addRecordEndpoint, options)
         .then(function (response) {
             console.log(response);
-            if (response['status'] === 200) {
+            if (response['status'] == 200) {
                 console.log("DONE");
-                setShowAlert(true)
+                setShowAlert(true);
+                setAlertHeader("Data Updated Successfully..")
+                setAlertMessage("");
+                resetAll();
             } else {
                 console.log("ERROR");
-                console.log(response)
+                setShowAlert(true);
+                setAlertHeader("Data Updation unsuccessfull..")
+                setAlertMessage("");
             }
             return response.json();
         })
@@ -90,7 +108,7 @@ const GlobalUpdateDoctor = () => {
                 setDoctor(data)
                 console.log(data)
             }
-            else if(id !== 0) setShowAlertNoSuchId(true);
+            else if(id != 0) setShowAlertNoSuchId(true);
            })
         },[openForm]);
 
@@ -136,7 +154,6 @@ const GlobalUpdateDoctor = () => {
                             isOpen={showAlertNoSuchId}
                             onDidDismiss={() => setShowAlertNoSuchId(false)}
                             subHeader="ID NOT FOUND..!"
-                            message="!!UNSUCCESSFUL..!"
                             buttons={['OK']}
                             />
                         </form>
@@ -184,15 +201,17 @@ const GlobalUpdateDoctor = () => {
                                 <IonGrid className='ion-text-center ion-margin'>
                                     <IonButton onClick={updateDoctor}>Submit</IonButton>
                                 </IonGrid>
-                            
-                            <IonAlert
-                            isOpen={showAlert}
-                            onDidDismiss={() => setShowAlertNoSuchId(false)}
-                            subHeader="DATA UPDATED SUCCESSFULLY..!"
-                            buttons={['OK']}
-                            /> </>
+                                </>
+                                
                         ) : null
                     }
+                    <IonAlert
+                                isOpen={showAlert}
+                                onDidDismiss={() => setShowAlert(false)}
+                                header={alertHeader}
+                                message={alertMessage}
+                                buttons={['OK']}
+                                /> 
                     </IonGrid>
                     </IonContent>
         </IonPage>
