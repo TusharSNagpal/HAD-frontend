@@ -63,7 +63,7 @@ const Home: React.FC = () => {
     }
 
     const generate = () => {
-        // fetch(`http://localhost:9090/api/${role}/phoneNo/${userId.current!.value}`)
+        // fetch(`http://172.16.132.90:9090/api/${role}/phoneNo/${userId.current!.value}`)
         //     .then(function (response) {
         //         // console.log(response.text());
         //         if (response['status'] === 200) {
@@ -82,7 +82,7 @@ const Home: React.FC = () => {
         //         }
         //         else{
         //             setMobileNo(data);
-        //             fetch(`http://localhost:9090/api/phoneNumber/generateOTP/${data}`)
+        //             fetch(`http://172.16.132.90:9090/api/phoneNumber/generateOTP/${data}`)
         //                 .then(function (response) {
         //                         console.log(response);
         //                         if (response['status'] === 200) {
@@ -98,11 +98,11 @@ const Home: React.FC = () => {
     const authenticate = () => {
         if(role === 'admin')
             setAuth(true);
-        // fetch(`http://localhost:9090/api/phoneNumber/verifyOTP/${otp.current!.value}/${mobileNo}`)
+        // fetch(`http://172.16.132.90:9090/api/phoneNumber/verifyOTP/${otp.current!.value}/${mobileNo}`)
             // .then(function (response) {
                 // console.log(response);
                 // if (response['status'] === 200) {
-                    fetch(`http://localhost:9090/api/${role}/${userId.current!.value}`)
+                    fetch(`http://172.16.132.90:9090/api/${role}/${userId.current!.value}`)
                         .then(function (response) {
                             console.log(response);
                             return response.json();

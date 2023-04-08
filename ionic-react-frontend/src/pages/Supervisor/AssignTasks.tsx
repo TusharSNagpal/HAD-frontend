@@ -86,7 +86,7 @@ const AssignTasks: React.FC<any> = props => {
             if(picked[i]===true){
                 const followUpId = followUps[i].followUpId;
                 console.log(followUpId)
-                const addRecordEndpoint = `http://localhost:9090/api/followUps/${followUpId}/fwInHosp/${fieldWorkerDetails.fwInHospId}`;
+                const addRecordEndpoint = `http://172.16.132.90:9090/api/followUps/${followUpId}/fwInHosp/${fieldWorkerDetails.fwInHospId}`;
                 const options = {
                     method: 'PUT',
                 }
@@ -110,7 +110,7 @@ const AssignTasks: React.FC<any> = props => {
             // console.log(fieldWorkerDetails.currFieldWorker.numOfTasksPerDay);
             fieldWorkerDetails.numOfTasksPerDay=tasksAssigned;
             console.log(JSON.stringify(fieldWorkerDetails));
-            const addRecordEndpoint = `http://localhost:9090/api/fieldWorkerInHospital/${fieldWorkerDetails.fwInHospId}`;
+            const addRecordEndpoint = `http://172.16.132.90:9090/api/fieldWorkerInHospital/${fieldWorkerDetails.fwInHospId}`;
             const options = {
                 method: 'PUT',
                 headers:{
@@ -143,7 +143,7 @@ const AssignTasks: React.FC<any> = props => {
     }
 
     useEffect(() => {
-        fetch(`http://localhost:9090/api/followUps/remaining/1`)
+        fetch(`http://172.16.132.90:9090/api/followUps/remaining/1`)
             .then((response) => response.json())
             .then((json) => {
                 // setUseSt(true);

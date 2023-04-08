@@ -73,7 +73,7 @@ const UpdatePatient:React.FC<any> = props => {
 
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `http://localhost:9090/api/patients/${patient.patientId}`;
+        const addRecordEndpoint = `http://172.16.132.90:9090/api/patients/${patient.patientId}`;
         const options = {
             method: 'PUT',
             headers: {
@@ -101,7 +101,7 @@ const UpdatePatient:React.FC<any> = props => {
     }
 
     useEffect(() => {
-        fetch(`http://localhost:9090/api/patients/${id}`)
+        fetch(`http://172.16.132.90:9090/api/patients/${id}`)
             .then(async (response) => {
                 if(response['status'] === 200) {
                     const data = await response.json();

@@ -56,7 +56,7 @@ const FieldWorkersInHospital: React.FC<any> = props => {
 
 
     useEffect(() => {
-        fetch(`http://localhost:9090/api/fieldWorkerInHospital/hospital/${profileData.userData.hospital.hospitalId}`)
+        fetch(`http://172.16.132.90:9090/api/fieldWorkerInHospital/hospital/${profileData.userData.hospital.hospitalId}`)
             .then((response) => response.json())
             .then((json) => {
                 // setUseSt(true);

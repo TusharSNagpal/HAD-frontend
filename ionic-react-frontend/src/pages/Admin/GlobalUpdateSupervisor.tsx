@@ -58,7 +58,7 @@ const GlobalUpdateSupervisor = () => {
             'hospital': {'hospitalId': hospitalId}
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `http://localhost:9090/api/supervisors/${supervisor.supervisorId}`;
+        const addRecordEndpoint = `http://172.16.132.90:9090/api/supervisors/${supervisor.supervisorId}`;
         const options = {
             method: 'PUT',
             headers: {
@@ -78,7 +78,7 @@ const GlobalUpdateSupervisor = () => {
             }
             return response.json();
         })
-        fetch(`http://localhost:9090/api/hospitals/noSupervisor`)
+        fetch(`http://172.16.132.90:9090/api/hospitals/noSupervisor`)
            .then((response) => response.json())
            .then((json) => {
                setHospitalOptions(json);
@@ -91,7 +91,7 @@ const GlobalUpdateSupervisor = () => {
     }
 
     useEffect(() => {
-        fetch(`http://localhost:9090/api/supervisors/${id}`)
+        fetch(`http://172.16.132.90:9090/api/supervisors/${id}`)
            .then(async (response) => {
             if(response['status'] === 200) {
                 const data = await response.json();
@@ -101,7 +101,7 @@ const GlobalUpdateSupervisor = () => {
             }
             else if(id !== 0) setShowAlertNoSuchId(true);
            })
-           fetch(`http://localhost:9090/api/hospitals/noSupervisor`)
+           fetch(`http://172.16.132.90:9090/api/hospitals/noSupervisor`)
            .then((response) => response.json())
            .then((json) => {
                setHospitalOptions(json);

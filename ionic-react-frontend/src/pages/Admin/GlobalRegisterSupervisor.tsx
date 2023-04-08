@@ -57,7 +57,7 @@ const GlobalRegisterSupervisor: React.FC = () => {
     }
 
     useEffect(() => {
-        fetch(`http://localhost:9090/api/hospitals/noSupervisor`)
+        fetch(`http://172.16.132.90:9090/api/hospitals/noSupervisor`)
            .then((response) => response.json())
            .then((json) => {
                setHospitalOptions(json);
@@ -80,7 +80,7 @@ const GlobalRegisterSupervisor: React.FC = () => {
             'address': address.current!.value
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = "http://localhost:9090/api/supervisors/";
+        const addRecordEndpoint = "http://172.16.132.90:9090/api/supervisors/";
         const options = {
             method: 'POST',
             headers: {
@@ -112,7 +112,7 @@ const GlobalRegisterSupervisor: React.FC = () => {
 
                 return items;
             })
-            await fetch(`http://localhost:9090/api/hospitals/noSupervisor`)
+            await fetch(`http://172.16.132.90:9090/api/hospitals/noSupervisor`)
             .then((response) => response.json())
             .then((json) => {
                 setHospitalOptions(json);

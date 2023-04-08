@@ -82,7 +82,7 @@ const RegisterPatient: React.FC<any> = props => {
 
     const registerPatient = async() => {
         //here
-        fetch(`http://localhost:9090/api/supervisors/${profileData.userData.supervisorId}`)
+        fetch(`http://172.16.132.90:9090/api/supervisors/${profileData.userData.supervisorId}`)
             .then(function(response){
                 console.log(response);
                 if(response['status'] === 200){
@@ -124,7 +124,7 @@ const RegisterPatient: React.FC<any> = props => {
                         'dob': changeDateFormat
                     };
                     console.log(JSON.stringify(data));
-                    const addRecordEndpoint = "http://localhost:9090/api/patients/";
+                    const addRecordEndpoint = "http://172.16.132.90:9090/api/patients/";
                     const options = {
                         method: 'POST',
                         headers: {

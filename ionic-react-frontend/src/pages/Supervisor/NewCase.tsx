@@ -53,7 +53,7 @@ const NewCase:React.FC<any> = props=> {
     const path="/supervisors"
 
     const loginPatient = async() => {
-        const response = await fetch(`http://localhost:9090/api/patients/${patientIdRef.current!.value}`)
+        const response = await fetch(`http://172.16.132.90:9090/api/patients/${patientIdRef.current!.value}`)
         const result = await response;
         console.log(response);
         if(result['status'] === 200){
@@ -72,7 +72,7 @@ const NewCase:React.FC<any> = props=> {
     }
 
     const createCase = async() => {
-        fetch(`http://localhost:9090/api/patients/${patientIdRef.current!.value}`)
+        fetch(`http://172.16.132.90:9090/api/patients/${patientIdRef.current!.value}`)
             .then(function (response) {
                 console.log(response);
                 if (response['status'] === 200) {
@@ -92,7 +92,7 @@ const NewCase:React.FC<any> = props=> {
             .then(async function (hospitalId) {
                 let data = {'hospital':{'hospitalId': hospitalId}, 'patient':{'patientId': patientIdRef.current!.value}};
                 console.log(JSON.stringify(data));
-                const addRecordEndpoint = "http://localhost:9090/api/visits/";
+                const addRecordEndpoint = "http://172.16.132.90:9090/api/visits/";
                 const options = {
                     method: 'POST',
                     headers:{

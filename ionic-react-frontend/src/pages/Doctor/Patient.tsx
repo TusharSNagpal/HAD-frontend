@@ -82,7 +82,7 @@ const Patient: React.FC<any> = props => {
         visitDetails.prescription = prescription;
         visitDetails.doctorInHospital= {'docInHospId':profileData.docInHospId};
         console.log(JSON.stringify(visitDetails));
-        const addRecordEndpoint = `http://localhost:9090/api/visits/visited/${visitDetails.visitId}`;
+        const addRecordEndpoint = `http://172.16.132.90:9090/api/visits/visited/${visitDetails.visitId}`;
         const options = {
             method: 'PUT',
             headers: {
@@ -150,7 +150,7 @@ const Patient: React.FC<any> = props => {
         };
         console.log(newFollowUp)
         console.log(JSON.stringify(newFollowUp));
-        const addRecordEndpoint = `http://localhost:9090/api/followUps/`;
+        const addRecordEndpoint = `http://172.16.132.90:9090/api/followUps/`;
         const options = {
             method: 'POST',
             headers: {
@@ -190,25 +190,27 @@ const Patient: React.FC<any> = props => {
         setRedirect(true)
     }
 
+    //dynamic task by doctor:
+
     let count = 1;
 
-    const [temp, setTemp] = useState(['']);
+    const [mapTask, setMapTask] = useState(['']);
 
     const addNew = (key:number) => {
         console.log(key);
-        let pseudo = temp;
+        let pseudo = mapTask;
         pseudo = [...pseudo, ''];
-        setTemp(pseudo);
-        console.log(temp);
+        setMapTask(pseudo);
+        console.log(mapTask);
     }
 
     const [changeState, setChangeState] = useState(false);
 
     const deleteIt = (index:number) => {
-        let pseudo = temp;
+        let pseudo = mapTask;
         pseudo.splice(index,1);
-        setTemp(pseudo);
-        console.log(temp);
+        setMapTask(pseudo);
+        console.log(mapTask);
         console.log("Hi");
         if(changeState)
             setChangeState(false);
@@ -217,12 +219,22 @@ const Patient: React.FC<any> = props => {
     }
 
     useEffect(() => {
-        console.log(temp.length);
+        console.log(mapTask.length);
     },[changeState]);
 
     const handleChangeOfTask = (event:any, index:number) => {
-        temp[index] = event!.target!.value;
-        setTemp(temp);
+        mapTask[index] = event!.target!.value;
+        setMapTask(mapTask);
+        // console.log(mapTask);
+        let assignedTask = "";
+
+        mapTask.map((data) => {
+            assignedTask += data;
+            assignedTask += '$';
+        })
+        assignedTask = assignedTask.substring(0,assignedTask.length-1);
+
+        setTasksAssigned(assignedTask);
     }
 
     return(
@@ -302,9 +314,10 @@ const Patient: React.FC<any> = props => {
                                         <IonCard>
                                             <IonItem>
                                                 <IonLabel class="ion-text-center" position="floating">ADD FOLLOW UP INSTRUCTIONS FOR THE FIELD WORKER</IonLabel>
-                                                {temp.map((value: any, index: any) => (
-                                                    <IonTextarea key = {index} value={temp[index]} onIonChange={(e) => handleChangeOfTask(e, index)}><IonButton onClick={()=> {addNew(index)}}>+</IonButton><IonButton onClick={() => deleteIt(index)}>-</IonButton></IonTextarea>
-                                                ))}
+                                                {mapTask.map((value: any, index: any) => (
+                                                    <IonTextarea key = {index} value={mapTask[index]} onIonChange={(e) => handleChangeOfTask(e, index)}><IonButton onClick={()=> {addNew(index)}}>+</IonButton><IonButton onClick={() => deleteIt(index)}>-</IonButton></IonTextarea>
+                                                // <IonTextarea value={tasksAssigned} onIonChange={(e) => setTasksAssigned(e.detail.value!)}></IonTextarea>
+                                                 ))}
                                             </IonItem>
                                         </IonCard>
                                     </IonCol>

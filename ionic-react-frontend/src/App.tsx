@@ -93,7 +93,7 @@ const App: React.FC = () => {
             'reviewByFieldWorker': offlineData[0]['reviewByFieldWorker']
           };
 
-          const addRecordEndpoint = `http://localhost:9090/api/followUps/fieldWorker/${offlineData[0]['followUpId']}`;
+          const addRecordEndpoint = `http://172.16.132.90:9090/api/followUps/fieldWorker/${offlineData[0]['followUpId']}`;
           const options = {
             method: 'PUT',
             headers: {

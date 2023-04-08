@@ -65,7 +65,7 @@ const RegisterDoctor: React.FC<any> = props => {
 
     const registerDoctor = async () => {
 
-        fetch(`http://localhost:9090/api/doctors/${docId.current!.value}`)
+        fetch(`http://172.16.132.90:9090/api/doctors/${docId.current!.value}`)
             .then(function (response) {
                 console.log(response);
                 if (response['status'] === 200) {
@@ -102,7 +102,7 @@ const RegisterDoctor: React.FC<any> = props => {
                     };
                     console.log(JSON.stringify(data));
 
-                    const addRecordEndpoint = `http://localhost:9090/api/doctorInHospital/docInHosp/${docId.current!.value}/hospital/${hospId.current!.value}`;
+                    const addRecordEndpoint = `http://172.16.132.90:9090/api/doctorInHospital/docInHosp/${docId.current!.value}/hospital/${hospId.current!.value}`;
                     const options = {
                         method: 'POST',
                         headers: {

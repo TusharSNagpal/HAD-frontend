@@ -63,7 +63,7 @@ const RegisterFieldWorker: React.FC<any> = props => {
 
     const registerFieldWorker = async() => {
 
-        fetch(`http://localhost:9090/api/fieldworkers/${fwId.current!.value}`)
+        fetch(`http://172.16.132.90:9090/api/fieldworkers/${fwId.current!.value}`)
             .then(function(response){
                 console.log(response);
                 if(response['status'] === 200){
@@ -100,7 +100,7 @@ const RegisterFieldWorker: React.FC<any> = props => {
                         };
                         console.log(JSON.stringify(data));
 
-                        const addRecordEndpoint = `http://localhost:9090/api/fieldWorkerInHospital/fwInHosp/${fwId.current!.value}/hospital/${hospId.current!.value}`;                        const options = {
+                        const addRecordEndpoint = `http://172.16.132.90:9090/api/fieldWorkerInHospital/fwInHosp/${fwId.current!.value}/hospital/${hospId.current!.value}`;                        const options = {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
