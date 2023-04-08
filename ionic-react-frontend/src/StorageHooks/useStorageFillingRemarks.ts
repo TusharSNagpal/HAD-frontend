@@ -38,7 +38,9 @@ export function useStorageFillingRemarks() {
                             isActive: number,
                             taskAssignedByDoctor: string,
                             reviewByFieldWorker: string,
-                            follow_ups_id: number) => 
+                            follow_ups_id: number,
+                            prescription: string,
+                            symptoms: string) => 
     {
         const newRemark = {
             followUpId:follow_ups_id,
@@ -46,6 +48,8 @@ export function useStorageFillingRemarks() {
             isActive,
             taskAssignedByDoctor,
             reviewByFieldWorker,
+            prescription,
+            symptoms,
             created: new Date().getTime(),
             status: 0,
             id: ''+new Date().getTime()

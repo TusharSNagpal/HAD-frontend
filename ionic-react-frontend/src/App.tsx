@@ -62,6 +62,7 @@ import OldFollowUp from "./pages/Doctor/OldFollowUp";
 import FieldWorkersInHospital from "./pages/Supervisor/FieldWorkersInHospital";
 import AssignTasks from "./pages/Supervisor/AssignTasks";
 import Home from "./pages/Home";
+import Prescription from './pages/FieldWorker/Prescription';
 
 
 setupIonicReact();
@@ -207,7 +208,7 @@ const App: React.FC = () => {
           <Route exact path = "/followup" component={FollowUp}/>
           <Route exact path = "/fieldWorkerHome" component={FWHome}/>
           <Route exact path = "/fillingRemarks" component={FillingRemarks}/>
-
+          <Route exact path = "/prescription" component={Prescription}/>
 
 
 

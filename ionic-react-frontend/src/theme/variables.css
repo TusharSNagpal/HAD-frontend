@@ -2,6 +2,16 @@
 http://ionicframework.com/docs/theming/ */
 
 /** Ionic CSS Variables **/
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../assets/fonts/montserrat.woff2') format('woff2');
+}
+
+* {
+  font-family: Montserrat;
+}
+
 :root {
   /** primary **/
   --ion-color-primary: #3880ff;

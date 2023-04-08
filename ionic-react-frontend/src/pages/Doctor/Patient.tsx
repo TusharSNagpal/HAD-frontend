@@ -47,9 +47,6 @@ import DoctorHome from "./DoctorHome";
 import {Route} from "react-router-dom";
 import BackButton from "../../components/BackButton";
 
-
-
-
 // setupIonicReact();
 const Patient: React.FC<any> = props => {
     const v = props.location.state;
@@ -193,6 +190,41 @@ const Patient: React.FC<any> = props => {
         setRedirect(true)
     }
 
+    let count = 1;
+
+    const [temp, setTemp] = useState(['']);
+
+    const addNew = (key:number) => {
+        console.log(key);
+        let pseudo = temp;
+        pseudo = [...pseudo, ''];
+        setTemp(pseudo);
+        console.log(temp);
+    }
+
+    const [changeState, setChangeState] = useState(false);
+
+    const deleteIt = (index:number) => {
+        let pseudo = temp;
+        pseudo.splice(index,1);
+        setTemp(pseudo);
+        console.log(temp);
+        console.log("Hi");
+        if(changeState)
+            setChangeState(false);
+        else
+        setChangeState(true);
+    }
+
+    useEffect(() => {
+        console.log(temp.length);
+    },[changeState]);
+
+    const handleChangeOfTask = (event:any, index:number) => {
+        temp[index] = event!.target!.value;
+        setTemp(temp);
+    }
+
     return(
         <IonPage>
             <IonHeader>
@@ -237,7 +269,8 @@ const Patient: React.FC<any> = props => {
                                 <IonCard>
                                     <IonItem>
                                         <IonLabel position="floating">SYMPTOMS</IonLabel>
-                                        <IonTextarea value={symptoms} onIonChange={(e) => setSymptoms(e.detail.value!)}></IonTextarea>
+                                        
+                                            <IonTextarea value={symptoms} onIonChange={(e) => setSymptoms(e.detail.value!)}></IonTextarea>
                                     </IonItem>
                                 </IonCard>
                             </IonCol>
@@ -269,7 +302,9 @@ const Patient: React.FC<any> = props => {
                                         <IonCard>
                                             <IonItem>
                                                 <IonLabel class="ion-text-center" position="floating">ADD FOLLOW UP INSTRUCTIONS FOR THE FIELD WORKER</IonLabel>
-                                                <IonTextarea value={tasksAssigned} onIonChange={(e) => setTasksAssigned(e.detail.value!)}></IonTextarea>
+                                                {temp.map((value: any, index: any) => (
+                                                    <IonTextarea key = {index} value={temp[index]} onIonChange={(e) => handleChangeOfTask(e, index)}><IonButton onClick={()=> {addNew(index)}}>+</IonButton><IonButton onClick={() => deleteIt(index)}>-</IonButton></IonTextarea>
+                                                ))}
                                             </IonItem>
                                         </IonCard>
                                     </IonCol>
@@ -309,8 +344,6 @@ const Patient: React.FC<any> = props => {
             {!showAlert && redirect?<Redirect to={{pathname:'/doctorInHospital',state: { userData: profileData }}}/>
                 :null}
         </IonPage>
-
-
     )
 };
 

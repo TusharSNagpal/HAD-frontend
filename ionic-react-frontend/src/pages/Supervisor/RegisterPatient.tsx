@@ -77,7 +77,7 @@ const RegisterPatient: React.FC<any> = props => {
     }
 
     useEffect(() => {
-        console.log(profileData.userData.supervisorId);
+        console.log(profileData);
     })
 
     const registerPatient = async() => {
@@ -247,10 +247,10 @@ const RegisterPatient: React.FC<any> = props => {
                     </IonGrid>
                 </IonCard>
 
-            {/* <IonGrid className='ion-text-center ion-margin'>*/}
-            {/*    <IonButton onClick = {registerPatient}>Submit</IonButton>*/}
-            {/*</IonGrid>*/}
-            {/*    */}
+            <IonGrid className='ion-text-center ion-margin'>
+            <IonButton onClick = {registerPatient}>Submit</IonButton>
+            </IonGrid>
+            
                <IonAlert
                    isOpen={showAlert}
                     onDidDismiss={() => setShowAlert(false)}
@@ -269,8 +269,8 @@ const RegisterPatient: React.FC<any> = props => {
                     buttons={['OK']}
                />
 
-            {/*    {!showAlert && redirect?<Redirect to='/supervisors/register' />*/}
-            {/*        :null}*/}
+            {!showAlert && redirect?<Redirect to= {{ pathname: "/supervisors/register", state: { userData: profileData.userData }}} />
+                 :null}
 
             </IonContent>
 

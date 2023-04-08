@@ -198,7 +198,7 @@ const NewCase:React.FC<any> = props=> {
                     />
                 </IonGrid>
                 {!showAlertCase && redirect ?
-                    <Redirect to='/supervisors' />
+                    <Redirect to={{ pathname: '/supervisors', state: { userData: profileData?.userData } }} />
                 :null}
 
             </IonContent>
