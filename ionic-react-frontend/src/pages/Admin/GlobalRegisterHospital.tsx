@@ -26,6 +26,7 @@ import '@ionic/react/css/display.css';
 import React, { useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
 import AdminBackButton from "../../components/AdminBackButton";
+import { API_HOSP_REG } from '../../api/Api';
 
 const path = "/admin/globalRegister"
 const GlobalRegisterHospital: React.FC = () => {
@@ -54,7 +55,7 @@ const GlobalRegisterHospital: React.FC = () => {
             'address': address.current!.value
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `http://172.16.132.90:9090/api/hospitals/`;
+        const addRecordEndpoint = `${API_HOSP_REG}`;
         const options = {
             method: 'POST',
             headers: {

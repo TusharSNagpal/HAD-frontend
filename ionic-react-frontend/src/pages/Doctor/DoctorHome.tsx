@@ -34,6 +34,7 @@ import {Redirect} from "react-router";
 import BackButton from "../../components/BackButton";
 import LogoutButton from '../../components/LogoutButton';
 import AlertLoggedOut from '../../components/AlertLoggedOut';
+import { API_ACTIVE_VIS, API_FOLLOWUP_DOC_END, API_FOLLOWUP_DOC_REV, API_VIS } from '../../api/Api';
 
 // setupIonicReact();
 
@@ -63,7 +64,7 @@ const DoctorHome: React.FC<any> = props => {
 
     const deactivate = (cases:any) => {
         setCurrCase(cases);
-        fetch(`http://172.16.132.90:9090/api/visits/${cases.visitId}`, {method : 'PUT'})
+        fetch(`${API_VIS}${cases.visitId}`, {method : 'PUT'})
             .then((response) => response.json())
             .then((json) => {
                 console.log(json);
@@ -91,7 +92,7 @@ const DoctorHome: React.FC<any> = props => {
         setCurrFollowUp(followUp)
         setRedirectToFollowUp(true)
 
-        fetch(`http://172.16.132.90:9090/api/followUps/doctor/end/${followUp.followUpId}`, {method : 'PUT'})
+        fetch(`${API_FOLLOWUP_DOC_END}${followUp.followUpId}`, {method : 'PUT'})
             .then((response) => response.json())
             .then((json) => {
                 console.log(json);
@@ -118,7 +119,7 @@ const DoctorHome: React.FC<any> = props => {
             setProfileData(null);
         }
         else{
-            fetch(`http://172.16.132.90:9090/api/visits/activeVisits/hospital/${profileData?.userData?.hospital?.hospitalId}`)
+            fetch(`${API_ACTIVE_VIS}${profileData?.userData?.hospital?.hospitalId}`)
                 .then((response) => response.json())
                 .then((json) => {
                     // setUseSt(true);
@@ -137,7 +138,7 @@ const DoctorHome: React.FC<any> = props => {
             setAuth(false);
         }
         else{
-            fetch(`http://172.16.132.90:9090/api/visits/activeVisits/hospital/${profileData?.userData?.hospital?.hospitalId}`)
+            fetch(`${API_ACTIVE_VIS}${profileData?.userData?.hospital?.hospitalId}`)
                 .then((response) => response.json())
                 .then((json) => {
                     // setUseSt(true);
@@ -157,7 +158,7 @@ const DoctorHome: React.FC<any> = props => {
             setAuth(false);
         }
         else{
-            fetch(`http://172.16.132.90:9090/api/followUps/doctor/review/${profileData?.userData?.docInHospId}`)
+            fetch(`${API_FOLLOWUP_DOC_REV}${profileData?.userData?.docInHospId}`)
                 .then((response) => response.json())
                 .then((json) => {
                     // setUseSt(true);
@@ -177,7 +178,7 @@ const DoctorHome: React.FC<any> = props => {
             setAuth(false);
         }
         else{
-            fetch(`http://172.16.132.90:9090/api/followUps/doctor/review/${profileData?.userData?.docInHospId}`)
+            fetch(`${API_FOLLOWUP_DOC_REV}${profileData?.userData?.docInHospId}`)
                 .then((response) => response.json())
                 .then((json) => {
                     // setUseSt(true);

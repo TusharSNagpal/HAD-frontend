@@ -46,6 +46,7 @@ import {Redirect} from "react-router";
 import DoctorHome from "./DoctorHome";
 import {Route} from "react-router-dom";
 import BackButton from "../../components/BackButton";
+import { API_FOLLOWUPS, API_VISITED } from '../../api/Api';
 
 // setupIonicReact();
 const Patient: React.FC<any> = props => {
@@ -82,7 +83,7 @@ const Patient: React.FC<any> = props => {
         visitDetails.prescription = prescription;
         visitDetails.doctorInHospital= {'docInHospId':profileData.docInHospId};
         console.log(JSON.stringify(visitDetails));
-        const addRecordEndpoint = `http://172.16.132.90:9090/api/visits/visited/${visitDetails.visitId}`;
+        const addRecordEndpoint = `${API_VISITED}${visitDetails.visitId}`;
         const options = {
             method: 'PUT',
             headers: {
@@ -150,7 +151,7 @@ const Patient: React.FC<any> = props => {
         };
         console.log(newFollowUp)
         console.log(JSON.stringify(newFollowUp));
-        const addRecordEndpoint = `http://172.16.132.90:9090/api/followUps/`;
+        const addRecordEndpoint = `${API_FOLLOWUPS}`;
         const options = {
             method: 'POST',
             headers: {

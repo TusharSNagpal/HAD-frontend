@@ -31,6 +31,7 @@ import { Network } from "@capacitor/network";
 //print prescription:
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { API_REVIEW_UPD } from '../../api/Api';
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 
 // setupIonicReact();
@@ -107,7 +108,7 @@ const FillingRemarks: React.FC<any> = props => {
                 'reviewByFieldWorker': task
             };
 
-            const addRecordEndpoint = `http://172.16.132.90:9090/api/followUps/fieldWorker/${followUpCurr.fup.currFollowup.followUpId}`;
+            const addRecordEndpoint = `${API_REVIEW_UPD}${followUpCurr.fup.currFollowup.followUpId}`;
             const options = {
                 method: 'PUT',
                 headers: {

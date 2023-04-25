@@ -35,6 +35,7 @@ import './Supervisor.css';
 import { useEffect, useRef, useState } from "react";
 import { Redirect } from "react-router";
 import BackButton from "../../components/BackButton";
+import { API_DOCINHOSP_REG, API_DOC_REG } from '../../api/Api';
 
 // setupIonicReact();
 
@@ -65,7 +66,7 @@ const RegisterDoctor: React.FC<any> = props => {
 
     const registerDoctor = async () => {
 
-        fetch(`http://172.16.132.90:9090/api/doctors/${docId.current!.value}`)
+        fetch(`${API_DOC_REG}${docId.current!.value}`)
             .then(function (response) {
                 console.log(response);
                 if (response['status'] === 200) {
@@ -102,7 +103,7 @@ const RegisterDoctor: React.FC<any> = props => {
                     };
                     console.log(JSON.stringify(data));
 
-                    const addRecordEndpoint = `http://172.16.132.90:9090/api/doctorInHospital/docInHosp/${docId.current!.value}/hospital/${hospId.current!.value}`;
+                    const addRecordEndpoint = `${API_DOCINHOSP_REG}docInHosp/${docId.current!.value}/hospital/${hospId.current!.value}`;
                     const options = {
                         method: 'POST',
                         headers: {
