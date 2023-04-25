@@ -26,7 +26,10 @@ import '@ionic/react/css/display.css';
 import React, { useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
 import AdminBackButton from "../../components/AdminBackButton";
-const path = "/admin/globalRegister"
+
+import * as apis from "../../api/Api";
+
+const path = "/admin/globalRegister";
 const GlobalRegisterDoctor: React.FC = () => {
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState<string>();
@@ -64,7 +67,7 @@ const GlobalRegisterDoctor: React.FC = () => {
             'address': address.current!.value
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = "http://172.16.132.90:9090/api/doctors/";
+        const addRecordEndpoint = `${apis.API_DOC_REG}`;
         const options = {
             method: 'POST',
             headers: {

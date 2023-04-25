@@ -26,6 +26,7 @@ import '@ionic/react/css/display.css';
 import React, { useEffect, useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
 import AdminBackButton from "../../components/AdminBackButton";
+import { API_HOSP_NOSUP, API_SUP_REG } from '../../api/Api';
 
 const path = "/admin/globalUpdate"
 const GlobalUpdateSupervisor = () => {
@@ -70,7 +71,7 @@ const GlobalUpdateSupervisor = () => {
             'hospital': {'hospitalId': hospitalId}
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `http://172.16.132.90:9090/api/supervisors/${supervisor.supervisorId}`;
+        const addRecordEndpoint = `${API_SUP_REG}${supervisor.supervisorId}`;
         const options = {
             method: 'PUT',
             headers: {
@@ -95,7 +96,7 @@ const GlobalUpdateSupervisor = () => {
             }
             return response.json();
         })
-        fetch(`http://172.16.132.90:9090/api/hospitals/noSupervisor`)
+        fetch(`${API_HOSP_NOSUP}`)
            .then((response) => response.json())
            .then((json) => {
                setHospitalOptions(json);
@@ -108,7 +109,7 @@ const GlobalUpdateSupervisor = () => {
     }
 
     useEffect(() => {
-        fetch(`http://172.16.132.90:9090/api/supervisors/${id}`)
+        fetch(`${API_SUP_REG}${id}`)
            .then(async (response) => {
             if(response['status'] === 200) {
                 const data = await response.json();
@@ -118,7 +119,7 @@ const GlobalUpdateSupervisor = () => {
             }
             else if(id !== 0) setShowAlertNoSuchId(true);
            })
-           fetch(`http://172.16.132.90:9090/api/hospitals/noSupervisor`)
+           fetch(`${API_HOSP_NOSUP}`)
            .then((response) => response.json())
            .then((json) => {
                setHospitalOptions(json);

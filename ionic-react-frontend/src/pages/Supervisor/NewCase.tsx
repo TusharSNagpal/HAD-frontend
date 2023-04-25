@@ -36,6 +36,7 @@ import './Supervisor.css';
 import React, {useRef, useState} from "react";
 import {Redirect} from "react-router";
 import BackButton from "../../components/BackButton";
+import { API_PATIENT, API_VIS } from '../../api/Api';
 
 // setupIonicReact();
 
@@ -53,7 +54,7 @@ const NewCase:React.FC<any> = props=> {
     const path="/supervisors"
 
     const loginPatient = async() => {
-        const response = await fetch(`http://172.16.132.90:9090/api/patients/${patientIdRef.current!.value}`)
+        const response = await fetch(`${API_PATIENT}${patientIdRef.current!.value}`)
         const result = await response;
         console.log(response);
         if(result['status'] === 200){
@@ -72,7 +73,7 @@ const NewCase:React.FC<any> = props=> {
     }
 
     const createCase = async() => {
-        fetch(`http://172.16.132.90:9090/api/patients/${patientIdRef.current!.value}`)
+        fetch(`${API_PATIENT}${patientIdRef.current!.value}`)
             .then(function (response) {
                 console.log(response);
                 if (response['status'] === 200) {
@@ -92,7 +93,7 @@ const NewCase:React.FC<any> = props=> {
             .then(async function (hospitalId) {
                 let data = {'hospital':{'hospitalId': hospitalId}, 'patient':{'patientId': patientIdRef.current!.value}};
                 console.log(JSON.stringify(data));
-                const addRecordEndpoint = "http://172.16.132.90:9090/api/visits/";
+                const addRecordEndpoint = `${API_VIS}`;
                 const options = {
                     method: 'POST',
                     headers:{

@@ -26,6 +26,7 @@ import '@ionic/react/css/display.css';
 import React, { useEffect, useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
 import AdminBackButton from "../../components/AdminBackButton";
+import { API_DOC_REG } from '../../api/Api';
 
 const path = "/admin/globalUpdate"
 const GlobalUpdateDoctor = () => {
@@ -68,7 +69,7 @@ const GlobalUpdateDoctor = () => {
             'registrationDate': registrationDate.current!.value
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `http://172.16.132.90:9090/api/doctors/${doctor.doctorId}`;
+        const addRecordEndpoint = `${API_DOC_REG}${doctor.doctorId}`;
         const options = {
             method: 'PUT',
             headers: {
@@ -101,7 +102,7 @@ const GlobalUpdateDoctor = () => {
     }
 
     useEffect(() => {
-        fetch(`http://172.16.132.90:9090/api/doctors/${id}`)
+        fetch(`${API_DOC_REG}${id}`)
            .then(async (response) => {
             if(response['status'] === 200) {
                 const data = await response.json();

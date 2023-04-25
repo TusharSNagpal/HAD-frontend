@@ -37,6 +37,7 @@ import {Redirect} from "react-router";
 import React, {useEffect, useState} from "react";
 import {type} from "os";
 import BackButton from "../../components/BackButton";
+import { API_FWINHOSP_REG } from '../../api/Api';
 // setupIonicReact();
 
 const FieldWorkersInHospital: React.FC<any> = props => {
@@ -56,7 +57,7 @@ const FieldWorkersInHospital: React.FC<any> = props => {
 
 
     useEffect(() => {
-        fetch(`http://172.16.132.90:9090/api/fieldWorkerInHospital/hospital/${profileData.userData.hospital.hospitalId}`)
+        fetch(`${API_FWINHOSP_REG}hospital/${profileData.userData.hospital.hospitalId}`)
             .then((response) => response.json())
             .then((json) => {
                 // setUseSt(true);

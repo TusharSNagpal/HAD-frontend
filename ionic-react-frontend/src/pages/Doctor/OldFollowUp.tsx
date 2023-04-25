@@ -46,6 +46,7 @@ import { Redirect } from "react-router";
 import DoctorHome from "./DoctorHome";
 import { Route } from "react-router-dom";
 import BackButton from "../../components/BackButton";
+import { API_ACTIVE_VIS, API_FOLLOWUPS, API_FOLLOWUP_VIS } from '../../api/Api';
 
 
 // setupIonicReact();
@@ -130,7 +131,7 @@ const OldFollowUp: React.FC<any> = props => {
         };
         // console.log(newFollowUp)
         console.log(JSON.stringify(newFollowUp));
-        const addRecordEndpoint = `http://172.16.132.90:9090/api/followUps/`;
+        const addRecordEndpoint = `${API_FOLLOWUPS}`;
         const options = {
             method: 'POST',
             headers: {
@@ -166,7 +167,7 @@ const OldFollowUp: React.FC<any> = props => {
     }
 
     useEffect(() => {
-        fetch(`http://172.16.132.90:9090/api/followUps/visit/${followUpDetails.visit.visitId}/followUpId/${followUpDetails.followUpId}`)
+        fetch(`${API_FOLLOWUP_VIS}${followUpDetails.visit.visitId}/followUpId/${followUpDetails.followUpId}`)
             .then((response) => response.json())
             .then((json) => {
                 // setUseSt(true);
