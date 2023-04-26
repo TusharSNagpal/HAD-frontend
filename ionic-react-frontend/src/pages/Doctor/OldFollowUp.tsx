@@ -47,10 +47,12 @@ import DoctorHome from "./DoctorHome";
 import { Route } from "react-router-dom";
 import BackButton from "../../components/BackButton";
 import { API_ACTIVE_VIS, API_FOLLOWUPS, API_FOLLOWUP_VIS } from '../../api/Api';
+import Cookie from 'universal-cookie';
 
 
 // setupIonicReact();
 const OldFollowUp: React.FC<any> = props => {
+    const cookie = new Cookie();
     const f = props.location.state;
     const [followUpDetails, setFollowUpDetails] = useState(f.currFollowUp);
     const [profileData, setProfileData] = useState(f.userData);
@@ -135,7 +137,8 @@ const OldFollowUp: React.FC<any> = props => {
         const options = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+ cookie.get("jwt")
             },
             body: JSON.stringify(newFollowUp)
         }
@@ -167,7 +170,7 @@ const OldFollowUp: React.FC<any> = props => {
     }
 
     useEffect(() => {
-        fetch(`${API_FOLLOWUP_VIS}${followUpDetails.visit.visitId}/followUpId/${followUpDetails.followUpId}`)
+        fetch(`${API_FOLLOWUP_VIS}${followUpDetails.visit.visitId}/followUpId/${followUpDetails.followUpId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then((response) => response.json())
             .then((json) => {
                 // setUseSt(true);

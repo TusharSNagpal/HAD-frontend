@@ -37,11 +37,13 @@ import {Redirect} from "react-router";
 import React, {useEffect, useState} from "react";
 import BackButton from "../../components/BackButton";
 import { API_FOLLOWUPS, API_FWINHOSP_REG } from '../../api/Api';
+import Cookie from 'universal-cookie';
 
 // setupIonicReact();
 
 const AssignTasks: React.FC<any> = props => {
 
+    const cookie = new Cookie()
     const [followUps, setFollowUps] = useState<any[]>([]);
     const [picked, setPicked] = useState<boolean[]>([false]);
     const [showAlert, setShowAlert] = useState(false);
@@ -90,6 +92,10 @@ const AssignTasks: React.FC<any> = props => {
                 const addRecordEndpoint = `${API_FOLLOWUPS}${followUpId}/fwInHosp/${fieldWorkerDetails.fwInHospId}`;
                 const options = {
                     method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer '+ cookie.get("jwt")
+                    },
                 }
                 fetch(addRecordEndpoint,options)
                     .then(function (response) {
@@ -115,7 +121,8 @@ const AssignTasks: React.FC<any> = props => {
             const options = {
                 method: 'PUT',
                 headers:{
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+ cookie.get("jwt")
                 },
                 body: JSON.stringify(fieldWorkerDetails)
             }
@@ -144,7 +151,7 @@ const AssignTasks: React.FC<any> = props => {
     }
 
     useEffect(() => {
-        fetch(`${API_FOLLOWUPS}/remaining/1`)
+        fetch(`${API_FOLLOWUPS}/remaining/1`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then((response) => response.json())
             .then((json) => {
                 // setUseSt(true);

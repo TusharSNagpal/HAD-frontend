@@ -37,10 +37,12 @@ import {useState} from "react";
 import {Redirect} from "react-router";
 import BackButton from "../../components/BackButton";
 import RegisterCard from '../../components/RegisterCard';
+import Cookie from 'universal-cookie';
 
 // setupIonicReact();
 
 const Delete: React.FC<any> = props => {
+    const cookie = new Cookie();
     const profile = props.location.state;
     const [profileData, setProfileData] = useState(profile);
     // const [service, setService] = useState("");

@@ -35,11 +35,12 @@ import BackButton from "../../components/BackButton";
 import LogoutButton from '../../components/LogoutButton';
 import AlertLoggedOut from '../../components/AlertLoggedOut';
 import { API_ACTIVE_VIS, API_FOLLOWUP_DOC_END, API_FOLLOWUP_DOC_REV, API_VIS } from '../../api/Api';
+import Cookie from 'universal-cookie'
 
 // setupIonicReact();
 
 const DoctorHome: React.FC<any> = props => {
-
+    const cookie = new Cookie();
     const [profile, setProfile] = useState(props?.location?.state);
     const [profileData, setProfileData] = useState(profile);
 
@@ -64,7 +65,11 @@ const DoctorHome: React.FC<any> = props => {
 
     const deactivate = (cases:any) => {
         setCurrCase(cases);
-        fetch(`${API_VIS}${cases.visitId}`, {method : 'PUT'})
+        fetch(`${API_VIS}${cases.visitId}`,
+        {
+            method : 'PUT',
+            headers: {Authorization: 'Bearer '+cookie.get("jwt")}
+        })
             .then((response) => response.json())
             .then((json) => {
                 console.log(json);
@@ -92,7 +97,11 @@ const DoctorHome: React.FC<any> = props => {
         setCurrFollowUp(followUp)
         setRedirectToFollowUp(true)
 
-        fetch(`${API_FOLLOWUP_DOC_END}${followUp.followUpId}`, {method : 'PUT'})
+        fetch(`${API_FOLLOWUP_DOC_END}${followUp.followUpId}`, 
+        {
+            method : 'PUT',
+            headers: {Authorization: 'Bearer '+cookie.get("jwt")}
+        })
             .then((response) => response.json())
             .then((json) => {
                 console.log(json);
@@ -119,7 +128,7 @@ const DoctorHome: React.FC<any> = props => {
             setProfileData(null);
         }
         else{
-            fetch(`${API_ACTIVE_VIS}${profileData?.userData?.hospital?.hospitalId}`)
+            fetch(`${API_ACTIVE_VIS}${profileData?.userData?.hospital?.hospitalId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
                 .then((response) => response.json())
                 .then((json) => {
                     // setUseSt(true);
@@ -138,7 +147,7 @@ const DoctorHome: React.FC<any> = props => {
             setAuth(false);
         }
         else{
-            fetch(`${API_ACTIVE_VIS}${profileData?.userData?.hospital?.hospitalId}`)
+            fetch(`${API_ACTIVE_VIS}${profileData?.userData?.hospital?.hospitalId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
                 .then((response) => response.json())
                 .then((json) => {
                     // setUseSt(true);
@@ -158,7 +167,7 @@ const DoctorHome: React.FC<any> = props => {
             setAuth(false);
         }
         else{
-            fetch(`${API_FOLLOWUP_DOC_REV}${profileData?.userData?.docInHospId}`)
+            fetch(`${API_FOLLOWUP_DOC_REV}${profileData?.userData?.docInHospId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
                 .then((response) => response.json())
                 .then((json) => {
                     // setUseSt(true);
@@ -178,7 +187,7 @@ const DoctorHome: React.FC<any> = props => {
             setAuth(false);
         }
         else{
-            fetch(`${API_FOLLOWUP_DOC_REV}${profileData?.userData?.docInHospId}`)
+            fetch(`${API_FOLLOWUP_DOC_REV}${profileData?.userData?.docInHospId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
                 .then((response) => response.json())
                 .then((json) => {
                     // setUseSt(true);

@@ -33,6 +33,8 @@ import '../theme/variables.css';
 import { useState, useRef, useEffect } from "react";
 // import { useStorageFillingRemarks } from '../../hooks/useStorageFillingRemarks';
 import {Redirect} from "react-router";
+import Cookie from'universal-cookie';
+
 
 import * as apis from '../api/Api';
 
@@ -82,9 +84,9 @@ const Home: React.FC = () => {
                 }
                 else{
                     setMobileNo(data);
-                    fetch(`${apis.API_OTP_GEN}${data}`)
+                    fetch(`${apis.JWT_REQ_OTP}${data}`)
                         .then(function (response) {
-                                console.log(response);
+                                console.log(response.json());
                                 if (response['status'] === 200) {
                                     console.log("OTP Sent to Registered Mobile Number");
                                 }
@@ -96,26 +98,45 @@ const Home: React.FC = () => {
     }
 
     const authenticate = () => {
-        if(role === 'admin')
-            setAuth(true);
-        fetch(`${apis.API_OTP_VERIFY}${otp.current!.value}/${mobileNo}`)
+        // setAuth(true);
+        let data = {
+            "phoneNo": mobileNo,
+            "otp": otp.current!.value
+        };
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }
+        fetch(`${apis.JWT_VERIFY_OTP}`, options)
             .then(function (response) {
-                console.log(response);
                 if (response['status'] === 200) {
-                    fetch(`${apis.API_BASE}${role}/${userId.current!.value}`)
-                        .then(function (response) {
-                            console.log(response);
-                            return response.json();
-                        })
-                        .then((data) => {
-                            setUserData(data);
-                            console.log("OTP Validated");
-                            setAuth(true);
-                        })
+                    return response.json()
+       
                 }
                 else {
                     console.log("OTP mismatch Sorry..!");
                     setAuth(false);
+                    return "-1";
+                }
+            })
+            .then(function(data) {
+                if(data != -1) {
+                    const cookie = new Cookie();
+                    console.log(data.jwt)
+                    cookie.set("jwt", data.jwt)
+                    
+                    fetch(`${apis.API_BASE}${role}/${userId.current!.value}`, {headers : {Authorization: 'Bearer '+cookie.get("jwt")}})
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then((data) => {
+                        setUserData(data);
+                        console.log("OTP Validated");
+                        setAuth(true);
+                    })
                 }
             })
     }

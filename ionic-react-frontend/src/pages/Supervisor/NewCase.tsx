@@ -37,10 +37,12 @@ import React, {useRef, useState} from "react";
 import {Redirect} from "react-router";
 import BackButton from "../../components/BackButton";
 import { API_PATIENT, API_VIS } from '../../api/Api';
+import Cookie from 'universal-cookie'
 
 // setupIonicReact();
 
 const NewCase:React.FC<any> = props=> {
+    const cookie = new Cookie();
     const patientIdRef = useRef<HTMLIonInputElement>(null);
     const profile = props.location.state;
     const [profileData, setProfileData] = useState(profile);
@@ -54,7 +56,7 @@ const NewCase:React.FC<any> = props=> {
     const path="/supervisors"
 
     const loginPatient = async() => {
-        const response = await fetch(`${API_PATIENT}${patientIdRef.current!.value}`)
+        const response = await fetch(`${API_PATIENT}${patientIdRef.current!.value}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
         const result = await response;
         console.log(response);
         if(result['status'] === 200){
@@ -73,7 +75,7 @@ const NewCase:React.FC<any> = props=> {
     }
 
     const createCase = async() => {
-        fetch(`${API_PATIENT}${patientIdRef.current!.value}`)
+        fetch(`${API_PATIENT}${patientIdRef.current!.value}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then(function (response) {
                 console.log(response);
                 if (response['status'] === 200) {
@@ -97,7 +99,8 @@ const NewCase:React.FC<any> = props=> {
                 const options = {
                     method: 'POST',
                     headers:{
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer '+ cookie.get("jwt")
                     },
                     body: JSON.stringify(data)
                 }

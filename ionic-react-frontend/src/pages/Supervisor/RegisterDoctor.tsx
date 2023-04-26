@@ -36,11 +36,13 @@ import { useEffect, useRef, useState } from "react";
 import { Redirect } from "react-router";
 import BackButton from "../../components/BackButton";
 import { API_DOCINHOSP_REG, API_DOC_REG } from '../../api/Api';
+import Cookie from 'universal-cookie'
 
 // setupIonicReact();
 
 
 const RegisterDoctor: React.FC<any> = props => {
+    const cookie = new Cookie();
     const supId = props.location.state;
     const docId = useRef<HTMLIonInputElement>(null);
     const hospId = useRef<HTMLIonInputElement>(null);
@@ -66,7 +68,7 @@ const RegisterDoctor: React.FC<any> = props => {
 
     const registerDoctor = async () => {
 
-        fetch(`${API_DOC_REG}${docId.current!.value}`)
+        fetch(`${API_DOC_REG}${docId.current!.value}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then(function (response) {
                 console.log(response);
                 if (response['status'] === 200) {
@@ -107,7 +109,7 @@ const RegisterDoctor: React.FC<any> = props => {
                     const options = {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Authorization': 'Bearer '+ cookie.get("jwt")
                         },
                         body: JSON.stringify(data)
                     }

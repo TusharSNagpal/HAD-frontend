@@ -26,8 +26,10 @@ import '@ionic/react/css/display.css';
 import React, { useEffect, useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
 import { API_PATIENT } from '../../api/Api';
+import Cookie from 'universal-cookie'
 
 const UpdatePatient:React.FC<any> = props => {
+    const cookie = new Cookie();
     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [id, setId] = useState(0);
@@ -78,7 +80,8 @@ const UpdatePatient:React.FC<any> = props => {
         const options = {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+ cookie.get("jwt")
             },
             body: JSON.stringify(data)
         }
@@ -102,7 +105,7 @@ const UpdatePatient:React.FC<any> = props => {
     }
 
     useEffect(() => {
-        fetch(`${API_PATIENT}${id}`)
+        fetch(`${API_PATIENT}${id}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then(async (response) => {
                 if(response['status'] === 200) {
                     const data = await response.json();

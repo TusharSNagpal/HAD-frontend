@@ -1,4 +1,4 @@
-const ip = "172.16.132.90";
+const ip = "localhost";
 const base = `http://${ip}:9090/api/`;
 
 //base:
@@ -7,6 +7,11 @@ const base = `http://${ip}:9090/api/`;
 //otp:
     export const API_OTP_GEN = `${base}phoneNumber/generateOTP/`;
     export const API_OTP_VERIFY = `${base}phoneNumber/verifyOTP/`;
+
+// otp with jwt:
+    export const JWT_REQ_OTP = `${base}client/auth/requestOtp/`;
+    export const JWT_VERIFY_OTP = `${base}client/auth/verifyOtp`;
+
 
 //followups:
 const followups = `${base}followUps`
@@ -49,7 +54,7 @@ const doctor = `${base}doctors`;
 //doctorInHospital:
     const doctorInHosp = `${base}doctorInHospital`
     //register:
-    export const API_DOCINHOSP_REG = `${fwInHosp}/`
+    export const API_DOCINHOSP_REG = `${doctorInHosp}/`
     export const API_DOCINHOSP_DEL = `${API_DOCINHOSP_REG}del/`
 
 //hostpitals:

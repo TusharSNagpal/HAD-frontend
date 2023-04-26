@@ -26,8 +26,11 @@ import '@ionic/react/css/display.css';
 import React, { useEffect, useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
 import { API_FWINHOSP_DEL, API_FWINHOSP_REG } from '../../api/Api';
+import Cookie from 'universal-cookie';
+
 
 const DeleteFieldWorker: React.FC<any> = props => {
+    const cookie = new Cookie();
     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [alertHeader, setAlertHeader] = useState<string>();
@@ -44,9 +47,6 @@ const DeleteFieldWorker: React.FC<any> = props => {
 
     const updateFieldWorker = async () => {
         let data = {
-
-
-
             'fieldWorkerId': { 'fieldWorkerId': fwInHospId.current!.value },
 
         }
@@ -55,7 +55,8 @@ const DeleteFieldWorker: React.FC<any> = props => {
         const options = {
             method: 'DELETE',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+ cookie.get("jwt")
             },
             body: JSON.stringify(data)
         }
@@ -79,7 +80,7 @@ const DeleteFieldWorker: React.FC<any> = props => {
     }
 
     useEffect(() => {
-        fetch(`${API_FWINHOSP_REG}${id}`)
+        fetch(`${API_FWINHOSP_REG}${id}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then(async (response) => {
                 if (response['status'] === 200) {
                     const data = await response.json();

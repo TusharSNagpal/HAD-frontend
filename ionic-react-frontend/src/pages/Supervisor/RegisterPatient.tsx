@@ -39,10 +39,12 @@ import {useEffect, useRef, useState} from "react";
 import { Redirect } from 'react-router';
 import BackButton from "../../components/BackButton";
 import { API_PATIENT, API_SUP_REG } from '../../api/Api';
+import Cookie from 'universal-cookie'
 
 // setupIonicReact();
 
 const RegisterPatient: React.FC<any> = props => {
+    const cookie = new Cookie();
     const profile = props.location.state;
     const [profileData, setProfileData] = useState(profile);
     // console.log(profileData)
@@ -83,7 +85,7 @@ const RegisterPatient: React.FC<any> = props => {
 
     const registerPatient = async() => {
         //here
-        fetch(`${API_SUP_REG}${profileData.userData.supervisorId}`)
+        fetch(`${API_SUP_REG}${profileData.userData.supervisorId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then(function(response){
                 console.log(response);
                 if(response['status'] === 200){
@@ -129,7 +131,8 @@ const RegisterPatient: React.FC<any> = props => {
                     const options = {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer '+ cookie.get("jwt")
                         },
                         body: JSON.stringify(data)
                     }
