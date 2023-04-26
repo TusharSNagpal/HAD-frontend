@@ -63,6 +63,7 @@ import FieldWorkersInHospital from "./pages/Supervisor/FieldWorkersInHospital";
 import AssignTasks from "./pages/Supervisor/AssignTasks";
 import Home from "./pages/Home";
 import Prescription from './pages/FieldWorker/Prescription';
+import ViewPatientHistory from "./pages/Doctor/ViewPatientHistory";
 
 import * as apis from "./api/Api"
 
@@ -197,6 +198,7 @@ const App: React.FC = () => {
           <Route exact path = "/doctorInHospital" component={DoctorHome}/>
           <Route exact path = "/doctorInHospital/patient" component={Patient}></Route>
           <Route exact path ="/doctorInHospital/oldFollowUp" component={OldFollowUp}></Route>
+          <Route exact path = "/doctorInHospital/patient/viewHistory" component={ViewPatientHistory}></Route>
 
 
           {/*<Route exact path = "/doctors" component={DoctorHome}/>*/}

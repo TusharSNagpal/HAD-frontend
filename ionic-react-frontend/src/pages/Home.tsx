@@ -33,7 +33,7 @@ import '../theme/variables.css';
 import { useState, useRef, useEffect } from "react";
 // import { useStorageFillingRemarks } from '../../hooks/useStorageFillingRemarks';
 import {Redirect} from "react-router";
-
+import { Network } from "@capacitor/network";
 import * as apis from '../api/Api';
 
 // setupIonicReact();
@@ -63,61 +63,60 @@ const Home: React.FC = () => {
     }
 
     const generate = () => {
-        fetch(`${apis.API_BASE}${role}/phoneNo/${userId.current!.value}`)
-            .then(function (response) {
-                // console.log(response.text());
-                if (response['status'] === 200) {
-                    console.log("Found entry");
-                    return response.text();
-                }
-                else {
-                    console.log("No such entry..!");
-                    return "-1";
-                }
-            })
-            .then(function (data) {
-                console.log(data);
-                if(data === "-1"){
-                    console.log("Try again..!");
-                }
-                else{
-                    setMobileNo(data);
-                    fetch(`${apis.API_OTP_GEN}${data}`)
-                        .then(function (response) {
-                                console.log(response);
-                                if (response['status'] === 200) {
-                                    console.log("OTP Sent to Registered Mobile Number");
-                                }
-                                else {
-                                    console.log("Please Enter a valid Phone Number");
-                                }
-                            }
-                        )}})
+        // fetch(`${apis.API_BASE}/${role}/phoneNo/${userId.current!.value}`)        //     .then(function (response) {
+        //         // console.log(response.text());
+        //         if (response['status'] === 200) {
+        //             console.log("Found entry");
+        //             return response.text();
+        //         }
+        //         else {
+        //             console.log("No such entry..!");
+        //             return "-1";
+        //         }
+        //     })
+        //     .then(function (data) {
+        //         console.log(data);
+        //         if(data === "-1"){
+        //             console.log("Try again..!");
+        //         }
+        //         else{
+        //             setMobileNo(data);
+        //             fetch(`${apis.API_OTP_GEN}/${data}`)
+        //                 .then(function (response) {
+        //                         console.log(response);
+        //                         if (response['status'] === 200) {
+        //                             console.log("OTP Sent to Registered Mobile Number");
+        //                         }
+        //                         else {
+        //                             console.log("Please Enter a valid Phone Number");
+        //                         }
+        //                     }
+        //                 )}})
     }
 
     const authenticate = () => {
         if(role === 'admin')
             setAuth(true);
-        fetch(`${apis.API_OTP_VERIFY}${otp.current!.value}/${mobileNo}`)
+        // fetch(`${apis.API_OTP_VERIFY}/${otp.current!.value}/${mobileNo}`)
+        // .then(function (response) {
+        // console.log(response);
+        // if (response['status'] === 200) {
+        fetch(`${apis.API_BASE}/${role}/${userId.current!.value}`)
             .then(function (response) {
                 console.log(response);
-                if (response['status'] === 200) {
-                    fetch(`${apis.API_BASE}${role}/${userId.current!.value}`)
-                        .then(function (response) {
-                            console.log(response);
-                            return response.json();
-                        })
-                        .then((data) => {
-                            setUserData(data);
-                            console.log("OTP Validated");
-                            setAuth(true);
-                        })
-                }
-                else {
-                    console.log("OTP mismatch Sorry..!");
-                    setAuth(false);
-                }
+                return response.json();
             })
+            .then((data) => {
+                setUserData(data);
+                console.log("OTP Validated");
+                setAuth(true);
+            })
+        // }
+        //     else {
+        //         console.log("OTP mismatch Sorry..!");
+        //         setAuth(false);
+        //     }
+        // })
     }
 
     return (

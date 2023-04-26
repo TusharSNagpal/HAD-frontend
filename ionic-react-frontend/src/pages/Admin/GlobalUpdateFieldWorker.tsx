@@ -69,7 +69,8 @@ const GlobalUpdateFieldWorker = () => {
             'numOfTasksPerDay': fieldWorker.numOfTasksPerDay
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `${API_FW_REG}${fieldWorker.fwId}`;
+
+        const addRecordEndpoint = `${API_FW_REG}/${fieldWorker.fwId}`;
         const options = {
             method: 'PUT',
             headers: {
@@ -102,7 +103,8 @@ const GlobalUpdateFieldWorker = () => {
     }
 
     useEffect(() => {
-        fetch(`${API_FW_REG}${id}`)
+
+        fetch(`${API_FW_REG}/${id}`)
            .then(async (response) => {
             if(response['status'] === 200) {
                 const data = await response.json();

@@ -108,7 +108,8 @@ const FillingRemarks: React.FC<any> = props => {
                 'reviewByFieldWorker': task
             };
 
-            const addRecordEndpoint = `${API_REVIEW_UPD}${followUpCurr.fup.currFollowup.followUpId}`;
+
+            const addRecordEndpoint = `${API_REVIEW_UPD}/${followUpCurr.fup.currFollowup.followUpId}`;
             const options = {
                 method: 'PUT',
                 headers: {

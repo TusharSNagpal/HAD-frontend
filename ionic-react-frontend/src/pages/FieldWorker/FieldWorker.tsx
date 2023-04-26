@@ -78,7 +78,8 @@ const FieldWorker: React.FC<any> = props => {
 
             if(connection.connected){
                 showOfflineAlert(false);
-                fetch(`${API_FOLLOWUPS}${profileData.fwInHospId}`)
+
+                fetch(`${API_FOLLOWUPS}/${profileData.fwInHospId}`)
                     .then((response) => response.json())
                     .then(async (json) => {
                         console.log("data fetched");

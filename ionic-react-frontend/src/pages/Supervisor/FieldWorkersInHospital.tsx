@@ -37,18 +37,20 @@ import {Redirect} from "react-router";
 import React, {useEffect, useState} from "react";
 import {type} from "os";
 import BackButton from "../../components/BackButton";
-import { API_FWINHOSP_REG } from '../../api/Api';
+import * as apis from '../../api/Api'
+
 // setupIonicReact();
 
 const FieldWorkersInHospital: React.FC<any> = props => {
     const profile = props.location.state;
     const [profileData, setProfileData] = useState(profile);
-    console.log(props.location.state)
+    // console.log(props.location.state)
     const [fieldWorkers, setFieldWorkers] = useState<any[]>([]);
     const [currFieldWorker, setCurrFieldWorker] = useState(null);
 
     const [redirectToAssignTasks, setRedirectToAssignTasks] = useState(false);
     const path="/supervisors"
+
 
     const handlePickFieldWorker=(fieldWorker:any)=>{
         setCurrFieldWorker(fieldWorker);
@@ -57,7 +59,8 @@ const FieldWorkersInHospital: React.FC<any> = props => {
 
 
     useEffect(() => {
-        fetch(`${API_FWINHOSP_REG}hospital/${profileData.userData.hospital.hospitalId}`)
+        fetch(`${apis.API_FWINHOSP_REG}/hospital/${profileData.userData.hospital.hospitalId}`)
+
             .then((response) => response.json())
             .then((json) => {
                 // setUseSt(true);

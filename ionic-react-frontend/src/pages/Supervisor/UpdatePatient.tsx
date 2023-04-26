@@ -25,7 +25,7 @@ import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 import React, { useEffect, useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
-import { API_PATIENT } from '../../api/Api';
+import {API_PATIENT} from "../../api/Api";
 
 const UpdatePatient:React.FC<any> = props => {
     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
@@ -74,7 +74,7 @@ const UpdatePatient:React.FC<any> = props => {
 
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `${API_PATIENT}${patient.patientId}`;
+        const addRecordEndpoint = `${API_PATIENT}/${patient.patientId}`;
         const options = {
             method: 'PUT',
             headers: {
@@ -102,7 +102,7 @@ const UpdatePatient:React.FC<any> = props => {
     }
 
     useEffect(() => {
-        fetch(`${API_PATIENT}${id}`)
+        fetch(`${API_PATIENT}/${id}`)
             .then(async (response) => {
                 if(response['status'] === 200) {
                     const data = await response.json();

@@ -71,7 +71,8 @@ const GlobalUpdateSupervisor = () => {
             'hospital': {'hospitalId': hospitalId}
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `${API_SUP_REG}${supervisor.supervisorId}`;
+
+        const addRecordEndpoint = `${API_SUP_REG}/${supervisor.supervisorId}`;
         const options = {
             method: 'PUT',
             headers: {
@@ -96,6 +97,7 @@ const GlobalUpdateSupervisor = () => {
             }
             return response.json();
         })
+
         fetch(`${API_HOSP_NOSUP}`)
            .then((response) => response.json())
            .then((json) => {
@@ -109,7 +111,8 @@ const GlobalUpdateSupervisor = () => {
     }
 
     useEffect(() => {
-        fetch(`${API_SUP_REG}${id}`)
+
+        fetch(`${API_SUP_REG}/${id}`)
            .then(async (response) => {
             if(response['status'] === 200) {
                 const data = await response.json();
@@ -119,6 +122,7 @@ const GlobalUpdateSupervisor = () => {
             }
             else if(id !== 0) setShowAlertNoSuchId(true);
            })
+
            fetch(`${API_HOSP_NOSUP}`)
            .then((response) => response.json())
            .then((json) => {

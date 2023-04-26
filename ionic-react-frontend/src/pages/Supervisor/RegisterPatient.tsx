@@ -38,15 +38,13 @@ import './Supervisor.css';
 import {useEffect, useRef, useState} from "react";
 import { Redirect } from 'react-router';
 import BackButton from "../../components/BackButton";
-import { API_PATIENT, API_SUP_REG } from '../../api/Api';
+import * as apis from '../../api/Api'
 
 // setupIonicReact();
 
 const RegisterPatient: React.FC<any> = props => {
     const profile = props.location.state;
     const [profileData, setProfileData] = useState(profile);
-    // console.log(profileData)
-    // const navigate = useNavigate();
 
     const [showAlert, setShowAlert] = useState(false);
     const [showAlertErr, setShowAlertErr] = useState(false);
@@ -77,15 +75,14 @@ const RegisterPatient: React.FC<any> = props => {
         phoneNo.current!.value = null;
     }
 
-    useEffect(() => {
-        console.log(profileData);
-    })
+    // useEffect(() => {
+    //     console.log(profileData);
+    // })
 
     const registerPatient = async() => {
         //here
-        fetch(`${API_SUP_REG}${profileData.userData.supervisorId}`)
+        fetch(`${apis.API_SUP_REG}/${profileData.userData.supervisorId}`)
             .then(function(response){
-                console.log(response);
                 if(response['status'] === 200){
                     console.log("DONE");
                 }
@@ -95,76 +92,70 @@ const RegisterPatient: React.FC<any> = props => {
                 return response.json();
             })
             .then(function(data){
-                    console.log(data);
                     const items  = data;
-                    console.log(items.success);
                     if(items.success === false) {
-                       return -1;
+                        return -1;
                     }
                     setShowAlertNoSuchId(false);
                     return items.hospital.hospitalId;
                 }
             )
             .then( async function (hospitalId){
-                if(hospitalId === -1){
-                    setShowAlertNoSuchId(true);
-                }
-                else {
-                    setShowAlertNoSuchId(false);
-                    var changeDateFormat = dob.current!.value;
-                    if(changeDateFormat!=null && typeof(changeDateFormat)=='string')
-                        changeDateFormat = changeDateFormat.split('T')[0];
-                    let data = {
-                        'hospital': {'hospitalId': hospitalId},
-                        'supervisor': {'supervisorId': profileData.userData.supervisorId},
-                        'fname': fname.current!.value,
-                        'lname': lname.current!.value,
-                        'gender': gender.current!.value,
-                        'address': address.current!.value,
-                        'phoneNo': phoneNo.current!.value,
-                        'dob': changeDateFormat
-                    };
-                    console.log(JSON.stringify(data));
-                    const addRecordEndpoint = `${API_PATIENT}`;
-                    const options = {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)
+                    if(hospitalId === -1){
+                        setShowAlertNoSuchId(true);
                     }
+                    else {
+                        setShowAlertNoSuchId(false);
+                        var changeDateFormat = dob.current!.value;
+                        if(changeDateFormat!=null && typeof(changeDateFormat)=='string')
+                            changeDateFormat = changeDateFormat.split('T')[0];
+                        let data = {
+                            'hospital': {'hospitalId': hospitalId},
+                            'supervisor': {'supervisorId': profileData.userData.supervisorId},
+                            'fname': fname.current!.value,
+                            'lname': lname.current!.value,
+                            'gender': gender.current!.value,
+                            'address': address.current!.value,
+                            'phoneNo': phoneNo.current!.value,
+                            'dob': changeDateFormat
+                        };
+                        const addRecordEndpoint = `${apis.API_PATIENT}/`;
+                        const options = {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        }
 
-                    await fetch(addRecordEndpoint, options)
-                        .then(function (response) {
-                            console.log(response);
-                            if (response['status'] === 201) {
-                                console.log("DONE");
-                            } else {
-                                console.log("ERROR");
-                            }
-                            return response.json();
-                        })
-                        .then(function (data) {
-                            console.log(data);
-                            const items = data;
-                            if (data.size !== 0) {
-                                setDisplayPatientId(items.patientId);
-                                // console.log(displayPatientId);
-                                setShowAlert(true);
-                                setShowAlertErr(false);
-                                setRedirect(true);
-                                resetAll();
-                            } else {
-                                setShowAlert(false);
-                                setShowAlertErr(true);
-                                setRedirect(false);
-                            }
+                        await fetch(addRecordEndpoint, options)
+                            .then(function (response) {
+                                if (response['status'] === 201) {
+                                    console.log("DONE");
+                                } else {
+                                    console.log("ERROR");
+                                }
+                                return response.json();
+                            })
+                            .then(function (data) {
+                                const items = data;
+                                if (data.size !== 0) {
+                                    setDisplayPatientId(items.patientId);
+                                    setShowAlert(true);
+                                    setShowAlertErr(false);
+                                    setRedirect(true);
+                                    resetAll();
+                                } else {
+                                    setShowAlert(false);
+                                    setShowAlertErr(true);
+                                    setRedirect(false);
+                                }
 
-                            return items;
-                        })
+                                return items;
+                            })
+                    }
                 }
-                }
-    )
+            )
     }
 
     return(
@@ -210,7 +201,7 @@ const RegisterPatient: React.FC<any> = props => {
                             subHeader="ID NOT FOUND..!"
                             message="!!UNSUCCESSFUL..!"
                             buttons={['OK']}
-                            />
+                        />
 
                         <IonRow className = "header-border">
 
@@ -248,14 +239,14 @@ const RegisterPatient: React.FC<any> = props => {
                     </IonGrid>
                 </IonCard>
 
-            <IonGrid className='ion-text-center ion-margin'>
-            <IonButton onClick = {registerPatient}>Submit</IonButton>
-            </IonGrid>
-            
-               <IonAlert
-                   isOpen={showAlert}
+                <IonGrid className='ion-text-center ion-margin'>
+                    <IonButton onClick = {registerPatient}>Submit</IonButton>
+                </IonGrid>
+
+                <IonAlert
+                    isOpen={showAlert}
                     onDidDismiss={() => setShowAlert(false)}
-                   header= {`PATIENT ID: ${displayPatientId}`}
+                    header= {`PATIENT ID: ${displayPatientId}`}
                     subHeader="Registration Successful..!"
                     message="Please go to Patient Login Tab to Login..!"
                     buttons={['OK']}
@@ -263,15 +254,15 @@ const RegisterPatient: React.FC<any> = props => {
 
                 <IonAlert
                     isOpen={showAlertErr}
-                   onDidDismiss={() => setShowAlertErr(false)}
-                   header="Alert"
+                    onDidDismiss={() => setShowAlertErr(false)}
+                    header="Alert"
                     subHeader="Registration Unsuccessful..!"
                     message="Please Go to Patient Registration Tab and Register Again!"
                     buttons={['OK']}
-               />
+                />
 
-            {!showAlert && redirect?<Redirect to= {{ pathname: "/supervisors/register", state: { userData: profileData.userData }}} />
-                 :null}
+                {!showAlert && redirect?<Redirect to= {{ pathname: "/supervisors/register", state: { userData: profileData.userData }}} />
+                    :null}
 
             </IonContent>
 

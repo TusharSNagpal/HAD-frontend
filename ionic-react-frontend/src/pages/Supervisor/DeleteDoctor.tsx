@@ -26,7 +26,8 @@ import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 import React, { useEffect, useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
-import { API_DOCINHOSP_DEL, API_DOCINHOSP_REG } from '../../api/Api';
+import {API_DOCINHOSP_DEL, API_DOCINHOSP_REG} from "../../api/Api";
+
 
 const DeleteDoctor: React.FC<any> = props=> {
     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
@@ -48,7 +49,8 @@ const DeleteDoctor: React.FC<any> = props=> {
 
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `${API_DOCINHOSP_DEL}${docInHospId.current!.value}`;
+        const addRecordEndpoint = `${API_DOCINHOSP_DEL}/${docInHospId.current!.value}`;
+
         const options = {
             method: 'DELETE',
             headers: {
@@ -76,7 +78,8 @@ const DeleteDoctor: React.FC<any> = props=> {
     }
 
     useEffect(() => {
-        fetch(`${API_DOCINHOSP_REG}${id}`)
+        fetch(`${API_DOCINHOSP_REG}/${id}`)
+
             .then(async (response) => {
                 if(response['status'] === 200) {
                     const data = await response.json();
