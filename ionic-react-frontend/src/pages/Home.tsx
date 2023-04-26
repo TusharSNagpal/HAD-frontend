@@ -34,6 +34,7 @@ import { useState, useRef, useEffect } from "react";
 // import { useStorageFillingRemarks } from '../../hooks/useStorageFillingRemarks';
 import {Redirect} from "react-router";
 import { Network } from "@capacitor/network";
+import * as apis from '../api/Api';
 
 // setupIonicReact();
 
@@ -62,8 +63,7 @@ const Home: React.FC = () => {
     }
 
     const generate = () => {
-        // fetch(`http://172.16.132.90:9090/api/${role}/phoneNo/${userId.current!.value}`)
-        //     .then(function (response) {
+        // fetch(`${apis.API_BASE}/${role}/phoneNo/${userId.current!.value}`)        //     .then(function (response) {
         //         // console.log(response.text());
         //         if (response['status'] === 200) {
         //             console.log("Found entry");
@@ -81,7 +81,7 @@ const Home: React.FC = () => {
         //         }
         //         else{
         //             setMobileNo(data);
-        //             fetch(`http://172.16.132.90:9090/api/phoneNumber/generateOTP/${data}`)
+        //             fetch(`${apis.API_OTP_GEN}/${data}`)
         //                 .then(function (response) {
         //                         console.log(response);
         //                         if (response['status'] === 200) {
@@ -97,11 +97,11 @@ const Home: React.FC = () => {
     const authenticate = () => {
         if(role === 'admin')
             setAuth(true);
-        // fetch(`http://172.16.132.90:9090/api/phoneNumber/verifyOTP/${otp.current!.value}/${mobileNo}`)
+        // fetch(`${apis.API_OTP_VERIFY}/${otp.current!.value}/${mobileNo}`)
             // .then(function (response) {
                 // console.log(response);
                 // if (response['status'] === 200) {
-                    fetch(`http://172.16.132.90:9090/api/${role}/${userId.current!.value}`)
+                    fetch(`${apis.API_BASE}/${role}/${userId.current!.value}`)
                         .then(function (response) {
                             console.log(response);
                             return response.json();
@@ -111,13 +111,13 @@ const Home: React.FC = () => {
                             console.log("OTP Validated");
                             setAuth(true);
                         })
-                }
+                // }
             //     else {
             //         console.log("OTP mismatch Sorry..!");
             //         setAuth(false);
             //     }
             // })
-    // }
+    }
 
     return (
         <IonPage>

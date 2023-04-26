@@ -2,6 +2,11 @@
     border: 0.14vw solid;
     margin-bottom: 0.1vw;
 }
+.item-border{
+    border: 0.14vw solid;
+    margin-bottom: 0.1vw;
+    padding: 0.5vw;
+}
 
 .ion-select-style{
     display: flex;

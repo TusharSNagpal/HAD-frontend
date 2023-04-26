@@ -64,7 +64,7 @@ const GlobalRegisterDoctor: React.FC = () => {
             'address': address.current!.value
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = "http://172.16.132.90:9090/api/doctors/";
+        const addRecordEndpoint = "http://localhost:9090/api/doctors/";
         const options = {
             method: 'POST',
             headers: {

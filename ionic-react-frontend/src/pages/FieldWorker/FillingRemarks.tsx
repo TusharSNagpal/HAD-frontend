@@ -107,7 +107,7 @@ const FillingRemarks: React.FC<any> = props => {
                 'reviewByFieldWorker': task
             };
 
-            const addRecordEndpoint = `http://172.16.132.90:9090/api/followUps/fieldWorker/${followUpCurr.fup.currFollowup.followUpId}`;
+            const addRecordEndpoint = `http://localhost:9090/api/followUps/fieldWorker/${followUpCurr.fup.currFollowup.followUpId}`;
             const options = {
                 method: 'PUT',
                 headers: {

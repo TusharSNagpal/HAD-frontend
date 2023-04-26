@@ -34,6 +34,7 @@ import {Redirect} from "react-router";
 import BackButton from "../../components/BackButton";
 import LogoutButton from '../../components/LogoutButton';
 import AlertLoggedOut from '../../components/AlertLoggedOut';
+import * as apis from '../../api/Api';
 
 // setupIonicReact();
 
@@ -63,10 +64,9 @@ const DoctorHome: React.FC<any> = props => {
 
     const deactivate = (cases:any) => {
         setCurrCase(cases);
-        fetch(`http://172.16.132.90:9090/api/visits/${cases.visitId}`, {method : 'PUT'})
+        fetch(`${apis.API_VIS}/${cases.visitId}`, {method : 'PUT'})
             .then((response) => response.json())
             .then((json) => {
-                console.log(json);
                 handle();
             })
 
@@ -76,7 +76,7 @@ const DoctorHome: React.FC<any> = props => {
 
     const handle = () => {
         console.log('Database updated..!');
-        
+
 
         if (useSt){
             setUseSt(false);
@@ -87,14 +87,12 @@ const DoctorHome: React.FC<any> = props => {
     }
 
     const pickFollowUp = (followUp:any)=>{
-        console.log("picked followup")
         setCurrFollowUp(followUp)
         setRedirectToFollowUp(true)
 
-        fetch(`http://172.16.132.90:9090/api/followUps/doctor/end/${followUp.followUpId}`, {method : 'PUT'})
+        fetch(`${apis.API_FOLLOWUP_DOC_END}/${followUp.followUpId}`, {method : 'PUT'})
             .then((response) => response.json())
             .then((json) => {
-                console.log(json);
                 handle();
             })
 
@@ -118,14 +116,12 @@ const DoctorHome: React.FC<any> = props => {
             setProfileData(null);
         }
         else{
-            fetch(`http://172.16.132.90:9090/api/visits/activeVisits/hospital/${profileData?.userData?.hospital?.hospitalId}`)
+            const hospitalId = profileData?.userData?.hospital?.hospitalId
+            const currId = profileData?.userData?.docInHospId
+            fetch(`${apis.API_ACTIVE_VIS}/${hospitalId}/docInHosp/${currId}`)
                 .then((response) => response.json())
                 .then((json) => {
-                    // setUseSt(true);
                     setActiveCases(json);
-                    console.log(json);
-                    // setUseSt(1);
-                    console.log(activeCases);
                     return json;
                 })
         }
@@ -137,15 +133,13 @@ const DoctorHome: React.FC<any> = props => {
             setAuth(false);
         }
         else{
-            fetch(`http://172.16.132.90:9090/api/visits/activeVisits/hospital/${profileData?.userData?.hospital?.hospitalId}`)
+            const hospitalId = profileData?.userData?.hospital?.hospitalId
+            const currId = profileData?.userData?.docInHospId
+            fetch(`${apis.API_ACTIVE_VIS}/${hospitalId}/docInHosp/${currId}`)
                 .then((response) => response.json())
                 .then((json) => {
-                    // setUseSt(true);
                     setActiveCases(json);
-                    // console.log(json);
-                    // console.log(json.length);
-                    // setUseSt(1);
-                    // console.log(activeCases);
+
                     return json;
                 })
             }
@@ -157,15 +151,11 @@ const DoctorHome: React.FC<any> = props => {
             setAuth(false);
         }
         else{
-            fetch(`http://172.16.132.90:9090/api/followUps/doctor/review/${profileData?.userData?.docInHospId}`)
+            fetch(`${apis.API_FOLLOWUP_DOC_REV}/${profileData?.userData?.docInHospId}`)
                 .then((response) => response.json())
                 .then((json) => {
-                    // setUseSt(true);
                     setActiveFollowUps(json);
-                    // console.log(json);
-                    // console.log(json.length);
-                    // setUseSt(1);
-                    // console.log(activeCases);
+
                     return json;
                 })
             }
@@ -177,26 +167,16 @@ const DoctorHome: React.FC<any> = props => {
             setAuth(false);
         }
         else{
-            fetch(`http://172.16.132.90:9090/api/followUps/doctor/review/${profileData?.userData?.docInHospId}`)
+            fetch(`${apis.API_FOLLOWUP_DOC_REV}/${profileData?.userData?.docInHospId}`)
                 .then((response) => response.json())
                 .then((json) => {
-                    // setUseSt(true);
                     setActiveFollowUps(json);
-                    // console.log(json);
-                    // console.log(json.length);
-                    // setUseSt(1);
-                    // console.log(activeCases);
+
                     return json;
                 })
         }
     },[useSt]);
 
-    // if(redirect) {
-    //     // setRedirect(false);
-    //     return (
-    //         <Redirect to={{pathname: '/patient', state: {case: {currCase}}}}/>
-    //     );
-    // }
 
     return(
         <IonPage>

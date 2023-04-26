@@ -38,14 +38,13 @@ import './Supervisor.css';
 import {useEffect, useRef, useState} from "react";
 import { Redirect } from 'react-router';
 import BackButton from "../../components/BackButton";
+import * as apis from '../../api/Api'
 
 // setupIonicReact();
 
 const RegisterPatient: React.FC<any> = props => {
     const profile = props.location.state;
     const [profileData, setProfileData] = useState(profile);
-    // console.log(profileData)
-    // const navigate = useNavigate();
 
     const [showAlert, setShowAlert] = useState(false);
     const [showAlertErr, setShowAlertErr] = useState(false);
@@ -76,15 +75,14 @@ const RegisterPatient: React.FC<any> = props => {
         phoneNo.current!.value = null;
     }
 
-    useEffect(() => {
-        console.log(profileData);
-    })
+    // useEffect(() => {
+    //     console.log(profileData);
+    // })
 
     const registerPatient = async() => {
         //here
-        fetch(`http://172.16.132.90:9090/api/supervisors/${profileData.userData.supervisorId}`)
+        fetch(`${apis.API_SUP_REG}/${profileData.userData.supervisorId}`)
             .then(function(response){
-                console.log(response);
                 if(response['status'] === 200){
                     console.log("DONE");
                 }
@@ -94,9 +92,7 @@ const RegisterPatient: React.FC<any> = props => {
                 return response.json();
             })
             .then(function(data){
-                    console.log(data);
                     const items  = data;
-                    console.log(items.success);
                     if(items.success === false) {
                        return -1;
                     }
@@ -123,8 +119,7 @@ const RegisterPatient: React.FC<any> = props => {
                         'phoneNo': phoneNo.current!.value,
                         'dob': changeDateFormat
                     };
-                    console.log(JSON.stringify(data));
-                    const addRecordEndpoint = "http://172.16.132.90:9090/api/patients/";
+                    const addRecordEndpoint = `${apis.API_PATIENT}/`;
                     const options = {
                         method: 'POST',
                         headers: {
@@ -135,7 +130,6 @@ const RegisterPatient: React.FC<any> = props => {
 
                     await fetch(addRecordEndpoint, options)
                         .then(function (response) {
-                            console.log(response);
                             if (response['status'] === 201) {
                                 console.log("DONE");
                             } else {
@@ -144,11 +138,9 @@ const RegisterPatient: React.FC<any> = props => {
                             return response.json();
                         })
                         .then(function (data) {
-                            console.log(data);
                             const items = data;
                             if (data.size !== 0) {
                                 setDisplayPatientId(items.patientId);
-                                // console.log(displayPatientId);
                                 setShowAlert(true);
                                 setShowAlertErr(false);
                                 setRedirect(true);
