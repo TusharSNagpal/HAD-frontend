@@ -27,6 +27,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
 import {API_FWINHOSP_DEL, API_FWINHOSP_REG} from "../../api/Api";
 
+
 const DeleteFieldWorker: React.FC<any> = props => {
     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
@@ -52,6 +53,7 @@ const DeleteFieldWorker: React.FC<any> = props => {
         }
         console.log(JSON.stringify(data))
         const addRecordEndpoint = `${API_FWINHOSP_DEL}/${fwInHospId.current!.value}`;
+
         const options = {
             method: 'DELETE',
             headers: {
@@ -80,6 +82,7 @@ const DeleteFieldWorker: React.FC<any> = props => {
 
     useEffect(() => {
         fetch(`${API_FWINHOSP_REG}/${id}`)
+
             .then(async (response) => {
                 if (response['status'] === 200) {
                     const data = await response.json();

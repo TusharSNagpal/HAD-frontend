@@ -36,6 +36,7 @@ import LogoutButton from '../../components/LogoutButton';
 import AlertLoggedOut from '../../components/AlertLoggedOut';
 import * as apis from '../../api/Api';
 
+
 // setupIonicReact();
 
 const DoctorHome: React.FC<any> = props => {
@@ -65,6 +66,7 @@ const DoctorHome: React.FC<any> = props => {
     const deactivate = (cases:any) => {
         setCurrCase(cases);
         fetch(`${apis.API_VIS}/${cases.visitId}`, {method : 'PUT'})
+
             .then((response) => response.json())
             .then((json) => {
                 handle();
@@ -91,6 +93,7 @@ const DoctorHome: React.FC<any> = props => {
         setRedirectToFollowUp(true)
 
         fetch(`${apis.API_FOLLOWUP_DOC_END}/${followUp.followUpId}`, {method : 'PUT'})
+
             .then((response) => response.json())
             .then((json) => {
                 handle();
@@ -119,6 +122,7 @@ const DoctorHome: React.FC<any> = props => {
             const hospitalId = profileData?.userData?.hospital?.hospitalId
             const currId = profileData?.userData?.docInHospId
             fetch(`${apis.API_ACTIVE_VIS}/${hospitalId}/docInHosp/${currId}`)
+
                 .then((response) => response.json())
                 .then((json) => {
                     setActiveCases(json);
@@ -136,6 +140,7 @@ const DoctorHome: React.FC<any> = props => {
             const hospitalId = profileData?.userData?.hospital?.hospitalId
             const currId = profileData?.userData?.docInHospId
             fetch(`${apis.API_ACTIVE_VIS}/${hospitalId}/docInHosp/${currId}`)
+
                 .then((response) => response.json())
                 .then((json) => {
                     setActiveCases(json);
@@ -152,6 +157,7 @@ const DoctorHome: React.FC<any> = props => {
         }
         else{
             fetch(`${apis.API_FOLLOWUP_DOC_REV}/${profileData?.userData?.docInHospId}`)
+
                 .then((response) => response.json())
                 .then((json) => {
                     setActiveFollowUps(json);
@@ -168,6 +174,7 @@ const DoctorHome: React.FC<any> = props => {
         }
         else{
             fetch(`${apis.API_FOLLOWUP_DOC_REV}/${profileData?.userData?.docInHospId}`)
+
                 .then((response) => response.json())
                 .then((json) => {
                     setActiveFollowUps(json);

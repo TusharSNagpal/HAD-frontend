@@ -34,6 +34,7 @@ import { Redirect } from 'react-router';
 import { Network } from "@capacitor/network";
 
 import LogoutButton from "../../components/LogoutButton"
+import { API_FOLLOWUPS } from '../../api/Api';
 
 const FieldWorker: React.FC<any> = props => {
 
@@ -77,7 +78,8 @@ const FieldWorker: React.FC<any> = props => {
 
             if(connection.connected){
                 showOfflineAlert(false);
-                fetch(`http://localhost:9090/api/followUps/${profileData.fwInHospId}`)
+
+                fetch(`${API_FOLLOWUPS}/${profileData.fwInHospId}`)
                     .then((response) => response.json())
                     .then(async (json) => {
                         console.log("data fetched");

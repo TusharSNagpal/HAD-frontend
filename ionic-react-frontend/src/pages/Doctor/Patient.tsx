@@ -48,6 +48,7 @@ import {Route} from "react-router-dom";
 import BackButton from "../../components/BackButton";
 import * as apis from '../../api/Api'
 
+
 // setupIonicReact();
 const Patient: React.FC<any> = props => {
     const v = props.location.state;
@@ -85,6 +86,7 @@ const Patient: React.FC<any> = props => {
         visitDetails.prescription = prescription;
         visitDetails.doctorInHospital= {'docInHospId':profileData.docInHospId};
         const addRecordEndpoint = `${apis.API_VISITED}/${visitDetails.visitId}`;
+
         const options = {
             method: 'PUT',
             headers: {
@@ -148,6 +150,7 @@ const Patient: React.FC<any> = props => {
             'reviewByFieldWorker':""
         };
         const addRecordEndpoint = `${apis.API_FOLLOWUPS}/`;
+
         const options = {
             method: 'POST',
             headers: {

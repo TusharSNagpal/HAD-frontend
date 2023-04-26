@@ -57,11 +57,11 @@ export const API_DOCINHOSP_DEL = `${API_DOCINHOSP_REG}/del`
 export const API_GET_ALL_DOCINHOSP = `${doctorInHosp}/getAllDocInHosp`
 
 //hostpitals:
-const hostpial = `${base}/hospitals`;
+const hospital = `${base}/hospitals`;
 //register hospital:
-export const API_HOSP_REG = `${hostpial}`
+export const API_HOSP_REG = `${hospital}`
 // fetching hospital with no supervisor assigned
-export const API_HOSP_NOSUP = `${hostpial}/noSupervisor`
+export const API_HOSP_NOSUP = `${hospital}/noSupervisor`
 
 //supervisors:
 const sup = `${base}/supervisors`;

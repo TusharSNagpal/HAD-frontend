@@ -26,6 +26,7 @@ import '@ionic/react/css/display.css';
 import React, { useEffect, useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
 import AdminBackButton from "../../components/AdminBackButton";
+import { API_FW_REG } from '../../api/Api';
 
 const path = "/admin/globalUpdate"
 const GlobalUpdateFieldWorker = () => {
@@ -68,7 +69,8 @@ const GlobalUpdateFieldWorker = () => {
             'numOfTasksPerDay': fieldWorker.numOfTasksPerDay
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `http://localhost:9090/api/fieldworkers/${fieldWorker.fwId}`;
+
+        const addRecordEndpoint = `${API_FW_REG}/${fieldWorker.fwId}`;
         const options = {
             method: 'PUT',
             headers: {
@@ -101,7 +103,8 @@ const GlobalUpdateFieldWorker = () => {
     }
 
     useEffect(() => {
-        fetch(`http://localhost:9090/api/fieldworkers/${id}`)
+
+        fetch(`${API_FW_REG}/${id}`)
            .then(async (response) => {
             if(response['status'] === 200) {
                 const data = await response.json();

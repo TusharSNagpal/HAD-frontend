@@ -26,6 +26,7 @@ import '@ionic/react/css/display.css';
 import React, { useEffect, useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
 import AdminBackButton from "../../components/AdminBackButton";
+import { API_HOSP_NOSUP, API_SUP_REG } from '../../api/Api';
 const path = "/admin/globalRegister"
 const GlobalRegisterSupervisor: React.FC = () => {
     const [showAlert, setShowAlert] = useState(false);
@@ -58,7 +59,8 @@ const GlobalRegisterSupervisor: React.FC = () => {
     }
 
     useEffect(() => {
-        fetch(`http://localhost:9090/api/hospitals/noSupervisor`)
+
+        fetch(`${API_HOSP_NOSUP}`)
            .then((response) => response.json())
            .then((json) => {
                setHospitalOptions(json);
@@ -87,7 +89,8 @@ const GlobalRegisterSupervisor: React.FC = () => {
             'address': address.current!.value
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = "http://localhost:9090/api/supervisors/";
+
+        const addRecordEndpoint = `${API_SUP_REG}/`;
         const options = {
             method: 'POST',
             headers: {
@@ -121,7 +124,8 @@ const GlobalRegisterSupervisor: React.FC = () => {
 
                 return items;
             })
-            await fetch(`http://localhost:9090/api/hospitals/noSupervisor`)
+
+            await fetch(`${API_HOSP_NOSUP}`)
             .then((response) => response.json())
             .then((json) => {
                 setHospitalOptions(json);

@@ -38,6 +38,7 @@ import React, {useEffect, useState} from "react";
 import {type} from "os";
 import BackButton from "../../components/BackButton";
 import * as apis from '../../api/Api'
+
 // setupIonicReact();
 
 const FieldWorkersInHospital: React.FC<any> = props => {
@@ -59,6 +60,7 @@ const FieldWorkersInHospital: React.FC<any> = props => {
 
     useEffect(() => {
         fetch(`${apis.API_FWINHOSP_REG}/hospital/${profileData.userData.hospital.hospitalId}`)
+
             .then((response) => response.json())
             .then((json) => {
                 // setUseSt(true);

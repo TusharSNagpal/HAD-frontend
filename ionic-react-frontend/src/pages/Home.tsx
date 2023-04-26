@@ -98,25 +98,25 @@ const Home: React.FC = () => {
         if(role === 'admin')
             setAuth(true);
         // fetch(`${apis.API_OTP_VERIFY}/${otp.current!.value}/${mobileNo}`)
-            // .then(function (response) {
-                // console.log(response);
-                // if (response['status'] === 200) {
-                    fetch(`${apis.API_BASE}/${role}/${userId.current!.value}`)
-                        .then(function (response) {
-                            console.log(response);
-                            return response.json();
-                        })
-                        .then((data) => {
-                            setUserData(data);
-                            console.log("OTP Validated");
-                            setAuth(true);
-                        })
-                // }
-            //     else {
-            //         console.log("OTP mismatch Sorry..!");
-            //         setAuth(false);
-            //     }
-            // })
+        // .then(function (response) {
+        // console.log(response);
+        // if (response['status'] === 200) {
+        fetch(`${apis.API_BASE}/${role}/${userId.current!.value}`)
+            .then(function (response) {
+                console.log(response);
+                return response.json();
+            })
+            .then((data) => {
+                setUserData(data);
+                console.log("OTP Validated");
+                setAuth(true);
+            })
+        // }
+        //     else {
+        //         console.log("OTP mismatch Sorry..!");
+        //         setAuth(false);
+        //     }
+        // })
     }
 
     return (

@@ -26,6 +26,7 @@ import '@ionic/react/css/display.css';
 import React, { useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
 import AdminBackButton from "../../components/AdminBackButton";
+import { API_FW_REG } from '../../api/Api';
 
 const path="/admin/globalRegister"
 const GlobalRegisterFieldWorker: React.FC = () => {
@@ -65,7 +66,7 @@ const GlobalRegisterFieldWorker: React.FC = () => {
             'address': address.current!.value
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = "http://localhost:9090/api/fieldworkers/";
+        const addRecordEndpoint = `${API_FW_REG}/`;
         const options = {
             method: 'POST',
             headers: {

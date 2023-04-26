@@ -81,111 +81,111 @@ const NewCase:React.FC<any> = props=> {
                     setMobileNo(data);
                     fetch(`${API_OTP_GEN}/${data}`)
                         .then(async function (response) {
-                            const result = await response;
-                            console.log(response);
-                            if(result['status'] === 200){
-                                console.log("DONE");
-                                setLoginSuccess(true);
-                                setShowAlert(true);
-                                setShowAlertErr(false);
-                            }
+                                const result = await response;
+                                console.log(response);
+                                if(result['status'] === 200){
+                                    console.log("DONE");
+                                    setLoginSuccess(true);
+                                    setShowAlert(true);
+                                    setShowAlertErr(false);
+                                }
 
-                            else{
-                                console.log("ERROR");
-                                setLoginSuccess(false);
-                                setShowAlert(false);
-                                setShowAlertErr(true);
-                            }
+                                else{
+                                    console.log("ERROR");
+                                    setLoginSuccess(false);
+                                    setShowAlert(false);
+                                    setShowAlertErr(true);
+                                }
                             }
                         )}
-    })
+            })
     }
 
     const createCase = async() => {
 
         fetch(`${API_OTP_VERIFY}/${otp.current!.value}/${mobileNo}`)
-        .then(async function (response) {
-        console.log(response);
-        if (response['status'] === 200) {
-
-            await fetch(`${API_GET_ALL_DOCINHOSP}/${profileData?.userData?.hospital?.hospitalId}`)
-                .then(function (response) {
+            .then(async function (response) {
                     console.log(response);
                     if (response['status'] === 200) {
-                        console.log("DONE");
-                    } else {
-                        console.log("ERROR");
-                    }
-                    return response.json();
-                })
-                .then(function (data){
-                    let curr_doctor;
-                    let min_patients = 1e9;
-                    let docInHospId;
-                    (async function(){
-                        for(curr_doctor of data){
-                            const hospitalId = profileData?.userData?.hospital?.hospitalId
-                            const currId = curr_doctor.docInHospId
-                            await fetch(`${API_ACTIVE_VIS}/${hospitalId}/docInHosp/${currId}`)
-                                .then(function (response){
+
+                        await fetch(`${API_GET_ALL_DOCINHOSP}/${profileData?.userData?.hospital?.hospitalId}`)
+                            .then(function (response) {
+                                console.log(response);
+                                if (response['status'] === 200) {
+                                    console.log("DONE");
+                                } else {
+                                    console.log("ERROR");
+                                }
+                                return response.json();
+                            })
+                            .then(function (data){
+                                let curr_doctor;
+                                let min_patients = 1e9;
+                                let docInHospId;
+                                (async function(){
+                                    for(curr_doctor of data){
+                                        const hospitalId = profileData?.userData?.hospital?.hospitalId
+                                        const currId = curr_doctor.docInHospId
+                                        await fetch(`${API_ACTIVE_VIS}/${hospitalId}/docInHosp/${currId}`)
+                                            .then(function (response){
+                                                console.log(response);
+                                                if (response['status'] === 200) {
+                                                    console.log("DONE");
+                                                } else {
+                                                    console.log("ERROR");
+                                                }
+                                                return response.json();
+                                            })
+                                            .then(async function (data){
+                                                if(data.length<min_patients){
+                                                    min_patients = await data.length
+                                                    docInHospId = await currId
+                                                }
+
+                                            })
+                                    }
+                                    return docInHospId
+                                })().then(async function (docInHospId){
+                                    let dto = {
+                                        'hospital':{'hospitalId': profileData?.userData?.hospital?.hospitalId},
+                                        'patient':{'patientId': patientIdRef.current!.value},
+                                        'doctorInHospital':{'docInHospId':docInHospId}
+                                    };
+                                    console.log(JSON.stringify(dto));
+                                    const addRecordEndpoint = `${API_VIS}/`;
+                                    const options = {
+                                        method: 'POST',
+                                        headers:{
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify(dto)
+                                    }
+
+                                    const response = await fetch(addRecordEndpoint, options);
+                                    const result = await response;
                                     console.log(response);
-                                    if (response['status'] === 200) {
+                                    if(result['status'] === 200){
                                         console.log("DONE");
-                                    } else {
+                                        setShowAlertCase(true);
+                                        setShowAlertCaseErr(false);
+                                        setRedirect(true);
+                                    }
+
+                                    else{
                                         console.log("ERROR");
+                                        setShowAlertCaseErr(true);
+                                        setShowAlertCase(false);
+                                        setRedirect(false);
                                     }
-                                    return response.json();
                                 })
-                                .then(async function (data){
-                                    if(data.length<min_patients){
-                                        min_patients = await data.length
-                                        docInHospId = await currId
-                                    }
+                            })
 
-                                })
-                        }
-                        return docInHospId
-                    })().then(async function (docInHospId){
-                        let dto = {
-                            'hospital':{'hospitalId': profileData?.userData?.hospital?.hospitalId},
-                            'patient':{'patientId': patientIdRef.current!.value},
-                            'doctorInHospital':{'docInHospId':docInHospId}
-                        };
-                        console.log(JSON.stringify(dto));
-                        const addRecordEndpoint = `${API_VIS}/`;
-                        const options = {
-                            method: 'POST',
-                            headers:{
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(dto)
-                        }
-
-                        const response = await fetch(addRecordEndpoint, options);
-                        const result = await response;
-                        console.log(response);
-                        if(result['status'] === 200){
-                            console.log("DONE");
-                            setShowAlertCase(true);
-                            setShowAlertCaseErr(false);
-                            setRedirect(true);
-                        }
-
-                        else{
-                            console.log("ERROR");
-                            setShowAlertCaseErr(true);
-                            setShowAlertCase(false);
-                            setRedirect(false);
-                        }
-                    })
-                })
-
-        }
-            else {
-                console.log("OTP mismatch Sorry..!");
-            }
-        }
-        )
+                    }
+                    else {
+                        console.log("OTP mismatch Sorry..!");
+                    }
+                }
+            )
 
     }
 
@@ -256,7 +256,7 @@ const NewCase:React.FC<any> = props=> {
                         </IonGrid>
 
                         :null}
-                    
+
                     <IonAlert
                         isOpen={showAlertCase}
                         onDidDismiss={() => setShowAlertCase(false)}
@@ -277,7 +277,7 @@ const NewCase:React.FC<any> = props=> {
                 </IonGrid>
                 {!showAlertCase && redirect ?
                     <Redirect to={{ pathname: '/supervisors', state: { userData: profileData?.userData } }} />
-                :null}
+                    :null}
 
             </IonContent>
 

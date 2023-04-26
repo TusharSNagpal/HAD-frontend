@@ -49,6 +49,7 @@ import BackButton from "../../components/BackButton";
 import * as apis from '../../api/Api'
 
 
+
 // setupIonicReact();
 const OldFollowUp: React.FC<any> = props => {
     const f = props.location.state;
@@ -125,6 +126,7 @@ const OldFollowUp: React.FC<any> = props => {
             'verificationNumber':verificationNo
         };
         const addRecordEndpoint = `${apis.API_FOLLOWUPS}/`;
+
         const options = {
             method: 'POST',
             headers: {
@@ -159,6 +161,7 @@ const OldFollowUp: React.FC<any> = props => {
 
     useEffect(() => {
         fetch(`${apis.API_FOLLOWUP_VIS}/${followUpDetails.visit.visitId}/followUpId/${followUpDetails.followUpId}`)
+
             .then((response) => response.json())
             .then((json) => {
                 setFollowUps(json);

@@ -65,6 +65,8 @@ import Home from "./pages/Home";
 import Prescription from './pages/FieldWorker/Prescription';
 import ViewPatientHistory from "./pages/Doctor/ViewPatientHistory";
 
+import * as apis from "./api/Api"
+
 
 setupIonicReact();
 
@@ -94,7 +96,7 @@ const App: React.FC = () => {
             'reviewByFieldWorker': offlineData[0]['reviewByFieldWorker']
           };
 
-          const addRecordEndpoint = `http://localhost:9090/api/followUps/fieldWorker/${offlineData[0]['followUpId']}`;
+          const addRecordEndpoint = `${apis.API_REVIEW_UPD}${offlineData[0]['followUpId']}`;
           const options = {
             method: 'PUT',
             headers: {

@@ -36,7 +36,9 @@ import './Supervisor.css';
 import {Redirect} from "react-router";
 import React, {useEffect, useState} from "react";
 import BackButton from "../../components/BackButton";
+
 import {API_FOLLOWUPS, API_FWINHOSP_REG, API_SEND_SMS} from "../../api/Api";
+
 
 // setupIonicReact();
 
@@ -92,6 +94,7 @@ const AssignTasks: React.FC<any> = props => {
                 followUps[i].fieldWorkerInHospital = {"fwInHospId":fieldWorkerDetails.fwInHospId}
                 console.log(followUps[i])
                 const addRecordEndpoint = `${API_FOLLOWUPS}/${followUpId}`;
+
                 const options = {
                     method: 'PUT',
                     headers:{
@@ -122,8 +125,8 @@ const AssignTasks: React.FC<any> = props => {
             console.log(tasksAssigned);
             // console.log(fieldWorkerDetails.currFieldWorker.numOfTasksPerDay);
             fieldWorkerDetails.numOfTasksPerDay=tasksAssigned;
-        console.log(JSON.stringify(fieldWorkerDetails));
         const addRecordEndpoint = `${API_FWINHOSP_REG}/${fieldWorkerDetails.fwInHospId}`;
+
             const options = {
                 method: 'PUT',
                 headers:{
@@ -157,6 +160,7 @@ const AssignTasks: React.FC<any> = props => {
 
     useEffect(() => {
         fetch(`${API_FOLLOWUPS}/remaining/${profileData?.hospital?.hospitalId}`)
+
             .then((response) => response.json())
             .then((json) => {
                 // setUseSt(true);

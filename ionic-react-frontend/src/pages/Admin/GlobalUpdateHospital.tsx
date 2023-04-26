@@ -26,6 +26,7 @@ import '@ionic/react/css/display.css';
 import React, { useEffect, useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
 import AdminBackButton from "../../components/AdminBackButton";
+import { API_HOSP_REG } from '../../api/Api';
 
 const path = "/admin/globalUpdate"
 const GlobalUpdateHospital = () => {
@@ -60,7 +61,8 @@ const GlobalUpdateHospital = () => {
             'registrationDate': registrationDate.current!.value
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `http://localhost:9090/api/hospitals/${hospital.hospitalId}`;
+
+        const addRecordEndpoint = `${API_HOSP_REG}/${hospital.hospitalId}`;
         const options = {
             method: 'PUT',
             headers: {
@@ -95,7 +97,8 @@ const GlobalUpdateHospital = () => {
     }
 
     useEffect(() => {
-        fetch(`http://localhost:9090/api/hospitals/${id}`)
+
+        fetch(`${API_HOSP_REG}/${id}`)
            .then(async (response) => {
             if(response['status'] === 200) {
                 const data = await response.json();
