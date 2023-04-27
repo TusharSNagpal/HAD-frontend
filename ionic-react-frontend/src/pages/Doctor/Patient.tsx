@@ -214,12 +214,14 @@ const Patient: React.FC<any> = props => {
 
     const deleteIt = (index:number) => {
         let pseudo = mapTask;
-        pseudo.splice(index,1);
-        setMapTask(pseudo);
-        if(changeState)
-            setChangeState(false);
-        else
-        setChangeState(true);
+        if(pseudo.length > 1){
+            pseudo.splice(index,1);
+            setMapTask(pseudo);
+            if(changeState)
+                setChangeState(false);
+            else
+            setChangeState(true);
+        }
     }
 
     useEffect(() => {
@@ -353,7 +355,7 @@ const Patient: React.FC<any> = props => {
                                             <IonItem>
                                                 <IonLabel class="ion-text-center" position="floating">ADD FOLLOW UP INSTRUCTIONS FOR THE FIELD WORKER</IonLabel>
                                                 {mapTask.map((value: any, index: any) => (
-                                                    <IonTextarea key = {index} value={mapTask[index]} onIonChange={(e) => handleChangeOfTask(e, index)}><IonButton onClick={()=> {addNew(index)}}>+</IonButton><IonButton onClick={() => deleteIt(index)}>-</IonButton></IonTextarea>
+                                                    <IonTextarea key = {index} value={mapTask[index]} onIonChange={(e) => handleChangeOfTask(e, index)}><IonButton size = "large" onClick={()=> {addNew(index)}}>+</IonButton><IonButton size = "large" onClick={() => deleteIt(index)}>-</IonButton></IonTextarea>
                                                 // <IonTextarea value={tasksAssigned} onIonChange={(e) => setTasksAssigned(e.detail.value!)}></IonTextarea>
                                                  ))}
                                             </IonItem>

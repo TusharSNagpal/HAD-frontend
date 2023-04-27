@@ -88,7 +88,7 @@ const RegisterPatient: React.FC<any> = props => {
 
     const registerPatient = async() => {
         //here
-        console.log(`${API_SUP_REG}/${profileData.userData.supervisorId}`);
+        // console.log(`${API_SUP_REG}/${profileData.userData.supervisorId}`);
         fetch(`${API_SUP_REG}/${profileData.userData.supervisorId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then(function(response){
                 if(response['status'] === 200){

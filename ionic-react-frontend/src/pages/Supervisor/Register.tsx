@@ -74,8 +74,6 @@ const Register: React.FC<any> = props => {
                     </IonTitle>
                 </IonToolbar>
 
-
-
             </IonHeader>
 
             <IonContent className='ion-padding' /*class = "content-style"*/>

@@ -60,7 +60,7 @@ const AssignTasks: React.FC<any> = props => {
     const [profileData, setProfileData] = useState(f.userData);
     const [fieldWorkerDetails,setFieldWorkerDetails] = useState(f.currFieldWorker)
     // console.log(profileData)
-    const [tasksAssigned, setTasksAssigned] = useState(fieldWorkerDetails.numOfTasksPerDay)
+    const [tasksAssigned, setTasksAssigned] = useState(fieldWorkerDetails.numOfTasksAssignedPerDay)
     const path = "/supervisors/fieldWorkersInHospital"
     // console.log(fieldWorkerDetails.currFieldWorker);
     // let count=0;
@@ -122,7 +122,7 @@ const AssignTasks: React.FC<any> = props => {
                         return response.json();
                     }).then(function(){
                     console.log(phoneNo)
-                    fetch(`${API_SEND_SMS}/${phoneNo}/verificationNo/${verificationNo}`)
+                    fetch(`${API_SEND_SMS}/${phoneNo}/verificationNo/${verificationNo}`, {headers : {Authorization: 'Bearer '+cookie.get("jwt")}})
                         .then(function (response){
                             console.log(response)
                         })
@@ -132,8 +132,8 @@ const AssignTasks: React.FC<any> = props => {
         }
         // .then(async function () {
             console.log(tasksAssigned);
-            // console.log(fieldWorkerDetails.currFieldWorker.numOfTasksPerDay);
-            fieldWorkerDetails.numOfTasksPerDay=tasksAssigned;
+            // console.log(fieldWorkerDetails.currFieldWorker.numOfTasksAssignedPerDay);
+            fieldWorkerDetails.numOfTasksAssignedPerDay=tasksAssigned;
         const addRecordEndpoint = `${API_FWINHOSP_REG}/${fieldWorkerDetails.fwInHospId}`;
 
             const options = {
@@ -170,7 +170,7 @@ const AssignTasks: React.FC<any> = props => {
     }
 
     useEffect(() => {
-        fetch(`${API_FOLLOWUPS}/remaining/1`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
+        fetch(`${API_FOLLOWUPS}/remaining/${profileData?.hospital?.hospitalId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then(function(response) {
                 if(response['status'] === 401) {
                     setAuth(false)
