@@ -86,6 +86,7 @@ const RegisterPatient: React.FC<any> = props => {
 
     const registerPatient = async() => {
         //here
+        console.log(`${API_SUP_REG}/${profileData.userData.supervisorId}`);
         fetch(`${API_SUP_REG}/${profileData.userData.supervisorId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then(function(response){
                 if(response['status'] === 200){
@@ -195,12 +196,6 @@ const RegisterPatient: React.FC<any> = props => {
             <IonContent className='ion-padding'>
                 <IonCard class = "card-style">
                     <IonGrid className='ion-text-center ion-margin'>
-                        {/*<IonRow className = "header-border">*/}
-                        {/*    <IonCol>*/}
-                        {/*        <IonCardTitle>Supervisor ID: </IonCardTitle>*/}
-                        {/*        <IonCardTitle ><IonInput ref = {supervisorId} class = "card-input" type="number" placeholder="1234"></IonInput></IonCardTitle>*/}
-                        {/*    </IonCol>*/}
-                        {/*</IonRow>*/}
                         <IonAlert
                             isOpen={showAlertNoSuchId}
                             onDidDismiss={() => setShowAlertNoSuchId(false)}
