@@ -2,6 +2,7 @@ import {
     IonButton,
     IonRow,
     IonAlert,
+    IonSegment
 } from '@ionic/react';
 import React, {useState} from "react";
 
@@ -13,19 +14,17 @@ import React, {useState} from "react";
 // }
 
 const ShowAlert: React.FC<any> = ({alert, showAlert, headAlert, msgAlert}) => {
-  if(alert)
   return(
-      alert ?
+    <IonSegment>
       <IonAlert
         isOpen={alert}
-        onDidDismiss={() => showAlert(false)}
+        onDidDismiss={() => {showAlert(false)}}
         header= {`${headAlert}`}
         message= {`${msgAlert}`}
         buttons={['OK']}
       />
-      :null
+      </IonSegment>
   )
-  else return (null)
 };
 
 export default ShowAlert;

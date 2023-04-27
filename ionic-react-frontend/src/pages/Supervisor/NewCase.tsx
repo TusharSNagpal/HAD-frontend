@@ -36,10 +36,8 @@ import './Supervisor.css';
 import React, {useRef, useState} from "react";
 import {Redirect} from "react-router";
 import BackButton from "../../components/BackButton";
-
-import Cookie from 'universal-cookie'
-
 import {API_ACTIVE_VIS, API_GET_ALL_DOCINHOSP, API_OTP_GEN, API_OTP_VERIFY, API_PATIENT, API_VIS} from "../../api/Api";
+import Cookie from 'universal-cookie'
 
 // setupIonicReact();
 
@@ -57,90 +55,60 @@ const NewCase:React.FC<any> = props=> {
     const otp = useRef<HTMLIonInputElement>(null);
     const [mobileNo, setMobileNo] = useState("");
 
-
-
     const path="/supervisors"
 
     const loginPatient = async() => {
-        const response = await fetch(`${API_PATIENT}/${patientIdRef.current!.value}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
-        const result = await response;
-        console.log(response);
-        if(result['status'] === 200){
-            console.log("DONE");
-            setLoginSuccess(true);
-            setShowAlert(true);
-            setShowAlertErr(false);
-        }
 
-        else{
-            console.log("ERROR");
-            setLoginSuccess(false);
-            setShowAlert(false);
-            setShowAlertErr(true);
-        }
+
+        fetch(`${API_PATIENT}/phoneNo/${patientIdRef.current!.value}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
+            .then(function (response) {
+                // console.log(response.text());
+                if (response['status'] === 200) {
+                    console.log("Found entry");
+                    return response.text();
+                }
+                else {
+                    console.log("No such entry..!");
+                    return "-1";
+                }
+            })
+            .then(async function (data) {
+                console.log(data);
+                if(data === "-1"){
+                    console.log("Try again..!");
+                }
+                else{
+                    setMobileNo(data);
+                    fetch(`${API_OTP_GEN}/${data}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
+                        .then(async function (response) {
+                                const result = await response;
+                                console.log(response);
+                                if(result['status'] === 200){
+                                    console.log("DONE");
+                                    setLoginSuccess(true);
+                                    setShowAlert(true);
+                                    setShowAlertErr(false);
+                                }
+
+                                else{
+                                    console.log("ERROR");
+                                    setLoginSuccess(false);
+                                    setShowAlert(false);
+                                    setShowAlertErr(true);
+                                }
+                            }
+                        )}
+            })
     }
 
-    // const createCase = async() => {
-    //     fetch(`${API_PATIENT}${patientIdRef.current!.value}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
-    //         .then(function (response) {
-    //             // console.log(response.text());
-    //             if (response['status'] === 200) {
-    //                 console.log("Found entry");
-    //                 return response.text();
-    //             }
-    //             else {
-    //                 console.log("No such entry..!");
-    //                 return "-1";
-    //             }
-    //         )   
-    //         .then(async function (hospitalId) {
-    //             let data = {'hospital':{'hospitalId': hospitalId}, 'patient':{'patientId': patientIdRef.current!.value}};
-    //             console.log(JSON.stringify(data));
-    //             const addRecordEndpoint = `${API_VIS}`;
-    //             const options = {
-    //                 method: 'POST',
-    //                 headers:{
-    //                     'Content-Type': 'application/json',
-    //                     'Authorization': 'Bearer '+ cookie.get("jwt")
-    //                 },
-    //                 body: JSON.stringify(data)
-    //         })
-    //         .then(async function (data) {
-    //             console.log(data);
-    //             if(data === "-1"){
-    //                 console.log("Try again..!");
-    //             }
-    //             else{
-    //                 setMobileNo(data);
-    //                 fetch(`${API_OTP_GEN}/${data}`)
-    //                     .then(async function (response) {
-    //                             const result = await response;
-    //                             console.log(response);
-    //                             if(result['status'] === 200){
-    //                                 console.log("DONE");
-    //                                 setLoginSuccess(true);
-    //                                 setShowAlert(true);
-    //                                 setShowAlertErr(false);
-    //                             }
-
-    //                             else{
-    //                                 console.log("ERROR");
-    //                                 setLoginSuccess(false);
-    //                                 setShowAlert(false);
-    //                                 setShowAlertErr(true);
-    //                             }
-    //                         }
-    //                     )}
-    //         })
-    // }
-
     const createCase = async() => {
-        fetch(`${API_OTP_VERIFY}/${otp.current!.value}/${mobileNo}`)
+
+        fetch(`${API_OTP_VERIFY}/${otp.current!.value}/${mobileNo}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then(async function (response) {
                     console.log(response);
                     if (response['status'] === 200) {
 
-                        await fetch(`${API_GET_ALL_DOCINHOSP}/${profileData?.userData?.hospital?.hospitalId}`)
+                        await fetch(`${API_GET_ALL_DOCINHOSP}/${profileData?.userData?.hospital?.hospitalId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
                             .then(function (response) {
                                 console.log(response);
                                 if (response['status'] === 200) {
@@ -158,7 +126,7 @@ const NewCase:React.FC<any> = props=> {
                                     for(curr_doctor of data){
                                         const hospitalId = profileData?.userData?.hospital?.hospitalId
                                         const currId = curr_doctor.docInHospId
-                                        await fetch(`${API_ACTIVE_VIS}/${hospitalId}/docInHosp/${currId}`)
+                                        await fetch(`${API_ACTIVE_VIS}/${hospitalId}/docInHosp/${currId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
                                             .then(function (response){
                                                 console.log(response);
                                                 if (response['status'] === 200) {
@@ -188,7 +156,8 @@ const NewCase:React.FC<any> = props=> {
                                     const options = {
                                         method: 'POST',
                                         headers:{
-                                            'Content-Type': 'application/json'
+                                            'Content-Type': 'application/json',
+                                            'Authorization': 'Bearer '+cookie.get("jwt")
                                         },
                                         body: JSON.stringify(dto)
                                     }

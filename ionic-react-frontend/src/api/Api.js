@@ -72,7 +72,7 @@ export const API_HOSP_NOSUP = `${hospital}/noSupervisor`
 //supervisors:
 const sup = `${base}/supervisors`;
 //register supervisors:
-export const API_SUP_REG = `/${sup}`
+export const API_SUP_REG = `${sup}`
 
 // *****************************************************************************************
 
