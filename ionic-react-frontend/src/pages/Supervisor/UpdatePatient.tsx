@@ -28,6 +28,7 @@ import BackButton from "../../components/BackButton";
 
 import { API_PATIENT } from '../../api/Api';
 import Cookie from 'universal-cookie'
+import AlertLoggedOut from '../../components/AlertLoggedOut';
 
 const UpdatePatient:React.FC<any> = props => {
     const cookie = new Cookie();
@@ -36,6 +37,7 @@ const UpdatePatient:React.FC<any> = props => {
     const [id, setId] = useState(0);
     const [patient, setPatient] = useState<any>([]);
     const [openForm, setOpenForm] = useState(false);
+    const [auth, setAuth] = useState(true);
     const supId =useRef<HTMLIonInputElement>(null)
     const hospId= useRef<HTMLIonInputElement>(null)
     const fname = useRef<HTMLIonInputElement>(null);
@@ -92,7 +94,8 @@ const UpdatePatient:React.FC<any> = props => {
                 if (response['status'] === 200) {
                     console.log("DONE");
                     setShowAlert(true)
-                } else {
+                } else if(response['status'] === 401) setAuth(false)
+                else {
                     console.log("ERROR");
                     console.log(response)
                 }
@@ -112,7 +115,7 @@ const UpdatePatient:React.FC<any> = props => {
                     const data = await response.json();
                     setPatient(data)
                     console.log(data)
-                }
+                } else if(response['status'] === 401) setAuth(false)
                 else if(id !== 0) setShowAlertNoSuchId(true);
             })
     },[openForm]);
@@ -211,6 +214,11 @@ const UpdatePatient:React.FC<any> = props => {
                                     buttons={['OK']}
                                 /> </>
                         ) : null
+                    }
+                    {
+                        !auth ? 
+                        <AlertLoggedOut auth = {auth} setAuth = {setAuth}></AlertLoggedOut>
+                        :null
                     }
                 </IonGrid>
             </IonContent>

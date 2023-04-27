@@ -27,14 +27,19 @@ import React, { useEffect, useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
 import AdminBackButton from "../../components/AdminBackButton";
 import { API_HOSP_NOSUP, API_SUP_REG } from '../../api/Api';
+import Cookie from 'universal-cookie'
+import AlertLoggedOut from '../../components/AlertLoggedOut';
+
 const path = "/admin/globalRegister"
 const GlobalRegisterSupervisor: React.FC = () => {
+    const cookie = new Cookie();
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState<string>();
     const [alertHeader, setAlertHeader] = useState<string>()
     const [hospitalOptions, setHospitalOptions] = useState<any[]>([]);
     const [useSt, setUseSt] = useState(false);
     const [hospitalId, setHospitalId] = useState(null);
+    const [auth, setAuth] = useState(true);
 
     const fname = useRef<HTMLIonInputElement>(null)
     const lname = useRef<HTMLIonInputElement>(null)
@@ -59,9 +64,13 @@ const GlobalRegisterSupervisor: React.FC = () => {
     }
 
     useEffect(() => {
-
-        fetch(`${API_HOSP_NOSUP}`)
-           .then((response) => response.json())
+        fetch(`${API_HOSP_NOSUP}`, {headers : {Authorization: 'Bearer '+cookie.get("jwt")}})
+           .then(function(response) {
+            if(response['status'] === 401) {
+               setAuth(false)
+            }
+            return response.json()
+           })
            .then((json) => {
                setHospitalOptions(json);
                console.log(hospitalOptions)
@@ -94,7 +103,8 @@ const GlobalRegisterSupervisor: React.FC = () => {
         const options = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+cookie.get("jwt")
             },
             body: JSON.stringify(data)
         }
@@ -104,6 +114,8 @@ const GlobalRegisterSupervisor: React.FC = () => {
                 console.log(response);
                 if (response['status'] === 201) {
                     console.log("DONE");
+                } else if(response['status'] === 401) {
+                    
                 } else {
                     console.log("ERROR");
                 }
@@ -210,7 +222,11 @@ const GlobalRegisterSupervisor: React.FC = () => {
                         <IonGrid className='ion-text-center ion-margin'>
                         <IonButton onClick = {registerSupervisor}>Submit</IonButton>
                         </IonGrid>
-
+                        {
+                            !auth ? 
+                            <AlertLoggedOut auth = {auth} setAuth = {setAuth}></AlertLoggedOut>
+                            :null
+                        }
                         <IonAlert
                         isOpen={showAlert}
                         onDidDismiss={() => setShowAlert(false)}

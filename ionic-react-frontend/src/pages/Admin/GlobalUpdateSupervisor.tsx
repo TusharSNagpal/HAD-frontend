@@ -27,9 +27,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
 import AdminBackButton from "../../components/AdminBackButton";
 import { API_HOSP_NOSUP, API_SUP_REG } from '../../api/Api';
+import Cookie from 'universal-cookie';
 
 const path = "/admin/globalUpdate"
 const GlobalUpdateSupervisor = () => {
+    const cookie = new Cookie();
     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
     const [showAlert, setShowAlert] = useState<boolean>(false);
     const [alertMessage, setAlertMessage] = useState<string>();
@@ -37,6 +39,7 @@ const GlobalUpdateSupervisor = () => {
     const [id, setId] = useState(0);
     const [supervisor, setSupervisor] = useState<any>([]);
     const [openForm, setOpenForm] = useState(false);
+    const [auth, setAuth] = useState(true);
     const [hospitalId, setHospitalId] = useState(null);
 
     const fname = useRef<HTMLIonInputElement>(null)
@@ -52,7 +55,7 @@ const GlobalUpdateSupervisor = () => {
         setSupervisor([])
     }
 
-    const updateDoctor = async() => {
+    const updateSupervisor = async() => {
         if(fname.current!.value=="" || lname.current!.value=="" || gender.current!.value=="" || dob.current!.value=="" || phoneNo.current!.value=="" || address.current!.value=="" || registrationDate.current!.value==""){
             setShowAlert(true);
             setAlertHeader("Unsuccessful");
@@ -76,7 +79,8 @@ const GlobalUpdateSupervisor = () => {
         const options = {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+cookie.get("jwt")
             },
             body: JSON.stringify(data)
         }
@@ -89,7 +93,9 @@ const GlobalUpdateSupervisor = () => {
                 setAlertHeader("Data Updated Successfully..")
                 setAlertMessage("");
                 resetAll();
-            } else {
+            } else if(response['status'] === 401) {
+                setAuth(false)
+            }else {
                 console.log("ERROR");
                 setShowAlert(true);
                 setAlertHeader("Data Updation unsuccessfull..")
@@ -98,8 +104,12 @@ const GlobalUpdateSupervisor = () => {
             return response.json();
         })
 
-        fetch(`${API_HOSP_NOSUP}`)
-           .then((response) => response.json())
+        fetch(`${API_HOSP_NOSUP}`, {headers : {Authorization: 'Bearer '+cookie.get("jwt")}})
+           .then(function(response) {
+            if(response['status'] === 401) {
+                setAuth(false)
+            }
+            return response.json()})
            .then((json) => {
                setHospitalOptions(json);
          })
@@ -111,20 +121,24 @@ const GlobalUpdateSupervisor = () => {
     }
 
     useEffect(() => {
-
-        fetch(`${API_SUP_REG}/${id}`)
+        fetch(`${API_SUP_REG}${id}`, {headers : {Authorization: 'Bearer '+cookie.get("jwt")}})
            .then(async (response) => {
             if(response['status'] === 200) {
                 const data = await response.json();
                 setSupervisor(data)
                 setHospitalId(data.hospital.hospitalId)
                 console.log(data)
+            } else if(response['status'] === 401) {
+                setAuth(false)
             }
             else if(id !== 0) setShowAlertNoSuchId(true);
            })
 
            fetch(`${API_HOSP_NOSUP}`)
-           .then((response) => response.json())
+           .then(function(response) {
+                if(response['status'] === 401) setAuth(false)
+                return response.json()
+            })
            .then((json) => {
                setHospitalOptions(json);
            })
@@ -238,7 +252,7 @@ const GlobalUpdateSupervisor = () => {
                             </IonGrid>
                             </IonCard>
                                 <IonGrid className='ion-text-center ion-margin'>
-                                    <IonButton onClick={updateDoctor}>Submit</IonButton>
+                                    <IonButton onClick={updateSupervisor}>Submit</IonButton>
                                 </IonGrid>
                              </>
                         ) : null

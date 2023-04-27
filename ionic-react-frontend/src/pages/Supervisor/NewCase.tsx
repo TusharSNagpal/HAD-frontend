@@ -38,6 +38,7 @@ import {Redirect} from "react-router";
 import BackButton from "../../components/BackButton";
 import {API_ACTIVE_VIS, API_GET_ALL_DOCINHOSP, API_OTP_GEN, API_OTP_VERIFY, API_PATIENT, API_VIS} from "../../api/Api";
 import Cookie from 'universal-cookie'
+import AlertLoggedOut from '../../components/AlertLoggedOut';
 
 // setupIonicReact();
 
@@ -50,6 +51,7 @@ const NewCase:React.FC<any> = props=> {
     const [showAlert, setShowAlert] = useState(false);
     const [showAlertErr, setShowAlertErr] = useState(false);
     const [redirect, setRedirect] = useState(false);
+    const [auth, setAuth] = useState(true);
     const [showAlertCase, setShowAlertCase] = useState(false);
     const [showAlertCaseErr, setShowAlertCaseErr] = useState(false);
     const otp = useRef<HTMLIonInputElement>(null);
@@ -58,15 +60,32 @@ const NewCase:React.FC<any> = props=> {
     const path="/supervisors"
 
     const loginPatient = async() => {
+        const response = await fetch(`${API_PATIENT}${patientIdRef.current!.value}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
+        const result = await response;
+        console.log(response);
+        if(result['status'] === 200){
+            console.log("DONE");
+            setLoginSuccess(true);
+            setShowAlert(true);
+            setShowAlertErr(false);
+        } else if(response['status'] === 401) setAuth(false);
+        else{
+            console.log("ERROR");
+            setLoginSuccess(false);
+            setShowAlert(false);
+            setShowAlertErr(true);
+        }
+    }
 
 
         fetch(`${API_PATIENT}/phoneNo/${patientIdRef.current!.value}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then(function (response) {
                 // console.log(response.text());
                 if (response['status'] === 200) {
-                    console.log("Found entry");
+                  console.log("Found entry");
                     return response.text();
-                }
+                    console.log("DONE");
+                } else if(response['status'] === 401) setAuth(false);
                 else {
                     console.log("No such entry..!");
                     return "-1";
@@ -88,8 +107,7 @@ const NewCase:React.FC<any> = props=> {
                                     setLoginSuccess(true);
                                     setShowAlert(true);
                                     setShowAlertErr(false);
-                                }
-
+                                } else if(response['status'] === 401) setAuth(false);
                                 else{
                                     console.log("ERROR");
                                     setLoginSuccess(false);
@@ -113,7 +131,8 @@ const NewCase:React.FC<any> = props=> {
                                 console.log(response);
                                 if (response['status'] === 200) {
                                     console.log("DONE");
-                                } else {
+                                } else if(response['status'] === 401) setAuth(false);
+                                else {
                                     console.log("ERROR");
                                 }
                                 return response.json();
@@ -131,7 +150,8 @@ const NewCase:React.FC<any> = props=> {
                                                 console.log(response);
                                                 if (response['status'] === 200) {
                                                     console.log("DONE");
-                                                } else {
+                                                } else if(response['status'] === 401) setAuth(false);
+                                                else {
                                                     console.log("ERROR");
                                                 }
                                                 return response.json();
@@ -170,8 +190,7 @@ const NewCase:React.FC<any> = props=> {
                                         setShowAlertCase(true);
                                         setShowAlertCaseErr(false);
                                         setRedirect(true);
-                                    }
-
+                                    } else if(response['status'] === 401) setAuth(false);
                                     else{
                                         console.log("ERROR");
                                         setShowAlertCaseErr(true);
@@ -276,10 +295,15 @@ const NewCase:React.FC<any> = props=> {
                         buttons={['OK']}
                     />
                 </IonGrid>
+                {
+                    !auth ? 
+                    <AlertLoggedOut auth = {auth} setAuth = {setAuth}></AlertLoggedOut>
+                    :null
+                }
                 {!showAlertCase && redirect ?
                     <Redirect to={{ pathname: '/supervisors', state: { userData: profileData?.userData } }} />
-                    :null}
-
+                :null}
+                
             </IonContent>
 
         </IonPage>

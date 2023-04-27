@@ -49,6 +49,7 @@ import BackButton from "../../components/BackButton";
 
 import { API_ACTIVE_VIS, API_FOLLOWUPS, API_FOLLOWUP_VIS } from '../../api/Api';
 import Cookie from 'universal-cookie';
+import AlertLoggedOut from '../../components/AlertLoggedOut';
 
 import * as apis from '../../api/Api'
 
@@ -69,6 +70,7 @@ const OldFollowUp: React.FC<any> = props => {
     const [currFollowUpExpanded, setCurrFollowUpExpanded] = useState(false);
     const [tasksAssigned, setTasksAssigned] = useState<string>();
     const [save, setSave] = useState(false);
+    const [auth, setAuth] = useState(true);
     const followUpDate = useRef<HTMLIonDatetimeElement>(null);
     const currTaskList = followUpDetails.taskAssignedByDoctor.split("$")
     const currReviewList = followUpDetails.reviewByFieldWorker.split("$")
@@ -144,7 +146,8 @@ const OldFollowUp: React.FC<any> = props => {
             .then(function (response) {
                 if (response['status'] === 201) {
                     console.log("DONE");
-                } else {
+                } else if(response['status'] == 401) setAuth(false)
+                else {
                     console.log("ERROR");
                 }
                 return response.json();
@@ -165,9 +168,11 @@ const OldFollowUp: React.FC<any> = props => {
     }
 
     useEffect(() => {
-
-        fetch(`${API_FOLLOWUP_VIS}/${followUpDetails.visit.visitId}/followUpId/${followUpDetails.followUpId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
-            .then((response) => response.json())
+        fetch(`${API_FOLLOWUP_VIS}${followUpDetails.visit.visitId}/followUpId/${followUpDetails.followUpId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
+            .then(function(response){
+                if(response['status'] === 401) setAuth(false)
+                return response.json();
+            })
             .then((json) => {
                 setFollowUps(json);
 
@@ -403,7 +408,11 @@ const OldFollowUp: React.FC<any> = props => {
                                 </IonRow>
                             </IonCol>
                         }
-
+                        {
+                            !auth ? 
+                            <AlertLoggedOut auth = {auth} setAuth = {setAuth}></AlertLoggedOut>
+                            :null
+                        }
                         <IonAlert
                             isOpen={showAlert}
                             onDidDismiss={() => setShowAlert(false)}

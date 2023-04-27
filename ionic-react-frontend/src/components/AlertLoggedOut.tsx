@@ -13,7 +13,7 @@ const AlertLoggedOut: React.FC<any> = ({auth, setAuth}) => {
     <IonSegment>
         <IonAlert
             isOpen={!auth}
-            onDidDismiss={() => {setAuth(true); setRe(true);}}
+            onDidDismiss={() => {setRe(true)}}
             header="Invalid Session.. Please Login Again..!"
             buttons={['OK']}
         />

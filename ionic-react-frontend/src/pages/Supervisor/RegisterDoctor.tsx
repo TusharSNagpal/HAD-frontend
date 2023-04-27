@@ -37,6 +37,7 @@ import { Redirect } from "react-router";
 import BackButton from "../../components/BackButton";
 import { API_DOCINHOSP_REG, API_DOC_REG } from '../../api/Api';
 import Cookie from 'universal-cookie'
+import AlertLoggedOut from '../../components/AlertLoggedOut';
 
 // setupIonicReact();
 
@@ -49,6 +50,7 @@ const RegisterDoctor: React.FC<any> = props => {
     const [supervisorId, setSupervisorId] = useState(supId);
     //onst [doctorId,setDoctorId] = useState(docId);
     const [showAlert, setShowAlert] = useState(false);
+    const [auth, setAuth] = useState(true);
     const [alertHeader, setAlertHeader] = useState<string>();
     const [alertMessage, setAlertMessage] = useState<string>();
     const [redirect, setRedirect] = useState(false);
@@ -73,7 +75,7 @@ const RegisterDoctor: React.FC<any> = props => {
                 console.log(response);
                 if (response['status'] === 200) {
                     console.log("DONE");
-                }
+                } else if(response['status'] === 401) setAuth(false)
                 else {
                     console.log("ERROR");
                 }
@@ -119,7 +121,8 @@ const RegisterDoctor: React.FC<any> = props => {
                             console.log(response);
                             if (response['status'] === 201) {
                                 console.log("DONE");
-                            } else {
+                            } else if(response['status'] === 401) setAuth(false)
+                            else {
                                 console.log("ERROR");
                             }
                             return response.json();
@@ -200,7 +203,11 @@ const RegisterDoctor: React.FC<any> = props => {
                 <IonGrid className='ion-text-center ion-margin'>
                     <IonButton onClick={registerDoctor}>Submit</IonButton>
                 </IonGrid>
-
+                {
+                    !auth ? 
+                    <AlertLoggedOut auth = {auth} setAuth = {setAuth}></AlertLoggedOut>
+                    :null
+                }
                 <IonAlert
                     isOpen={showAlert}
                     onDidDismiss={() => setShowAlert(false)}

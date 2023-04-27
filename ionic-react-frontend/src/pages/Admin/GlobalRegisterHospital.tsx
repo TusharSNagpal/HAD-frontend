@@ -23,17 +23,20 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
 import AdminBackButton from "../../components/AdminBackButton";
 import { API_HOSP_REG } from '../../api/Api';
+import Cookie from 'universal-cookie';
+import AlertLoggedOut from '../../components/AlertLoggedOut';
 
 const path = "/admin/globalRegister"
 const GlobalRegisterHospital: React.FC = () => {
-
+    const cookie = new Cookie();
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState<string>();
     const [alertHeader, setAlertHeader] = useState<string>()
+    const [auth, setAuth] = useState(true)
 
     const name = useRef<HTMLIonInputElement>(null)
     const address = useRef<HTMLIonInputElement>(null)
@@ -42,6 +45,7 @@ const GlobalRegisterHospital: React.FC = () => {
         name.current!.value = null;
         address.current!.value = null;
     }
+
 
     const registerHospital = async() => {
         if(name.current!.value==null || address.current!.value==null){
@@ -60,7 +64,8 @@ const GlobalRegisterHospital: React.FC = () => {
         const options = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+cookie.get("jwt")
             },
             body: JSON.stringify(data)
         }
@@ -70,6 +75,9 @@ const GlobalRegisterHospital: React.FC = () => {
                 console.log(response);
                 if (response['status'] === 201) {
                     console.log("DONE");
+                } else if(response['status'] == 401) {
+                    setAuth(false)
+                    console.log("called")
                 } else {
                     console.log("ERROR");
                 }
@@ -90,8 +98,9 @@ const GlobalRegisterHospital: React.FC = () => {
 
                 return items;
             })
-
     }
+    // useEffect(() => {console.log(auth)}, [auth])
+
 
     return(
         <IonPage>
@@ -116,6 +125,7 @@ const GlobalRegisterHospital: React.FC = () => {
                 </IonToolbar>
             </IonHeader>
 
+
             <IonContent className='ion-padding'>
                 <IonCard class = "card-style">
                     <IonGrid className='ion-text-center ion-margin' >
@@ -136,6 +146,11 @@ const GlobalRegisterHospital: React.FC = () => {
                 <IonGrid className='ion-text-center ion-margin'>
                     <IonButton onClick = {registerHospital}>Submit</IonButton>
                 </IonGrid>
+                {
+                    !auth ? 
+                    <AlertLoggedOut auth = {auth} setAuth = {setAuth}></AlertLoggedOut>
+                    :null
+                }
                 <IonAlert
                     isOpen={showAlert}
                     onDidDismiss={() => setShowAlert(false)}

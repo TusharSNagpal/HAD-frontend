@@ -29,11 +29,16 @@ import BackButton from "../../components/BackButton";
 
 import { API_DOCINHOSP_DEL, API_DOCINHOSP_REG } from '../../api/Api';
 import Cookie from 'universal-cookie';
+import AlertLoggedOut from '../../components/AlertLoggedOut';
 
 const DeleteDoctor: React.FC<any> = props=> {
     const cookie = new Cookie();
     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
+    const [alertHeader, setAlertHeader] = useState("");
+    const [alertMessage, setAlertMessage] = useState("");
     const [showAlert, setShowAlert] = useState(false);
+    const [auth, setAuth] = useState(true);
+
     const [id, setId] = useState(0);
     const [doctor, setDoctor] = useState<any>([]);
     const [openForm, setOpenForm] = useState(false);
@@ -67,7 +72,9 @@ const DeleteDoctor: React.FC<any> = props=> {
                 if (response['status'] === 200) {
                     console.log("DONE");
                     setShowAlert(true)
-                } else {
+                } else if(response['status'] === 401) {
+                    setAuth(false)
+                }else {
                     console.log("ERROR");
                     console.log(response)
                 }
@@ -87,7 +94,7 @@ const DeleteDoctor: React.FC<any> = props=> {
                     const data = await response.json();
                     setDoctor(data)
                     console.log(data)
-                }
+                } else if(response['status'] === 401) setAuth(false)
                 else if(id !== 0) setShowAlertNoSuchId(true);
             })
     },[openForm]);
@@ -161,8 +168,14 @@ const DeleteDoctor: React.FC<any> = props=> {
                                     onDidDismiss={() => setShowAlertNoSuchId(false)}
                                     subHeader="DATA UPDATED SUCCESSFULLY..!"
                                     buttons={['OK']}
-                                /> </>
+                                /> 
+                               </>
                         ) : null
+                    }
+                    {
+                        !auth ? 
+                        <AlertLoggedOut auth = {auth} setAuth = {setAuth}></AlertLoggedOut>
+                        :null
                     }
                 </IonGrid>
             </IonContent>
