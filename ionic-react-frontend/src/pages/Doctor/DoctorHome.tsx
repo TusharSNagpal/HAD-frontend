@@ -143,7 +143,7 @@ const DoctorHome: React.FC<any> = props => {
         }
         else{
             // const hospitalId = profileData?.userData?.hospital?.hospitalId
-            fetch(`${API_ACTIVE_VIS}/${profileData?.userData?.hospital?.hospitalId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
+            fetch(`${API_ACTIVE_VIS}/${profileData?.userData?.hospital?.hospitalId}//activeVisits/hospital/{hospitalId}/docInHosp/{docInHospId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
                 .then((response) => response.json())
                 .then((json) => {
                     setActiveCases(json);
