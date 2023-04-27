@@ -46,8 +46,11 @@ import { Redirect } from "react-router";
 import DoctorHome from "./DoctorHome";
 import { Route } from "react-router-dom";
 import BackButton from "../../components/BackButton";
+
 import { API_ACTIVE_VIS, API_FOLLOWUPS, API_FOLLOWUP_VIS } from '../../api/Api';
 import Cookie from 'universal-cookie';
+
+import * as apis from '../../api/Api'
 
 
 // setupIonicReact();
@@ -67,22 +70,17 @@ const OldFollowUp: React.FC<any> = props => {
     const [tasksAssigned, setTasksAssigned] = useState<string>();
     const [save, setSave] = useState(false);
     const followUpDate = useRef<HTMLIonDatetimeElement>(null);
-
     const currTaskList = followUpDetails.taskAssignedByDoctor.split("$")
     const currReviewList = followUpDetails.reviewByFieldWorker.split("$")
-
     const [oldTaskList, setOldTaskList] = useState<string[]>([])
     const [oldReviewList, setOldReviewList] = useState<string[]>([])
 
     const path = "/doctorInHospital"
-    // console.log(followUpDetails)
     const handleExpandFollowUp = (index: any) => {
         const tasks = followUps[index].taskAssignedByDoctor.split("$")
         const reviews = followUps[index].reviewByFieldWorker.split("$")
         setOldTaskList(tasks)
         setOldReviewList(reviews)
-        console.log(oldTaskList)
-        console.log(oldReviewList)
         let newArray = [...expanded];
         if (newArray[index] === true)
             newArray[index] = false;
@@ -117,11 +115,10 @@ const OldFollowUp: React.FC<any> = props => {
 
 
         var changeDateFormat = followUpDate.current!.value;
-        console.log(changeDateFormat);
         if (changeDateFormat != null && typeof (changeDateFormat) == 'string')
             changeDateFormat = changeDateFormat.split('T')[0];
-        console.log(changeDateFormat);
-
+        const verificationNo = Math.floor(100000 + Math.random() * 900000);
+        const phoneNo = followUpDetails?.visit?.patient?.phoneNo
         // setTasksAssigned(temp);
         let newFollowUp = {
             'followUpDate': changeDateFormat,
@@ -129,11 +126,11 @@ const OldFollowUp: React.FC<any> = props => {
             'visit': { 'visitId': followUpDetails.visit.visitId },
             'isActive': 1,
             'fieldWorkerInHospital': { 'fwInHospId': followUpDetails.fieldWorkerInHospital.fwInHospId },
-            'reviewByFieldWorker': ""
+            'reviewByFieldWorker': "",
+            'verificationNumber':verificationNo
         };
-        // console.log(newFollowUp)
-        console.log(JSON.stringify(newFollowUp));
-        const addRecordEndpoint = `${API_FOLLOWUPS}`;
+        const addRecordEndpoint = `${apis.API_FOLLOWUPS}/`;
+
         const options = {
             method: 'POST',
             headers: {
@@ -145,7 +142,6 @@ const OldFollowUp: React.FC<any> = props => {
 
         await fetch(addRecordEndpoint, options)
             .then(function (response) {
-                console.log(response);
                 if (response['status'] === 201) {
                     console.log("DONE");
                 } else {
@@ -154,13 +150,12 @@ const OldFollowUp: React.FC<any> = props => {
                 return response.json();
             })
             .then(function (data) {
-                console.log(data);
-                const items = data;
+                fetch(`${apis.API_SEND_SMS}/${phoneNo}/verificationNo/${verificationNo}`)
+                    .then(function (response){
+                        setRedirect(true);
+                    })
 
-                setRedirect(true);
 
-
-                return items;
             })
 
     }
@@ -170,15 +165,12 @@ const OldFollowUp: React.FC<any> = props => {
     }
 
     useEffect(() => {
-        fetch(`${API_FOLLOWUP_VIS}${followUpDetails.visit.visitId}/followUpId/${followUpDetails.followUpId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
+
+        fetch(`${API_FOLLOWUP_VIS}/${followUpDetails.visit.visitId}/followUpId/${followUpDetails.followUpId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then((response) => response.json())
             .then((json) => {
-                // setUseSt(true);
                 setFollowUps(json);
-                // console.log(json);
-                // console.log(json.length);
-                // setUseSt(1);
-                // console.log(activeCases);
+
                 return json;
             })
     }, []);
@@ -190,11 +182,9 @@ const OldFollowUp: React.FC<any> = props => {
     const [mapTask, setMapTask] = useState(['']);
 
     const addNew = (key:number) => {
-        console.log(key);
         let pseudo = mapTask;
         pseudo = [...pseudo, ''];
         setMapTask(pseudo);
-        console.log(mapTask);
     }
 
     const [changeState, setChangeState] = useState(false);
@@ -203,8 +193,6 @@ const OldFollowUp: React.FC<any> = props => {
         let pseudo = mapTask;
         pseudo.splice(index,1);
         setMapTask(pseudo);
-        console.log(mapTask);
-        console.log("Hi");
         if(changeState)
             setChangeState(false);
         else
@@ -212,13 +200,11 @@ const OldFollowUp: React.FC<any> = props => {
     }
 
     useEffect(() => {
-        console.log(mapTask.length);
     },[changeState]);
 
     const handleChangeOfTask = (event:any, index:number) => {
         mapTask[index] = event!.target!.value;
         setMapTask(mapTask);
-        // console.log(mapTask);
         let assignedTask = "";
 
         mapTask.map((data) => {
@@ -273,21 +259,28 @@ const OldFollowUp: React.FC<any> = props => {
                                                 <IonCol>
                                                     <h5>Follow-up Date: {followUpDetails.followUpDate}</h5>
                                                     <h5>Tasks Assigned:</h5>
-                                                    {currTaskList.map((task: any) =>
-                                                        <IonRow>
-                                                            <IonCol>
-                                                                <h6>{task}</h6>
-                                                            </IonCol>
-                                                        </IonRow>
-                                                    )}
-                                                    <h5>Reviews:</h5>
-                                                    {currReviewList.map((review: any) =>
-                                                        <IonRow>
-                                                            <IonCol>
-                                                                <h6>{review}</h6>
-                                                            </IonCol>
-                                                        </IonRow>
-                                                    )}
+                                                    <IonRow>
+                                                        <IonCol>
+                                                            <h5>Tasks Assigned:</h5>
+                                                            {currTaskList.map((task: any) =>
+                                                                <IonRow>
+                                                                    <IonCol>
+                                                                        <h6 className="item-border">{task}</h6>
+                                                                    </IonCol>
+                                                                </IonRow>
+                                                            )}
+                                                        </IonCol>
+                                                        <IonCol>
+                                                            <h5>Reviews:</h5>
+                                                            {currReviewList.map((review: any) =>
+                                                                <IonRow>
+                                                                    <IonCol>
+                                                                        <h6 className="item-border">{review}</h6>
+                                                                    </IonCol>
+                                                                </IonRow>
+                                                            )}
+                                                        </IonCol>
+                                                    </IonRow>
                                                 </IonCol>
                                             }
                                         </IonCol>
@@ -319,22 +312,28 @@ const OldFollowUp: React.FC<any> = props => {
                                                     {expanded[index] &&
                                                         <IonCol>
                                                             <h5>Follow-up Date: {followUp.followUpDate}</h5>
-                                                            <h5>Tasks Assigned:</h5>
-                                                            {oldTaskList.map((task: any) =>
-                                                                <IonRow>
-                                                                    <IonCol>
-                                                                        <h6>{task}</h6>
-                                                                    </IonCol>
-                                                                </IonRow>
-                                                            )}
-                                                            <h5>Reviews:</h5>
-                                                            {oldReviewList.map((review: any) =>
-                                                                <IonRow>
-                                                                    <IonCol>
-                                                                        <h6>{review}</h6>
-                                                                    </IonCol>
-                                                                </IonRow>
-                                                            )}
+                                                            <IonRow>
+                                                                <IonCol>
+                                                                    <h5>Tasks Assigned:</h5>
+                                                                    {oldTaskList.map((task: any) =>
+                                                                        <IonRow>
+                                                                            <IonCol>
+                                                                                <h6 className="item-border">{task}</h6>
+                                                                            </IonCol>
+                                                                        </IonRow>
+                                                                    )}
+                                                                </IonCol>
+                                                                <IonCol>
+                                                                    <h5>Reviews:</h5>
+                                                                    {oldReviewList.map((review: any) =>
+                                                                        <IonRow>
+                                                                            <IonCol>
+                                                                                <h6 className="item-border">{review}</h6>
+                                                                            </IonCol>
+                                                                        </IonRow>
+                                                                    )}
+                                                                </IonCol>
+                                                            </IonRow>
                                                         </IonCol>
                                                     }
 

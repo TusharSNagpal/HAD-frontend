@@ -35,6 +35,7 @@ import { useState, useRef, useEffect } from "react";
 import {Redirect} from "react-router";
 import Cookie from'universal-cookie';
 
+import { Network } from "@capacitor/network";
 
 import * as apis from '../api/Api';
 
@@ -65,7 +66,7 @@ const Home: React.FC = () => {
     }
 
     const generate = () => {
-        fetch(`${apis.API_BASE}${role}/phoneNo/${userId.current!.value}`)
+        fetch(`${apis.API_BASE}/${role}/phoneNo/${userId.current!.value}`)
             .then(function (response) {
                 // console.log(response.text());
                 if (response['status'] === 200) {
@@ -84,7 +85,7 @@ const Home: React.FC = () => {
                 }
                 else{
                     setMobileNo(data);
-                    fetch(`${apis.JWT_REQ_OTP}${data}`)
+                    fetch(`${apis.JWT_REQ_OTP}/${data}`)
                         .then(function (response) {
                                 console.log(response.json());
                                 if (response['status'] === 200) {
@@ -138,7 +139,36 @@ const Home: React.FC = () => {
                         setAuth(true);
                     })
                 }
-            })
+
+        // fetch(`${apis.API_BASE}/${role}/phoneNo/${userId.current!.value}`)        //     .then(function (response) {
+        //         // console.log(response.text());
+        //         if (response['status'] === 200) {
+        //             console.log("Found entry");
+        //             return response.text();
+        //         }
+        //         else {
+        //             console.log("No such entry..!");
+        //             return "-1";
+        //         }
+        //     })
+        //     .then(function (data) {
+        //         console.log(data);
+        //         if(data === "-1"){
+        //             console.log("Try again..!");
+        //         }
+        //         else{
+        //             setMobileNo(data);
+        //             fetch(`${apis.API_OTP_GEN}/${data}`)
+        //                 .then(function (response) {
+        //                         console.log(response);
+        //                         if (response['status'] === 200) {
+        //                             console.log("OTP Sent to Registered Mobile Number");
+        //                         }
+        //                         else {
+        //                             console.log("Please Enter a valid Phone Number");
+        //                         }
+        //                     }
+        //                 )}})
     }
 
     return (

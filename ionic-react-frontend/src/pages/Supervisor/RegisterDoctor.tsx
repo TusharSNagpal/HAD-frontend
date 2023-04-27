@@ -68,7 +68,7 @@ const RegisterDoctor: React.FC<any> = props => {
 
     const registerDoctor = async () => {
 
-        fetch(`${API_DOC_REG}${docId.current!.value}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
+        fetch(`${API_DOC_REG}/${docId.current!.value}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then(function (response) {
                 console.log(response);
                 if (response['status'] === 200) {
@@ -105,7 +105,8 @@ const RegisterDoctor: React.FC<any> = props => {
                     };
                     console.log(JSON.stringify(data));
 
-                    const addRecordEndpoint = `${API_DOCINHOSP_REG}docInHosp/${docId.current!.value}/hospital/${hospId.current!.value}`;
+
+                    const addRecordEndpoint = `${API_DOCINHOSP_REG}/docInHosp/${docId.current!.value}/hospital/${hospId.current!.value}`;
                     const options = {
                         method: 'POST',
                         headers: {

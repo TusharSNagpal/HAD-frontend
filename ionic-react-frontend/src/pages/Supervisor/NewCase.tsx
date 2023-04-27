@@ -36,8 +36,11 @@ import './Supervisor.css';
 import React, {useRef, useState} from "react";
 import {Redirect} from "react-router";
 import BackButton from "../../components/BackButton";
+
 import { API_PATIENT, API_VIS } from '../../api/Api';
 import Cookie from 'universal-cookie'
+
+import {API_ACTIVE_VIS, API_GET_ALL_DOCINHOSP, API_OTP_GEN, API_OTP_VERIFY, API_PATIENT, API_VIS} from "../../api/Api";
 
 // setupIonicReact();
 
@@ -46,13 +49,17 @@ const NewCase:React.FC<any> = props=> {
     const patientIdRef = useRef<HTMLIonInputElement>(null);
     const profile = props.location.state;
     const [profileData, setProfileData] = useState(profile);
-
     const [loginSuccess, setLoginSuccess] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [showAlertErr, setShowAlertErr] = useState(false);
     const [redirect, setRedirect] = useState(false);
     const [showAlertCase, setShowAlertCase] = useState(false);
     const [showAlertCaseErr, setShowAlertCaseErr] = useState(false);
+    const otp = useRef<HTMLIonInputElement>(null);
+    const [mobileNo, setMobileNo] = useState("");
+
+
+
     const path="/supervisors"
 
     const loginPatient = async() => {
@@ -77,19 +84,14 @@ const NewCase:React.FC<any> = props=> {
     const createCase = async() => {
         fetch(`${API_PATIENT}${patientIdRef.current!.value}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then(function (response) {
-                console.log(response);
+                // console.log(response.text());
                 if (response['status'] === 200) {
-                    console.log("DONE");
-                } else {
-                    console.log("ERROR");
+                    console.log("Found entry");
+                    return response.text();
                 }
-                return response.json();
-            })
-            .then(function (data) {
-                    console.log(data);
-                    const items = data;
-                    console.log(items.success);
-                    return items.hospital.hospitalId;
+                else {
+                    console.log("No such entry..!");
+                    return "-1";
                 }
             )
             .then(async function (hospitalId) {
@@ -103,25 +105,122 @@ const NewCase:React.FC<any> = props=> {
                         'Authorization': 'Bearer '+ cookie.get("jwt")
                     },
                     body: JSON.stringify(data)
-                }
-
-                const response = await fetch(addRecordEndpoint, options);
-                const result = await response;
-                console.log(response);
-                if(result['status'] === 200){
-                    console.log("DONE");
-                    setShowAlertCase(true);
-                    setShowAlertCaseErr(false);
-                    setRedirect(true);
-                }
-
-                else{
-                    console.log("ERROR");
-                    setShowAlertCaseErr(true);
-                    setShowAlertCase(false);
-                    setRedirect(false);
-                }
             })
+            .then(async function (data) {
+                console.log(data);
+                if(data === "-1"){
+                    console.log("Try again..!");
+                }
+                else{
+                    setMobileNo(data);
+                    fetch(`${API_OTP_GEN}/${data}`)
+                        .then(async function (response) {
+                                const result = await response;
+                                console.log(response);
+                                if(result['status'] === 200){
+                                    console.log("DONE");
+                                    setLoginSuccess(true);
+                                    setShowAlert(true);
+                                    setShowAlertErr(false);
+                                }
+
+                                else{
+                                    console.log("ERROR");
+                                    setLoginSuccess(false);
+                                    setShowAlert(false);
+                                    setShowAlertErr(true);
+                                }
+                            }
+                        )}
+            })
+    }
+
+    const createCase = async() => {
+
+        fetch(`${API_OTP_VERIFY}/${otp.current!.value}/${mobileNo}`)
+            .then(async function (response) {
+                    console.log(response);
+                    if (response['status'] === 200) {
+
+                        await fetch(`${API_GET_ALL_DOCINHOSP}/${profileData?.userData?.hospital?.hospitalId}`)
+                            .then(function (response) {
+                                console.log(response);
+                                if (response['status'] === 200) {
+                                    console.log("DONE");
+                                } else {
+                                    console.log("ERROR");
+                                }
+                                return response.json();
+                            })
+                            .then(function (data){
+                                let curr_doctor;
+                                let min_patients = 1e9;
+                                let docInHospId;
+                                (async function(){
+                                    for(curr_doctor of data){
+                                        const hospitalId = profileData?.userData?.hospital?.hospitalId
+                                        const currId = curr_doctor.docInHospId
+                                        await fetch(`${API_ACTIVE_VIS}/${hospitalId}/docInHosp/${currId}`)
+                                            .then(function (response){
+                                                console.log(response);
+                                                if (response['status'] === 200) {
+                                                    console.log("DONE");
+                                                } else {
+                                                    console.log("ERROR");
+                                                }
+                                                return response.json();
+                                            })
+                                            .then(async function (data){
+                                                if(data.length<min_patients){
+                                                    min_patients = await data.length
+                                                    docInHospId = await currId
+                                                }
+
+                                            })
+                                    }
+                                    return docInHospId
+                                })().then(async function (docInHospId){
+                                    let dto = {
+                                        'hospital':{'hospitalId': profileData?.userData?.hospital?.hospitalId},
+                                        'patient':{'patientId': patientIdRef.current!.value},
+                                        'doctorInHospital':{'docInHospId':docInHospId}
+                                    };
+                                    console.log(JSON.stringify(dto));
+                                    const addRecordEndpoint = `${API_VIS}/`;
+                                    const options = {
+                                        method: 'POST',
+                                        headers:{
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify(dto)
+                                    }
+
+                                    const response = await fetch(addRecordEndpoint, options);
+                                    const result = await response;
+                                    console.log(response);
+                                    if(result['status'] === 200){
+                                        console.log("DONE");
+                                        setShowAlertCase(true);
+                                        setShowAlertCaseErr(false);
+                                        setRedirect(true);
+                                    }
+
+                                    else{
+                                        console.log("ERROR");
+                                        setShowAlertCaseErr(true);
+                                        setShowAlertCase(false);
+                                        setRedirect(false);
+                                    }
+                                })
+                            })
+
+                    }
+                    else {
+                        console.log("OTP mismatch Sorry..!");
+                    }
+                }
+            )
+
     }
 
     return(
@@ -159,14 +258,14 @@ const NewCase:React.FC<any> = props=> {
                         </IonCardHeader>
                     </IonCard>
 
-                    <IonButton onClick = {loginPatient}>Submit</IonButton>
+                    <IonButton onClick = {loginPatient}>Send OTP</IonButton>
 
                     <IonAlert
                         isOpen={showAlert}
                         onDidDismiss={() => setShowAlert(false)}
                         header="Alert"
-                        subHeader="REGISTERED PATIENT ID FOUND..!"
-                        message="PLEASE CLICK ON CREATE CASE BUTTON..!"
+                        subHeader="OTP SENT TO THE REGISTERED MOBILE NUMBER"
+                        message="Please verify the OTP"
                         buttons={['OK']}
                     />
 
@@ -180,15 +279,24 @@ const NewCase:React.FC<any> = props=> {
                     />
 
                     {!showAlert && loginSuccess?
-                        <IonButton onClick = {createCase}>Create Case</IonButton>
+                        <IonGrid>
+                            <IonCard class = "card-style">
+                                <IonCardHeader>
+                                    <IonCardTitle>ENTER OTP: </IonCardTitle>
+                                    <IonCardTitle><IonInput ref={otp} type="password" /></IonCardTitle>
+                                </IonCardHeader>
+                            </IonCard>
+                            <IonButton onClick = {createCase}>Create Case</IonButton>
+                        </IonGrid>
+
                         :null}
-                    
+
                     <IonAlert
                         isOpen={showAlertCase}
                         onDidDismiss={() => setShowAlertCase(false)}
                         header="Alert"
-                        subHeader="CASE CREATED SUCCESSFULLY..!"
-                        message="Please wait for your appointment with DOCTOR..!"
+                        subHeader="CASE CREATED SUCCESSFULLY"
+                        message="Please wait for your appointment with doctor"
                         buttons={['OK']}
                     />
 
@@ -203,7 +311,7 @@ const NewCase:React.FC<any> = props=> {
                 </IonGrid>
                 {!showAlertCase && redirect ?
                     <Redirect to={{ pathname: '/supervisors', state: { userData: profileData?.userData } }} />
-                :null}
+                    :null}
 
             </IonContent>
 

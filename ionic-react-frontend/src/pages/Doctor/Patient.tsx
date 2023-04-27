@@ -46,8 +46,11 @@ import {Redirect} from "react-router";
 import DoctorHome from "./DoctorHome";
 import {Route} from "react-router-dom";
 import BackButton from "../../components/BackButton";
+
 import { API_FOLLOWUPS, API_VISITED } from '../../api/Api';
 import Cookie from 'universal-cookie';
+
+import * as apis from '../../api/Api'
 
 // setupIonicReact();
 const Patient: React.FC<any> = props => {
@@ -65,12 +68,13 @@ const Patient: React.FC<any> = props => {
     const [tasksAssigned, setTasksAssigned] = useState<string>();
     const followUpDate = useRef<HTMLIonDatetimeElement>(null);
     const path = "/doctorInHospital"
-    // console.log(profileData)
+    const [viewHistoryClicked,setViewHistoryClicked] = useState(false);
+    const [askForFollowUp, setAskForFollowUp] = useState(false)
 
-    //  useEffect(() => {
-    //
-    //      // setPatientDetails(props.location.state.case.patient)
-    // },[]);
+
+    const handleViewHistoryButton = ()=>{
+        setViewHistoryClicked(true);
+    }
 
     const submitDetails = async()=>{
 
@@ -81,11 +85,12 @@ const Patient: React.FC<any> = props => {
             return;
         }
 
+
         visitDetails.symptoms = symptoms;
         visitDetails.prescription = prescription;
         visitDetails.doctorInHospital= {'docInHospId':profileData.docInHospId};
-        console.log(JSON.stringify(visitDetails));
-        const addRecordEndpoint = `${API_VISITED}${visitDetails.visitId}`;
+        const addRecordEndpoint = `${apis.API_VISITED}/${visitDetails.visitId}`;
+
         const options = {
             method: 'PUT',
             headers: {
@@ -97,7 +102,6 @@ const Patient: React.FC<any> = props => {
 
         await fetch(addRecordEndpoint, options)
             .then(function (response) {
-                console.log(response);
                 if (response['status'] === 200) {
                     console.log("DONE");
                 } else {
@@ -107,13 +111,14 @@ const Patient: React.FC<any> = props => {
             })
             .then(function (data) {
                 const items = data;
-                console.log(items);
                 if (data.size != 0) {
 
                     setShowAlert(true);
                     setAlertHeader("Details submitted successfully")
                     setAlertMessage("Add followups if required")
-                    setShowFollowUpOption(true)
+                    setAskForFollowUp(true)
+                    // setShowFollowUpOption(true)
+
                     // setRedirect(true);
                     // resetAll();
                 } else {
@@ -137,12 +142,9 @@ const Patient: React.FC<any> = props => {
         if(tasksAssigned!=null)
             temp = tasksAssigned.replace(/\n/g, "$");
         var changeDateFormat = followUpDate.current!.value;
-        console.log(changeDateFormat);
         if(changeDateFormat!=null && typeof(changeDateFormat)=='string')
             changeDateFormat = changeDateFormat.split('T')[0];
-        console.log(changeDateFormat);
 
-        console.log(temp);
         let newFollowUp = {
             'followUpDate':changeDateFormat,
             'taskAssignedByDoctor':temp,
@@ -151,9 +153,8 @@ const Patient: React.FC<any> = props => {
             'fieldWorkerInHospital':{'fwInHospId':-1},
             'reviewByFieldWorker':""
         };
-        console.log(newFollowUp)
-        console.log(JSON.stringify(newFollowUp));
-        const addRecordEndpoint = `${API_FOLLOWUPS}`;
+        const addRecordEndpoint = `${apis.API_FOLLOWUPS}/`;
+
         const options = {
             method: 'POST',
             headers: {
@@ -165,7 +166,6 @@ const Patient: React.FC<any> = props => {
 
         await fetch(addRecordEndpoint, options)
             .then(function (response) {
-                console.log(response);
                 if (response['status'] === 201) {
                     console.log("DONE");
                 } else {
@@ -174,7 +174,6 @@ const Patient: React.FC<any> = props => {
                 return response.json();
             })
             .then(function (data) {
-                console.log(data);
                 const items = data;
 
                 setRedirect(true);
@@ -187,6 +186,7 @@ const Patient: React.FC<any> = props => {
 
 
     const handleYes = ()=>{
+        setAskForFollowUp(false)
         setShowFollowUpOption(true);
     }
 
@@ -201,11 +201,9 @@ const Patient: React.FC<any> = props => {
     const [mapTask, setMapTask] = useState(['']);
 
     const addNew = (key:number) => {
-        console.log(key);
         let pseudo = mapTask;
         pseudo = [...pseudo, ''];
         setMapTask(pseudo);
-        console.log(mapTask);
     }
 
     const [changeState, setChangeState] = useState(false);
@@ -214,8 +212,6 @@ const Patient: React.FC<any> = props => {
         let pseudo = mapTask;
         pseudo.splice(index,1);
         setMapTask(pseudo);
-        console.log(mapTask);
-        console.log("Hi");
         if(changeState)
             setChangeState(false);
         else
@@ -223,13 +219,11 @@ const Patient: React.FC<any> = props => {
     }
 
     useEffect(() => {
-        console.log(mapTask.length);
     },[changeState]);
 
     const handleChangeOfTask = (event:any, index:number) => {
         mapTask[index] = event!.target!.value;
         setMapTask(mapTask);
-        // console.log(mapTask);
         let assignedTask = "";
 
         mapTask.map((data) => {
@@ -257,16 +251,29 @@ const Patient: React.FC<any> = props => {
                 </IonToolbar>
 
                 <IonRow>
-                    <BackButton path={path} data={profileData}></BackButton>
-                </IonRow>
+                    <IonCol>
+                        <BackButton path={path} data={profileData}></BackButton>
+                    </IonCol>
+
+            <IonCol>
 
                 <IonToolbar>
                     <IonTitle class="ion-text-center">
                         <b>PATIENT DETAILS AND PRESCRIPTION</b>
                     </IonTitle>
                 </IonToolbar>
+            </IonCol>
+
+                <IonCol>
+                    <IonButton onClick={handleViewHistoryButton}>View History</IonButton>
+                </IonCol>
+                </IonRow>
+
 
             </IonHeader>
+
+
+
 
             <IonContent className='ion-padding'>
                 <IonCard class = "card-style">
@@ -279,6 +286,10 @@ const Patient: React.FC<any> = props => {
                             </IonCol>
 
                         </IonRow>
+
+                        {/*<IonRow>*/}
+
+                        {/*</IonRow>*/}
 
                         <IonRow>
                             <IonCol>
@@ -307,6 +318,25 @@ const Patient: React.FC<any> = props => {
                                     <IonButton onClick={submitDetails}>SUBMIT</IonButton>
                                 </IonCol>
                             </IonRow>
+                        }
+                        {
+                            askForFollowUp &&
+
+                            <IonCol class="ion-text-center">
+                                <IonRow>
+                                    <IonCol>
+                                        <h3>Do you want to add followups for this patient?</h3>
+                                    </IonCol>
+                                </IonRow>
+
+
+                                <IonRow>
+                                    <IonCol>
+                                        <IonButton onClick={handleYes}>Yes</IonButton>
+                                        <IonButton onClick={handleNo}>No</IonButton>
+                                    </IonCol>
+                                </IonRow>
+                            </IonCol>
                         }
 
 
@@ -357,6 +387,8 @@ const Patient: React.FC<any> = props => {
                 message={alertMessage}
                 buttons={['OK']}
             />
+
+            {viewHistoryClicked && <Redirect to={{pathname:'/doctorInHospital/patient/viewHistory',state: {visitDetails,userData: profileData }}}/>}
 
             {!showAlert && redirect?<Redirect to={{pathname:'/doctorInHospital',state: { userData: profileData }}}/>
                 :null}

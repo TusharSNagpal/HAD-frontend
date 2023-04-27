@@ -61,7 +61,8 @@ const GlobalUpdateHospital = () => {
             'registrationDate': registrationDate.current!.value
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `${API_HOSP_REG}${hospital.hospitalId}`;
+
+        const addRecordEndpoint = `${API_HOSP_REG}/${hospital.hospitalId}`;
         const options = {
             method: 'PUT',
             headers: {
@@ -96,7 +97,8 @@ const GlobalUpdateHospital = () => {
     }
 
     useEffect(() => {
-        fetch(`${API_HOSP_REG}${id}`)
+
+        fetch(`${API_HOSP_REG}/${id}`)
            .then(async (response) => {
             if(response['status'] === 200) {
                 const data = await response.json();

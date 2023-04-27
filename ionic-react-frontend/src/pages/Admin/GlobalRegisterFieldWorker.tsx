@@ -66,7 +66,7 @@ const GlobalRegisterFieldWorker: React.FC = () => {
             'address': address.current!.value
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `${API_FW_REG}`;
+        const addRecordEndpoint = `${API_FW_REG}/`;
         const options = {
             method: 'POST',
             headers: {

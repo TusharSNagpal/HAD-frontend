@@ -55,7 +55,8 @@ const GlobalRegisterHospital: React.FC = () => {
             'address': address.current!.value
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `${API_HOSP_REG}`;
+
+        const addRecordEndpoint = `${API_HOSP_REG}/`;
         const options = {
             method: 'POST',
             headers: {
