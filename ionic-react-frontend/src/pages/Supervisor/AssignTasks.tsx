@@ -56,7 +56,7 @@ const AssignTasks: React.FC<any> = props => {
     const [profileData, setProfileData] = useState(f.userData);
     const [fieldWorkerDetails,setFieldWorkerDetails] = useState(f.currFieldWorker)
     // console.log(profileData)
-    const [tasksAssigned, setTasksAssigned] = useState(fieldWorkerDetails.numOfTasksPerDay)
+    const [tasksAssigned, setTasksAssigned] = useState(fieldWorkerDetails.numOfTasksAssignedPerDay)
     const path = "/supervisors/fieldWorkersInHospital"
     // console.log(fieldWorkerDetails.currFieldWorker);
     // let count=0;
