@@ -35,6 +35,7 @@ import { useState, useRef, useEffect } from "react";
 import {Redirect} from "react-router";
 import Cookie from'universal-cookie';
 
+import ShowAlert from '../components/ShowAlert';
 
 import * as apis from '../api/Api';
 
@@ -50,8 +51,10 @@ const Home: React.FC = () => {
     const [mobileNo, setMobileNo] = useState("");
     const [auth, setAuth] = useState(true);
     const [on, setOn] = useState(false);
-    const [offlineAlert, setOfflineAlert] = useState(false);
-    const [onlineAlert, setOnlineAlert] = useState(false);
+
+    const [otpGen, showOtpGen] = useState(false);
+    const [invalidOtp, showInvalidOtp] = useState(false);
+    const [invalidId, showInvalidId] = useState(false);
 
     const [userData, setUserData] = useState();
 
@@ -65,14 +68,16 @@ const Home: React.FC = () => {
     }
 
     const generate = () => {
-        fetch(`${apis.API_BASE}${role}/phoneNo/${userId.current!.value}`)
+        fetch(`${apis.API_BASE}/${role}/phoneNo/${userId.current!.value}`)
             .then(function (response) {
                 // console.log(response.text());
                 if (response['status'] === 200) {
                     console.log("Found entry");
+                    showInvalidId(false);
                     return response.text();
                 }
                 else {
+                    showInvalidId(true);
                     console.log("No such entry..!");
                     return "-1";
                 }
@@ -84,14 +89,16 @@ const Home: React.FC = () => {
                 }
                 else{
                     setMobileNo(data);
-                    fetch(`${apis.JWT_REQ_OTP}${data}`)
+                    fetch(`${apis.JWT_REQ_OTP}/${data}`)
                         .then(function (response) {
                                 console.log(response.json());
                                 if (response['status'] === 200) {
                                     console.log("OTP Sent to Registered Mobile Number");
+                                    showOtpGen(true);
                                 }
                                 else {
                                     console.log("Please Enter a valid Phone Number");
+                                    showOtpGen(false);
                                 }
                             }
                         )}})
@@ -113,10 +120,12 @@ const Home: React.FC = () => {
         fetch(`${apis.JWT_VERIFY_OTP}`, options)
             .then(function (response) {
                 if (response['status'] === 200) {
+                    showInvalidOtp(false);
                     return response.json()
                 }
                 else {
                     console.log("OTP mismatch Sorry..!");
+                    showInvalidOtp(true);
                     setAuth(false);
                     return "-1";
                 }
@@ -127,8 +136,13 @@ const Home: React.FC = () => {
                     console.log(data.jwt)
                     cookie.set("jwt", data.jwt)
                     
-                    fetch(`${apis.API_BASE}${role}/${userId.current!.value}`, {headers : {Authorization: 'Bearer '+cookie.get("jwt")}})
+                    fetch(`${apis.API_BASE}/${role}/${userId.current!.value}`, {headers : {Authorization: 'Bearer '+cookie.get("jwt")}})
                     .then(function (response) {
+                        if(response.status !== 200 && response.status !== 201)
+                            showInvalidOtp(true);
+                        else
+                            showInvalidOtp(false);
+
                         return response.json();
                     })
                     .then((data) => {
@@ -198,6 +212,11 @@ const Home: React.FC = () => {
                     </IonSegment>
 
                 </IonGrid>
+
+                {/* alerts: */}
+                <ShowAlert alert = {otpGen} showAlert = {showOtpGen} headAlert = "Success" msgAlert = "OTP sent on your registered Mobile Number." onIonChange = {() => {showOtpGen(false)}}></ShowAlert>
+                <ShowAlert alert = {invalidOtp} showAlert = {showInvalidOtp} headAlert = "Incorrect OTP" msgAlert = "Please try again." onIonChange = {() => {showInvalidOtp(false)}}></ShowAlert>
+                <ShowAlert alert = {invalidId} showAlert = {showInvalidId} headAlert = "Incorrect ID" msgAlert = "Please try again." onIonChange = {() => {showInvalidOtp(false)}}></ShowAlert>
 
             </IonContent>
         </IonPage>

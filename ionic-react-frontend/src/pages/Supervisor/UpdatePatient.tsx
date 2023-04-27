@@ -25,6 +25,7 @@ import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 import React, { useEffect, useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
+
 import { API_PATIENT } from '../../api/Api';
 import Cookie from 'universal-cookie'
 import AlertLoggedOut from '../../components/AlertLoggedOut';
@@ -78,7 +79,7 @@ const UpdatePatient:React.FC<any> = props => {
 
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `${API_PATIENT}${patient.patientId}`;
+        const addRecordEndpoint = `${API_PATIENT}/${patient.patientId}`;
         const options = {
             method: 'PUT',
             headers: {

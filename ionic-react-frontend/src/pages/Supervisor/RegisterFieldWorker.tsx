@@ -68,7 +68,7 @@ const RegisterFieldWorker: React.FC<any> = props => {
 
     const registerFieldWorker = async() => {
 
-        fetch(`${API_FW_REG}${fwId.current!.value}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
+        fetch(`${API_FW_REG}/${fwId.current!.value}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then(function(response){
                 console.log(response);
                 if(response['status'] === 200){
@@ -105,7 +105,8 @@ const RegisterFieldWorker: React.FC<any> = props => {
                         };
                         console.log(JSON.stringify(data));
 
-                        const addRecordEndpoint = `${API_FWINHOSP_REG}fwInHosp/${fwId.current!.value}/hospital/${hospId.current!.value}`;                        const options = {
+
+                        const addRecordEndpoint = `${API_FWINHOSP_REG}/fwInHosp/${fwId.current!.value}/hospital/${hospId.current!.value}`;                        const options = {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',

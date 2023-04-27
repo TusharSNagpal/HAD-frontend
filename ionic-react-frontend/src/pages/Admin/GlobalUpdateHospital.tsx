@@ -64,7 +64,8 @@ const GlobalUpdateHospital = () => {
             'registrationDate': registrationDate.current!.value
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `${API_HOSP_REG}${hospital.hospitalId}`;
+
+        const addRecordEndpoint = `${API_HOSP_REG}/${hospital.hospitalId}`;
         const options = {
             method: 'PUT',
             headers: {

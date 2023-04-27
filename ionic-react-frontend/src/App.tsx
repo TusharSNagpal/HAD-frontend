@@ -61,8 +61,9 @@ import Patient from "./pages/Doctor/Patient";
 import OldFollowUp from "./pages/Doctor/OldFollowUp";
 import FieldWorkersInHospital from "./pages/Supervisor/FieldWorkersInHospital";
 import AssignTasks from "./pages/Supervisor/AssignTasks";
-import Home from "./pages/Home";
+import Home from "./pages/Home"
 import Prescription from './pages/FieldWorker/Prescription';
+import ViewPatientHistory from "./pages/Doctor/ViewPatientHistory";
 
 import * as apis from "./api/Api"
 
@@ -70,82 +71,6 @@ import * as apis from "./api/Api"
 setupIonicReact();
 
 const App: React.FC = () => {
-
-  const [on, setOn] = useState(false);
-  const [off, setOff] = useState(false);
-
-  const [offlineAlert, setOfflineAlert] = useState(false);
-  const [onlineAlert, setOnlineAlert] = useState(false);
-
-  // const [offlineData, setOfflineData] = useState([]);
-
-  const { remarks, addRemark, getRemarks, updateRemarks } = useStorageFillingRemarks();
-
-  const syncStart = async() => {
-    let flag = 1;
-    let connection = await Network.getStatus();
-    getRemarks().then(async offlineData => {
-      console.log(offlineData);
-        while (connection.connected && offlineData!.length > 0 && flag === 1) {
-          // console.log(offlineData[0]['reviewByFieldWorker']);
-          // updateRemarks(offlineData);  
-          // count--;
-          // console.log(offlineData[0]['reviewByFieldWorker']);
-          let data = {
-            'reviewByFieldWorker': offlineData[0]['reviewByFieldWorker']
-          };
-
-          const addRecordEndpoint = `${apis.API_REVIEW_UPD}${offlineData[0]['followUpId']}`;
-          const options = {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-          }
-
-           await fetch(addRecordEndpoint, options)
-              .then(function (response) {
-                console.log(response);
-                if (response['status'] === 200) {
-                  console.log("DONE");
-                  // console.log(task);
-                  offlineData.shift();
-                  updateRemarks(offlineData);
-                } else {
-                  console.log("ERROR");
-                  flag = 0;
-                }
-              })
-        }
-      }
-    )
-  }
-
-  const status = (status: any) => {
-      console.log('Network status changed', status);
-      if (status.connected === true) {
-        setOn(true);
-        setOff(false);
-        setOnlineAlert(true);
-        setOfflineAlert(false);
-        // syncStart();
-      }
-      else {
-        setOn(false);
-        setOff(true);
-        setOfflineAlert(true);
-        setOnlineAlert(false);
-      }
-  }
-
-  useEffect(() => {
-    syncStart();
-  }, [on, off])
-
-  Network.addListener('networkStatusChange', status);
-  
-  // Network.addListener('networkStatusChange', status);
 
   return (
     <IonApp>
@@ -197,6 +122,7 @@ const App: React.FC = () => {
           <Route exact path = "/doctorInHospital" component={DoctorHome}/>
           <Route exact path = "/doctorInHospital/patient" component={Patient}></Route>
           <Route exact path ="/doctorInHospital/oldFollowUp" component={OldFollowUp}></Route>
+          <Route exact path = "/doctorInHospital/patient/viewHistory" component={ViewPatientHistory}></Route>
 
 
           {/*<Route exact path = "/doctors" component={DoctorHome}/>*/}
@@ -217,21 +143,6 @@ const App: React.FC = () => {
 
         </IonRouterOutlet>
       </IonReactRouter>
-
-      <IonAlert
-                    isOpen={offlineAlert}
-                    onDidDismiss={() => setOfflineAlert(false)}
-                    header= {"CONNECTION LOST..!"}
-                    subHeader="Please connect to Internet for Sync"
-                    buttons={['OK']}
-                />
-      <IonAlert
-                    isOpen={onlineAlert}
-                    onDidDismiss={() => setOnlineAlert(false)}
-                    header= {"CONNECTION IS BACK"}
-                    subHeader="CONNECTED"
-                    buttons={['OK']}
-                />
     </IonApp>
   )
 };

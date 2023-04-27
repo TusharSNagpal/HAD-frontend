@@ -25,10 +25,10 @@ import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 import React, { useEffect, useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
+
 import { API_FWINHOSP_DEL, API_FWINHOSP_REG } from '../../api/Api';
 import Cookie from 'universal-cookie';
 import AlertLoggedOut from '../../components/AlertLoggedOut';
-
 
 const DeleteFieldWorker: React.FC<any> = props => {
     const cookie = new Cookie();
@@ -53,7 +53,8 @@ const DeleteFieldWorker: React.FC<any> = props => {
 
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `${API_FWINHOSP_DEL}${fwInHospId.current!.value}`;
+        const addRecordEndpoint = `${API_FWINHOSP_DEL}/${fwInHospId.current!.value}`;
+
         const options = {
             method: 'DELETE',
             headers: {
@@ -83,7 +84,7 @@ const DeleteFieldWorker: React.FC<any> = props => {
     }
 
     useEffect(() => {
-        fetch(`${API_FWINHOSP_REG}${id}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
+        fetch(`${API_FWINHOSP_REG}/${id}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then(async (response) => {
                 if (response['status'] === 200) {
                     const data = await response.json();

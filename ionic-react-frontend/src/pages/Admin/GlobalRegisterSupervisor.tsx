@@ -98,7 +98,8 @@ const GlobalRegisterSupervisor: React.FC = () => {
             'address': address.current!.value
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `${API_SUP_REG}`;
+
+        const addRecordEndpoint = `${API_SUP_REG}/`;
         const options = {
             method: 'POST',
             headers: {
@@ -135,6 +136,7 @@ const GlobalRegisterSupervisor: React.FC = () => {
 
                 return items;
             })
+
             await fetch(`${API_HOSP_NOSUP}`)
             .then((response) => response.json())
             .then((json) => {

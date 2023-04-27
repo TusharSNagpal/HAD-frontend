@@ -72,7 +72,8 @@ const GlobalRegisterDoctor: React.FC = () => {
             'address': address.current!.value
         }
         console.log(JSON.stringify(data))
-        const addRecordEndpoint = `${apis.API_DOC_REG}`;
+
+        const addRecordEndpoint = `${apis.API_DOC_REG}/`;
         const options = {
             method: 'POST',
             headers: {

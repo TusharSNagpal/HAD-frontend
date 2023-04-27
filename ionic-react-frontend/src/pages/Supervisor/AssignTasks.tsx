@@ -36,9 +36,11 @@ import './Supervisor.css';
 import {Redirect} from "react-router";
 import React, {useEffect, useState} from "react";
 import BackButton from "../../components/BackButton";
-import { API_FOLLOWUPS, API_FWINHOSP_REG } from '../../api/Api';
+
 import Cookie from 'universal-cookie';
 import AlertLoggedOut from '../../components/AlertLoggedOut';
+
+import {API_FOLLOWUPS, API_FWINHOSP_REG, API_SEND_SMS} from "../../api/Api";
 
 // setupIonicReact();
 
@@ -54,10 +56,10 @@ const AssignTasks: React.FC<any> = props => {
     const [auth, setAuth] = useState(true)
 
     const f = props.location.state;
-    console.log(f)
+    // console.log(f)
     const [profileData, setProfileData] = useState(f.userData);
     const [fieldWorkerDetails,setFieldWorkerDetails] = useState(f.currFieldWorker)
-    console.log(profileData)
+    // console.log(profileData)
     const [tasksAssigned, setTasksAssigned] = useState(fieldWorkerDetails.numOfTasksPerDay)
     const path = "/supervisors/fieldWorkersInHospital"
     // console.log(fieldWorkerDetails.currFieldWorker);
@@ -90,14 +92,22 @@ const AssignTasks: React.FC<any> = props => {
         for(;i<followUps.length;i++){
             if(picked[i]===true){
                 const followUpId = followUps[i].followUpId;
-                console.log(followUpId)
-                const addRecordEndpoint = `${API_FOLLOWUPS}${followUpId}/fwInHosp/${fieldWorkerDetails.fwInHospId}`;
+                const verificationNo = Math.floor(100000 + Math.random() * 900000);
+                const phoneNo = followUps[i]?.visit?.patient?.phoneNo
+                followUps[i].verificationNumber = verificationNo
+                followUps[i].fieldWorkerInHospital = {"fwInHospId":fieldWorkerDetails.fwInHospId}
+                console.log(followUps[i])
+                const addRecordEndpoint = `${API_FOLLOWUPS}/${followUpId}`;
+
                 const options = {
                     method: 'PUT',
+
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer '+ cookie.get("jwt")
                     },
+
+                    body: JSON.stringify(followUps[i])
                 }
                 fetch(addRecordEndpoint,options)
                     .then(function (response) {
@@ -110,9 +120,13 @@ const AssignTasks: React.FC<any> = props => {
                             console.log("ERROR");
                         }
                         return response.json();
-                    })
-
-
+                    }).then(function(){
+                    console.log(phoneNo)
+                    fetch(`${API_SEND_SMS}/${phoneNo}/verificationNo/${verificationNo}`)
+                        .then(function (response){
+                            console.log(response)
+                        })
+                })
 
             }
         }
@@ -120,8 +134,8 @@ const AssignTasks: React.FC<any> = props => {
             console.log(tasksAssigned);
             // console.log(fieldWorkerDetails.currFieldWorker.numOfTasksPerDay);
             fieldWorkerDetails.numOfTasksPerDay=tasksAssigned;
-            console.log(JSON.stringify(fieldWorkerDetails));
-            const addRecordEndpoint = `${API_FWINHOSP_REG}${fieldWorkerDetails.fwInHospId}`;
+        const addRecordEndpoint = `${API_FWINHOSP_REG}/${fieldWorkerDetails.fwInHospId}`;
+
             const options = {
                 method: 'PUT',
                 headers:{
@@ -165,6 +179,7 @@ const AssignTasks: React.FC<any> = props => {
             })
             .then((json) => {
                 // setUseSt(true);
+                console.log(json)
                 setFollowUps(json);
                 // console.log(json[0].fwInHospId);
                 // setUseSt(1);
@@ -220,7 +235,7 @@ const AssignTasks: React.FC<any> = props => {
                     </IonCard>
                 </IonGrid>
                 <IonGrid className='ion-text-center ion-margin'>
-                    {followUps.map((followUp,index) =>
+                    {followUps!=null && followUps.map((followUp,index) =>
                         <IonCard class="card-style">
                             <IonCardHeader>
                                 <IonSegment value={followUp.followUpId} key={followUp.followUpId}>
