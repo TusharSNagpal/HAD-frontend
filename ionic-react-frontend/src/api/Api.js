@@ -12,7 +12,7 @@ export const API_SEND_SMS = `${base}/phoneNumber/sendSMS`;
 
 
 // otp with jwt:
-    export const JWT_REQ_OTP = `${base}/client/auth/requestOtp/`;
+    export const JWT_REQ_OTP = `${base}/client/auth/requestOtp`;
     export const JWT_VERIFY_OTP = `${base}/client/auth/verifyOtp`;
 
 
@@ -72,7 +72,7 @@ export const API_HOSP_NOSUP = `${hospital}/noSupervisor`
 //supervisors:
 const sup = `${base}/supervisors`;
 //register supervisors:
-export const API_SUP_REG = `${sup}`
+export const API_SUP_REG = `/${sup}`
 
 // *****************************************************************************************
 

@@ -37,7 +37,6 @@ import React, {useRef, useState} from "react";
 import {Redirect} from "react-router";
 import BackButton from "../../components/BackButton";
 
-import { API_PATIENT, API_VIS } from '../../api/Api';
 import Cookie from 'universal-cookie'
 
 import {API_ACTIVE_VIS, API_GET_ALL_DOCINHOSP, API_OTP_GEN, API_OTP_VERIFY, API_PATIENT, API_VIS} from "../../api/Api";
@@ -63,7 +62,7 @@ const NewCase:React.FC<any> = props=> {
     const path="/supervisors"
 
     const loginPatient = async() => {
-        const response = await fetch(`${API_PATIENT}${patientIdRef.current!.value}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
+        const response = await fetch(`${API_PATIENT}/${patientIdRef.current!.value}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
         const result = await response;
         console.log(response);
         if(result['status'] === 200){
@@ -81,62 +80,61 @@ const NewCase:React.FC<any> = props=> {
         }
     }
 
+    // const createCase = async() => {
+    //     fetch(`${API_PATIENT}${patientIdRef.current!.value}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
+    //         .then(function (response) {
+    //             // console.log(response.text());
+    //             if (response['status'] === 200) {
+    //                 console.log("Found entry");
+    //                 return response.text();
+    //             }
+    //             else {
+    //                 console.log("No such entry..!");
+    //                 return "-1";
+    //             }
+    //         )   
+    //         .then(async function (hospitalId) {
+    //             let data = {'hospital':{'hospitalId': hospitalId}, 'patient':{'patientId': patientIdRef.current!.value}};
+    //             console.log(JSON.stringify(data));
+    //             const addRecordEndpoint = `${API_VIS}`;
+    //             const options = {
+    //                 method: 'POST',
+    //                 headers:{
+    //                     'Content-Type': 'application/json',
+    //                     'Authorization': 'Bearer '+ cookie.get("jwt")
+    //                 },
+    //                 body: JSON.stringify(data)
+    //         })
+    //         .then(async function (data) {
+    //             console.log(data);
+    //             if(data === "-1"){
+    //                 console.log("Try again..!");
+    //             }
+    //             else{
+    //                 setMobileNo(data);
+    //                 fetch(`${API_OTP_GEN}/${data}`)
+    //                     .then(async function (response) {
+    //                             const result = await response;
+    //                             console.log(response);
+    //                             if(result['status'] === 200){
+    //                                 console.log("DONE");
+    //                                 setLoginSuccess(true);
+    //                                 setShowAlert(true);
+    //                                 setShowAlertErr(false);
+    //                             }
+
+    //                             else{
+    //                                 console.log("ERROR");
+    //                                 setLoginSuccess(false);
+    //                                 setShowAlert(false);
+    //                                 setShowAlertErr(true);
+    //                             }
+    //                         }
+    //                     )}
+    //         })
+    // }
+
     const createCase = async() => {
-        fetch(`${API_PATIENT}${patientIdRef.current!.value}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
-            .then(function (response) {
-                // console.log(response.text());
-                if (response['status'] === 200) {
-                    console.log("Found entry");
-                    return response.text();
-                }
-                else {
-                    console.log("No such entry..!");
-                    return "-1";
-                }
-            )
-            .then(async function (hospitalId) {
-                let data = {'hospital':{'hospitalId': hospitalId}, 'patient':{'patientId': patientIdRef.current!.value}};
-                console.log(JSON.stringify(data));
-                const addRecordEndpoint = `${API_VIS}`;
-                const options = {
-                    method: 'POST',
-                    headers:{
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer '+ cookie.get("jwt")
-                    },
-                    body: JSON.stringify(data)
-            })
-            .then(async function (data) {
-                console.log(data);
-                if(data === "-1"){
-                    console.log("Try again..!");
-                }
-                else{
-                    setMobileNo(data);
-                    fetch(`${API_OTP_GEN}/${data}`)
-                        .then(async function (response) {
-                                const result = await response;
-                                console.log(response);
-                                if(result['status'] === 200){
-                                    console.log("DONE");
-                                    setLoginSuccess(true);
-                                    setShowAlert(true);
-                                    setShowAlertErr(false);
-                                }
-
-                                else{
-                                    console.log("ERROR");
-                                    setLoginSuccess(false);
-                                    setShowAlert(false);
-                                    setShowAlertErr(true);
-                                }
-                            }
-                        )}
-            })
-    }
-
-    const createCase = async() => {
-
         fetch(`${API_OTP_VERIFY}/${otp.current!.value}/${mobileNo}`)
             .then(async function (response) {
                     console.log(response);

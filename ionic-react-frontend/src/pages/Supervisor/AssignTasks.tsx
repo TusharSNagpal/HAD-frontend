@@ -37,7 +37,6 @@ import {Redirect} from "react-router";
 import React, {useEffect, useState} from "react";
 import BackButton from "../../components/BackButton";
 
-import { API_FOLLOWUPS, API_FWINHOSP_REG } from '../../api/Api';
 import Cookie from 'universal-cookie';
 
 import {API_FOLLOWUPS, API_FWINHOSP_REG, API_SEND_SMS} from "../../api/Api";
