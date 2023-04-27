@@ -133,6 +133,7 @@ const RegisterPatient: React.FC<any> = props => {
                             'Authorization': 'Bearer '+ cookie.get("jwt")
                         },
                         body: JSON.stringify(data)
+                    }
 
                         await fetch(addRecordEndpoint, options)
                             .then(function (response) {

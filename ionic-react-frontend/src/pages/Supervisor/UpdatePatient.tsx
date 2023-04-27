@@ -29,8 +29,6 @@ import BackButton from "../../components/BackButton";
 import { API_PATIENT } from '../../api/Api';
 import Cookie from 'universal-cookie'
 
-import {API_PATIENT} from "../../api/Api";
-
 const UpdatePatient:React.FC<any> = props => {
     const cookie = new Cookie();
     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
