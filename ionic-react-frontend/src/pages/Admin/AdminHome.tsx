@@ -23,11 +23,23 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import BackButton from "../../components/BackButton";
 import AdminBackButton from "../../components/AdminBackButton";
+import AlertLoggedOut from '../../components/AlertLoggedOut';
+import LogoutButton from '../../components/LogoutButton';
 const path='/'
-const AdminHome: React.FC = () => {
+const AdminHome: React.FC<any> = (props) => {
+    const [profile, setProfile] = useState(props?.location?.state);
+    const [profileData, setProfileData] = useState(profile);
+    const [auth, setAuth] = useState(true);
+    useEffect(() => {
+        console.log(profileData);
+        if(!profileData){
+            console.log("Login Again..!");
+            setAuth(false);
+        }
+    }, [])
     return(
         <IonPage>
             <IonHeader>
@@ -43,9 +55,14 @@ const AdminHome: React.FC = () => {
                     <b>Admin</b>
                     </IonTitle>
                 </IonToolbar>
-                <IonRow>
-                    <AdminBackButton path={path}/>
-                </IonRow>
+                {
+                !auth ? 
+                <AlertLoggedOut auth = {auth} setAuth = {setAuth}></AlertLoggedOut>
+                :null
+            }
+            <IonRow>
+                <LogoutButton profile = {profile} setProfile = {setProfile} profileData = {profileData} setProfileData = {setProfileData}></LogoutButton>
+            </IonRow>
             </IonHeader>
 
 

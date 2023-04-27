@@ -38,6 +38,7 @@ import React, {useEffect, useState} from "react";
 import BackButton from "../../components/BackButton";
 import { API_FOLLOWUPS, API_FWINHOSP_REG } from '../../api/Api';
 import Cookie from 'universal-cookie';
+import AlertLoggedOut from '../../components/AlertLoggedOut';
 
 // setupIonicReact();
 
@@ -50,6 +51,7 @@ const AssignTasks: React.FC<any> = props => {
     const [alertHeader,setAlertHeader] = useState<string>();
     const [alertMessage,setAlertMessage] = useState<string>();
     const [redirect, setRedirect] = useState<boolean>(false);
+    const [auth, setAuth] = useState(true)
 
     const f = props.location.state;
     console.log(f)
@@ -102,7 +104,9 @@ const AssignTasks: React.FC<any> = props => {
                         console.log(response);
                         if (response['status'] === 200) {
                             console.log("DONE");
-                        } else {
+                        } else if(response['status'] === 401) {
+                            setAuth(false)
+                        }else {
                             console.log("ERROR");
                         }
                         return response.json();
@@ -137,8 +141,9 @@ const AssignTasks: React.FC<any> = props => {
                 setAlertMessage("Tasks assigned successfully.")
                 // setShowAlertCaseErr(false);
                 setRedirect(true);
+            }else if(response['status'] === 401) {
+                setAuth(false)
             }
-
             else{
                 console.log("ERROR");
                 setShowAlert(true);
@@ -152,7 +157,12 @@ const AssignTasks: React.FC<any> = props => {
 
     useEffect(() => {
         fetch(`${API_FOLLOWUPS}/remaining/1`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
-            .then((response) => response.json())
+            .then(function(response) {
+                if(response['status'] === 401) {
+                    setAuth(false)
+                }
+                return response.json()
+            })
             .then((json) => {
                 // setUseSt(true);
                 setFollowUps(json);
@@ -232,6 +242,11 @@ const AssignTasks: React.FC<any> = props => {
                         </IonCol>
                     </IonRow>
                 </IonGrid>
+                {
+                    !auth ? 
+                    <AlertLoggedOut auth = {auth} setAuth = {setAuth}></AlertLoggedOut>
+                    :null
+                }
                 <IonAlert
                     isOpen={showAlert}
                     onDidDismiss={() => setShowAlert(false)}

@@ -38,6 +38,7 @@ import {Redirect} from "react-router";
 import BackButton from "../../components/BackButton";
 import { API_PATIENT, API_VIS } from '../../api/Api';
 import Cookie from 'universal-cookie'
+import AlertLoggedOut from '../../components/AlertLoggedOut';
 
 // setupIonicReact();
 
@@ -51,6 +52,7 @@ const NewCase:React.FC<any> = props=> {
     const [showAlert, setShowAlert] = useState(false);
     const [showAlertErr, setShowAlertErr] = useState(false);
     const [redirect, setRedirect] = useState(false);
+    const [auth, setAuth] = useState(true);
     const [showAlertCase, setShowAlertCase] = useState(false);
     const [showAlertCaseErr, setShowAlertCaseErr] = useState(false);
     const path="/supervisors"
@@ -64,8 +66,7 @@ const NewCase:React.FC<any> = props=> {
             setLoginSuccess(true);
             setShowAlert(true);
             setShowAlertErr(false);
-        }
-
+        } else if(response['status'] === 401) setAuth(false);
         else{
             console.log("ERROR");
             setLoginSuccess(false);
@@ -80,7 +81,8 @@ const NewCase:React.FC<any> = props=> {
                 console.log(response);
                 if (response['status'] === 200) {
                     console.log("DONE");
-                } else {
+                } else if(response['status'] === 401) setAuth(false)
+                else {
                     console.log("ERROR");
                 }
                 return response.json();
@@ -114,7 +116,7 @@ const NewCase:React.FC<any> = props=> {
                     setShowAlertCaseErr(false);
                     setRedirect(true);
                 }
-
+                else if(response['status'] === 401) setAuth(false)
                 else{
                     console.log("ERROR");
                     setShowAlertCaseErr(true);
@@ -201,10 +203,15 @@ const NewCase:React.FC<any> = props=> {
                         buttons={['OK']}
                     />
                 </IonGrid>
+                {
+                    !auth ? 
+                    <AlertLoggedOut auth = {auth} setAuth = {setAuth}></AlertLoggedOut>
+                    :null
+                }
                 {!showAlertCase && redirect ?
                     <Redirect to={{ pathname: '/supervisors', state: { userData: profileData?.userData } }} />
                 :null}
-
+                
             </IonContent>
 
         </IonPage>

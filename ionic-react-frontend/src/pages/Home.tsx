@@ -48,7 +48,7 @@ const Home: React.FC = () => {
     const otp = useRef<HTMLIonInputElement>(null);
     // const [valid, setValid] = useState(false);
     const [mobileNo, setMobileNo] = useState("");
-    const [auth, setAuth] = useState(false);
+    const [auth, setAuth] = useState(true);
     const [on, setOn] = useState(false);
     const [offlineAlert, setOfflineAlert] = useState(false);
     const [onlineAlert, setOnlineAlert] = useState(false);
@@ -114,7 +114,6 @@ const Home: React.FC = () => {
             .then(function (response) {
                 if (response['status'] === 200) {
                     return response.json()
-       
                 }
                 else {
                     console.log("OTP mismatch Sorry..!");

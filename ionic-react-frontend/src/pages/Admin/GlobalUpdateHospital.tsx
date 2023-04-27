@@ -27,10 +27,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
 import AdminBackButton from "../../components/AdminBackButton";
 import { API_HOSP_REG } from '../../api/Api';
+import Cookie from 'universal-cookie';
+import AlertLoggedOut from '../../components/AlertLoggedOut';
 
 const path = "/admin/globalUpdate"
 const GlobalUpdateHospital = () => {
-
+    const cookie = new Cookie();
     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
     const [showAlert, setShowAlert] = useState<boolean>(false);
     const [alertMessage, setAlertMessage] = useState<string>();
@@ -38,6 +40,7 @@ const GlobalUpdateHospital = () => {
     const [id, setId] = useState(0);
     const [hospital, setHospital] = useState<any>([]);
     const [openForm, setOpenForm] = useState(false);
+    const [auth, setAuth] = useState(true);
 
     const name = useRef<HTMLIonInputElement>(null)
     const address = useRef<HTMLIonInputElement>(null)
@@ -65,7 +68,8 @@ const GlobalUpdateHospital = () => {
         const options = {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+cookie.get("jwt")
             },
             body: JSON.stringify(data)
         }
@@ -78,7 +82,9 @@ const GlobalUpdateHospital = () => {
                 setAlertHeader("Data Updated Successfully..")
                 setAlertMessage("");
                 resetAll();
-            } else {
+            } else if(response['status'] === 401) {
+                setAuth(false)
+            }else {
                 console.log("ERROR");
                 setShowAlert(true);
                 setAlertHeader("Data Updation unsuccessfull..")
@@ -96,12 +102,14 @@ const GlobalUpdateHospital = () => {
     }
 
     useEffect(() => {
-        fetch(`${API_HOSP_REG}${id}`)
+        fetch(`${API_HOSP_REG}${id}`, {headers : {Authorization: 'Bearer '+cookie.get("jwt")}})
            .then(async (response) => {
             if(response['status'] === 200) {
                 const data = await response.json();
                 setHospital(data)
                 console.log(data)
+            } else if(response['status'] === 401) {
+                setAuth(false)
             }
             else if(id !== 0) setShowAlertNoSuchId(true);
            })
@@ -184,6 +192,11 @@ const GlobalUpdateHospital = () => {
                              </>
                         ) : null
                     }
+                {
+                    !auth ? 
+                    <AlertLoggedOut auth = {auth} setAuth = {setAuth}></AlertLoggedOut>
+                    :null
+                }
                 <IonAlert
                     isOpen={showAlert}
                     onDidDismiss={() => setShowAlert(false)}

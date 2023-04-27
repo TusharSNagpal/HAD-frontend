@@ -70,7 +70,10 @@ const DoctorHome: React.FC<any> = props => {
             method : 'PUT',
             headers: {Authorization: 'Bearer '+cookie.get("jwt")}
         })
-            .then((response) => response.json())
+            .then(function(response){
+                if(response['status'] === 401) setAuth(false)
+                return response.json();
+            })
             .then((json) => {
                 console.log(json);
                 handle();
@@ -102,7 +105,10 @@ const DoctorHome: React.FC<any> = props => {
             method : 'PUT',
             headers: {Authorization: 'Bearer '+cookie.get("jwt")}
         })
-            .then((response) => response.json())
+            .then(function(response){
+                if(response['status'] === 401) setAuth(false)
+                return response.json();
+            })
             .then((json) => {
                 console.log(json);
                 handle();
@@ -129,7 +135,10 @@ const DoctorHome: React.FC<any> = props => {
         }
         else{
             fetch(`${API_ACTIVE_VIS}${profileData?.userData?.hospital?.hospitalId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
-                .then((response) => response.json())
+                .then(function(response){
+                    if(response['status'] === 401) setAuth(false)
+                    return response.json();
+                })
                 .then((json) => {
                     // setUseSt(true);
                     setActiveCases(json);
@@ -148,7 +157,10 @@ const DoctorHome: React.FC<any> = props => {
         }
         else{
             fetch(`${API_ACTIVE_VIS}${profileData?.userData?.hospital?.hospitalId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
-                .then((response) => response.json())
+                .then(function(response){
+                    if(response['status'] === 401) setAuth(false)
+                    return response.json();
+                })
                 .then((json) => {
                     // setUseSt(true);
                     setActiveCases(json);
@@ -168,7 +180,10 @@ const DoctorHome: React.FC<any> = props => {
         }
         else{
             fetch(`${API_FOLLOWUP_DOC_REV}${profileData?.userData?.docInHospId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
-                .then((response) => response.json())
+                .then(function(response){
+                    if(response['status'] === 401) setAuth(false)
+                    return response.json();
+                })
                 .then((json) => {
                     // setUseSt(true);
                     setActiveFollowUps(json);
@@ -188,7 +203,10 @@ const DoctorHome: React.FC<any> = props => {
         }
         else{
             fetch(`${API_FOLLOWUP_DOC_REV}${profileData?.userData?.docInHospId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
-                .then((response) => response.json())
+                .then(function(response){
+                    if(response['status'] === 401) setAuth(false)
+                    return response.json();
+                })
                 .then((json) => {
                     // setUseSt(true);
                     setActiveFollowUps(json);

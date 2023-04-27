@@ -27,6 +27,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
 import { API_FWINHOSP_DEL, API_FWINHOSP_REG } from '../../api/Api';
 import Cookie from 'universal-cookie';
+import AlertLoggedOut from '../../components/AlertLoggedOut';
 
 
 const DeleteFieldWorker: React.FC<any> = props => {
@@ -38,6 +39,7 @@ const DeleteFieldWorker: React.FC<any> = props => {
     const [id, setId] = useState(0);
     const [doctor, setDoctor] = useState<any>([]);
     const [openForm, setOpenForm] = useState(false);
+    const [auth, setAuth] = useState(true);
     const fwInHospId = useRef<HTMLIonInputElement>(null)
     const profile = props.location.state;
     const [profileData, setProfileData] = useState(profile);
@@ -66,7 +68,8 @@ const DeleteFieldWorker: React.FC<any> = props => {
                 if (response['status'] === 200) {
                     console.log("DONE");
                     setShowAlert(true)
-                } else {
+                } else if(response['status'] === 401) setAuth(false)
+                else {
                     console.log("ERROR");
                     console.log(response)
                 }
@@ -86,7 +89,7 @@ const DeleteFieldWorker: React.FC<any> = props => {
                     const data = await response.json();
                     setDoctor(data)
                     console.log(data)
-                }
+                } else if(response['status'] === 401) setAuth(false)
                 else if (id !== 0) setShowAlertNoSuchId(true);
             })
     }, [openForm]);
@@ -161,6 +164,11 @@ const DeleteFieldWorker: React.FC<any> = props => {
                                     buttons={['OK']}
                                 /> </>
                         ) : null
+                    }
+                    {
+                        !auth ? 
+                        <AlertLoggedOut auth = {auth} setAuth = {setAuth}></AlertLoggedOut>
+                        :null
                     }
                 </IonGrid>
             </IonContent>

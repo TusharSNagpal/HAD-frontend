@@ -39,6 +39,7 @@ import {type} from "os";
 import BackButton from "../../components/BackButton";
 import { API_FWINHOSP_REG } from '../../api/Api';
 import Cookie from 'universal-cookie';
+import AlertLoggedOut from '../../components/AlertLoggedOut';
 
 // setupIonicReact();
 
@@ -51,6 +52,7 @@ const FieldWorkersInHospital: React.FC<any> = props => {
     const [currFieldWorker, setCurrFieldWorker] = useState(null);
 
     const [redirectToAssignTasks, setRedirectToAssignTasks] = useState(false);
+    const [auth, setAuth] = useState(true)
     const path="/supervisors"
 
     const handlePickFieldWorker=(fieldWorker:any)=>{
@@ -61,7 +63,10 @@ const FieldWorkersInHospital: React.FC<any> = props => {
 
     useEffect(() => {
         fetch(`${API_FWINHOSP_REG}hospital/${profileData.userData.hospital.hospitalId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
-            .then((response) => response.json())
+            .then(function(response){
+                if(response['status'] === 401) setAuth(false)
+                return response.json();
+            })
             .then((json) => {
                 // setUseSt(true);
                 setFieldWorkers(json);
@@ -133,6 +138,11 @@ const FieldWorkersInHospital: React.FC<any> = props => {
                                 </IonCardHeader>
                             </IonCard>
                         )}
+                        {
+                            !auth ? 
+                            <AlertLoggedOut auth = {auth} setAuth = {setAuth}></AlertLoggedOut>
+                            :null
+                        }
 
                     </IonGrid>
 

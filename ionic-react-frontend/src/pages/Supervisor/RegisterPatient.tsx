@@ -40,6 +40,7 @@ import { Redirect } from 'react-router';
 import BackButton from "../../components/BackButton";
 import { API_PATIENT, API_SUP_REG } from '../../api/Api';
 import Cookie from 'universal-cookie'
+import AlertLoggedOut from '../../components/AlertLoggedOut';
 
 // setupIonicReact();
 
@@ -54,6 +55,7 @@ const RegisterPatient: React.FC<any> = props => {
     const [showAlertErr, setShowAlertErr] = useState(false);
 
     const [redirect, setRedirect] = useState(false);
+    const [auth, setAuth] = useState(true);
 
     const [displayPatientId, setDisplayPatientId] = useState(0);
 
@@ -90,7 +92,7 @@ const RegisterPatient: React.FC<any> = props => {
                 console.log(response);
                 if(response['status'] === 200){
                     console.log("DONE");
-                }
+                } else if(response['status'] === 401) setAuth(false)
                 else{
                     console.log("ERROR");
                 }
@@ -142,7 +144,8 @@ const RegisterPatient: React.FC<any> = props => {
                             console.log(response);
                             if (response['status'] === 201) {
                                 console.log("DONE");
-                            } else {
+                            } else if(response['status'] === 401) setAuth(false)
+                            else {
                                 console.log("ERROR");
                             }
                             return response.json();
@@ -254,7 +257,11 @@ const RegisterPatient: React.FC<any> = props => {
             <IonGrid className='ion-text-center ion-margin'>
             <IonButton onClick = {registerPatient}>Submit</IonButton>
             </IonGrid>
-            
+                {
+                    !auth ? 
+                    <AlertLoggedOut auth = {auth} setAuth = {setAuth}></AlertLoggedOut>
+                    :null
+                }
                <IonAlert
                    isOpen={showAlert}
                     onDidDismiss={() => setShowAlert(false)}

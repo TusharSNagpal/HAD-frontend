@@ -23,17 +23,21 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
 import AdminBackButton from "../../components/AdminBackButton";
 
 import * as apis from "../../api/Api";
+import Cookie from 'universal-cookie';
+import AlertLoggedOut from '../../components/AlertLoggedOut';
 
 const path = "/admin/globalRegister";
 const GlobalRegisterDoctor: React.FC = () => {
+    const cookie = new Cookie();
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState<string>();
     const [alertHeader, setAlertHeader] = useState<string>()
+    const [auth, setAuth] = useState(true)
 
     const fname = useRef<HTMLIonInputElement>(null)
     const lname = useRef<HTMLIonInputElement>(null)
@@ -50,6 +54,7 @@ const GlobalRegisterDoctor: React.FC = () => {
         phoneNo.current!.value = null;
         address.current!.value = null;
     }
+
 
     const registerDoctor = async () => {
         if(fname.current!.value==null || lname.current!.value==null || gender.current!.value==null || dob.current!.value==null || phoneNo.current!.value==null || address.current!.value==null){
@@ -71,7 +76,8 @@ const GlobalRegisterDoctor: React.FC = () => {
         const options = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+cookie.get("jwt")
             },
             body: JSON.stringify(data)
         }
@@ -81,7 +87,10 @@ const GlobalRegisterDoctor: React.FC = () => {
                 console.log(response);
                 if (response['status'] === 201) {
                     console.log("DONE");
-                } else {
+                } else if(response['status'] === 401) {
+                    setAuth(false)
+                }
+                else {
                     console.log("ERROR");
                 }
                 return response.json();
@@ -167,6 +176,11 @@ const GlobalRegisterDoctor: React.FC = () => {
                 <IonGrid className='ion-text-center ion-margin'>
                     <IonButton onClick={registerDoctor}>Submit</IonButton>
                 </IonGrid>
+                {
+                    !auth ? 
+                    <AlertLoggedOut auth = {auth} setAuth = {setAuth}></AlertLoggedOut>
+                    :null
+                }
                         <IonAlert
                         isOpen={showAlert}
                         onDidDismiss={() => setShowAlert(false)}
