@@ -59,6 +59,9 @@ const OldFollowUp: React.FC<any> = props => {
     const cookie = new Cookie();
     const f = props.location.state;
     const [followUpDetails, setFollowUpDetails] = useState(f.currFollowUp);
+    useEffect(() => {
+        console.log(f);
+    },[])
     const [profileData, setProfileData] = useState(f.userData);
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState<string>();
@@ -146,19 +149,16 @@ const OldFollowUp: React.FC<any> = props => {
             .then(function (response) {
                 if (response['status'] === 201) {
                     console.log("DONE");
-                } else if(response['status'] == 401) setAuth(false)
+                }
                 else {
                     console.log("ERROR");
                 }
                 return response.json();
-            })
-            .then(function (data) {
-                fetch(`${apis.API_SEND_SMS}/${phoneNo}/verificationNo/${verificationNo}`)
-                    .then(function (response){
-                        setRedirect(true);
-                    })
-
-
+            }).then(() => {
+            fetch(`${apis.API_SEND_SMS}/${phoneNo}/verificationNo/${verificationNo}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
+                .then(function (response){
+                    setRedirect(true);
+                })
             })
 
     }
@@ -168,7 +168,7 @@ const OldFollowUp: React.FC<any> = props => {
     }
 
     useEffect(() => {
-        fetch(`${API_FOLLOWUP_VIS}${followUpDetails.visit.visitId}/followUpId/${followUpDetails.followUpId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
+        fetch(`${API_FOLLOWUP_VIS}/${followUpDetails.visit.visitId}/followUpId/${followUpDetails.followUpId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then(function(response){
                 if(response['status'] === 401) setAuth(false)
                 return response.json();
@@ -196,12 +196,14 @@ const OldFollowUp: React.FC<any> = props => {
 
     const deleteIt = (index:number) => {
         let pseudo = mapTask;
-        pseudo.splice(index,1);
-        setMapTask(pseudo);
-        if(changeState)
-            setChangeState(false);
-        else
-        setChangeState(true);
+        if(pseudo.length > 1){
+            pseudo.splice(index,1);
+            setMapTask(pseudo);
+            if(changeState)
+                setChangeState(false);
+            else
+            setChangeState(true);
+        }
     }
 
     useEffect(() => {
@@ -381,7 +383,7 @@ const OldFollowUp: React.FC<any> = props => {
                                                 
                                                 {/* <IonTextarea value={tasksAssigned} onIonChange={(e) => setTasksAssigned(e.detail.value!)}></IonTextarea> */}
                                                 {mapTask.map((value: any, index: any) => (
-                                                    <IonTextarea key = {index} value={mapTask[index]} onIonChange={(e) => handleChangeOfTask(e, index)}><IonButton onClick={()=> {addNew(index)}}>+</IonButton><IonButton onClick={() => deleteIt(index)}>-</IonButton></IonTextarea>
+                                                    <IonTextarea key = {index} value={mapTask[index]} onIonChange={(e) => handleChangeOfTask(e, index)}><IonButton size = "large" onClick={()=> {addNew(index)}}>+</IonButton><IonButton size = "large" onClick={() => deleteIt(index)}>-</IonButton></IonTextarea>
                                                 // <IonTextarea value={tasksAssigned} onIonChange={(e) => setTasksAssigned(e.detail.value!)}></IonTextarea>
                                                  ))}
                                             </IonItem>

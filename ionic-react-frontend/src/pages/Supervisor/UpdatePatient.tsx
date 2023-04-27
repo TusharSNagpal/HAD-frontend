@@ -51,7 +51,6 @@ const UpdatePatient:React.FC<any> = props => {
     const [profileData, setProfileData] = useState(profile);
     const path="/supervisors"
 
-
     const resetAll = () => {
         // supervisorId.current!.value = null;
         dob.current!.value=null;
@@ -63,20 +62,14 @@ const UpdatePatient:React.FC<any> = props => {
         phoneNo.current!.value = null;
     }
 
-
-
     const updatePatient = async() => {
         let data = {
-
-
-
             'fname': fname.current!.value,
             'lname': lname.current!.value,
             'gender': gender.current!.value,
             'address': address.current!.value,
             'phoneNo': phoneNo.current!.value,
             'dob': dob.current!.value
-
         }
         console.log(JSON.stringify(data))
         const addRecordEndpoint = `${API_PATIENT}/${patient.patientId}`;
@@ -104,21 +97,19 @@ const UpdatePatient:React.FC<any> = props => {
     }
 
     const handle = () => {
-        if(openForm) setOpenForm(false);
-        else setOpenForm(true);
-    }
-
-    useEffect(() => {
-        fetch(`${API_PATIENT}${id}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
+        fetch(`${API_PATIENT}/${id}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then(async (response) => {
                 if(response['status'] === 200) {
                     const data = await response.json();
                     setPatient(data)
                     console.log(data)
+                    resetAll();
                 } else if(response['status'] === 401) setAuth(false)
                 else if(id !== 0) setShowAlertNoSuchId(true);
             })
-    },[openForm]);
+        // if(openForm) setOpenForm(false);
+        // else setOpenForm(true);
+    }
 
     return(
         <IonPage>

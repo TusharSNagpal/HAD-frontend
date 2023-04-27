@@ -70,7 +70,7 @@ const GlobalUpdateFieldWorker = () => {
             'phoneNo': phoneNo.current!.value,
             'address': address.current!.value,
             'registrationDate': registrationDate.current!.value,
-            'numOfTasksPerDay': fieldWorker.numOfTasksPerDay
+            'numOfTasksAssignedPerDay': fieldWorker.numOfTasksAssignedPerDay
         }
         console.log(JSON.stringify(data))
 
@@ -110,7 +110,7 @@ const GlobalUpdateFieldWorker = () => {
     }
 
     useEffect(() => {
-        fetch(`${API_FW_REG}${id}`, {headers : {Authorization: 'Bearer '+cookie.get("jwt")}})
+        fetch(`${API_FW_REG}/${id}`, {headers : {Authorization: 'Bearer '+cookie.get("jwt")}})
            .then(async (response) => {
             if(response['status'] === 200) {
                 const data = await response.json();

@@ -103,7 +103,7 @@ const GlobalUpdateHospital = () => {
     }
 
     useEffect(() => {
-        fetch(`${API_HOSP_REG}${id}`, {headers : {Authorization: 'Bearer '+cookie.get("jwt")}})
+        fetch(`${API_HOSP_REG}/${id}`, {headers : {Authorization: 'Bearer '+cookie.get("jwt")}})
            .then(async (response) => {
             if(response['status'] === 200) {
                 const data = await response.json();

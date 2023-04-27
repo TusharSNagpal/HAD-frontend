@@ -100,20 +100,6 @@ const DoctorHome: React.FC<any> = props => {
     const pickFollowUp = (followUp:any)=>{
         setCurrFollowUp(followUp)
         setRedirectToFollowUp(true)
-
-        fetch(`${API_FOLLOWUP_DOC_END}/${followUp.followUpId}`, 
-        {
-            method : 'PUT',
-            headers: {Authorization: 'Bearer '+cookie.get("jwt")}
-        })
-            .then(function(response){
-                if(response['status'] === 401) setAuth(false)
-                return response.json();
-            })
-            .then((json) => {
-                console.log(json);
-                handle();
-            })
     }
 
     const handleNewPatientList=()=>{
@@ -130,32 +116,14 @@ const DoctorHome: React.FC<any> = props => {
         if(!profileData || profileData === undefined || profileData.userData.docInHospId === undefined){
             console.log("Login Again..!");
             setAuth(false);
-            setProfile(null);
-            setProfileData(null);
         }
         else{
-            fetch(`${API_ACTIVE_VIS}${profileData?.userData?.hospital?.hospitalId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
-                .then(function(response){
-                    if(response['status'] === 401) setAuth(false)
-                    return response.json();
-                })
-                .then((json) => {
-                    setActiveCases(json);
-                    return json;
-                })
-        }
-    }, []);
-
-    useEffect(() => {
-        if(!profileData || profileData === undefined || profileData.userData.docInHospId === undefined){
-            console.log("Login Again..!");
-            setAuth(false);
-        }
-        else{
-            fetch(`${API_ACTIVE_VIS}${profileData?.userData?.hospital?.hospitalId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
-                .then(function(response){
-                    if(response['status'] === 401) setAuth(false)
-                    return response.json();
+            const hospitalId = profileData?.userData?.hospital?.hospitalId
+            const currId = profileData?.userData?.docInHospId
+            fetch(`${apis.API_ACTIVE_VIS}/${hospitalId}/docInHosp/${currId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
+                .then((response) => {
+                    if(response['status'] === 401) setAuth(false);
+                    return response.json()
                 })
                 .then((json) => {
                     setActiveCases(json);
@@ -171,35 +139,16 @@ const DoctorHome: React.FC<any> = props => {
             setAuth(false);
         }
         else{
-            fetch(`${API_FOLLOWUP_DOC_REV}${profileData?.userData?.docInHospId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
-                .then(function(response){
-                    if(response['status'] === 401) setAuth(false)
-                    return response.json();
-                })
-                .then((json) => {
-                    setActiveFollowUps(json);
+            fetch(`${apis.API_FOLLOWUP_DOC_REV}/${profileData?.userData?.docInHospId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
+            .then((response) => {
+                if(response['status'] === 401) setAuth(false);
+                return response.json()
+            })
+            .then((json) => {
+                setActiveFollowUps(json);
 
-                    return json;
-                })
-            }
-    },[]);
-
-    useEffect(() => {
-        if(!profileData || profileData === undefined || profileData.userData.docInHospId === undefined){
-            console.log("Login Again..!");
-            setAuth(false);
-        }
-        else{
-            fetch(`${API_FOLLOWUP_DOC_REV}${profileData?.userData?.docInHospId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
-                .then(function(response){
-                    if(response['status'] === 401) setAuth(false)
-                    return response.json();
-                })
-                .then((json) => {
-                    setActiveFollowUps(json);
-
-                    return json;
-                })
+                return json;
+            })
         }
     },[useSt]);
 

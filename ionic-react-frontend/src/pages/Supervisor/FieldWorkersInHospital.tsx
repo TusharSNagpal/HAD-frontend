@@ -66,7 +66,7 @@ const FieldWorkersInHospital: React.FC<any> = props => {
 
 
     useEffect(() => {
-        fetch(`${API_FWINHOSP_REG}hospital/${profileData.userData.hospital.hospitalId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
+        fetch(`${API_FWINHOSP_REG}/hospital/${profileData.userData.hospital.hospitalId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then(function(response){
                 if(response['status'] === 401) setAuth(false)
                 return response.json();
