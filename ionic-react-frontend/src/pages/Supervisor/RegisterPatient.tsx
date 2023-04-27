@@ -38,11 +38,16 @@ import './Supervisor.css';
 import {useEffect, useRef, useState} from "react";
 import { Redirect } from 'react-router';
 import BackButton from "../../components/BackButton";
+
+import { API_PATIENT, API_SUP_REG } from '../../api/Api';
+import Cookie from 'universal-cookie'
+
 import * as apis from '../../api/Api'
 
 // setupIonicReact();
 
 const RegisterPatient: React.FC<any> = props => {
+    const cookie = new Cookie();
     const profile = props.location.state;
     const [profileData, setProfileData] = useState(profile);
 
@@ -81,7 +86,7 @@ const RegisterPatient: React.FC<any> = props => {
 
     const registerPatient = async() => {
         //here
-        fetch(`${apis.API_SUP_REG}/${profileData.userData.supervisorId}`)
+        fetch(`${API_SUP_REG}/${profileData.userData.supervisorId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then(function(response){
                 if(response['status'] === 200){
                     console.log("DONE");
@@ -101,32 +106,33 @@ const RegisterPatient: React.FC<any> = props => {
                 }
             )
             .then( async function (hospitalId){
-                    if(hospitalId === -1){
-                        setShowAlertNoSuchId(true);
-                    }
-                    else {
-                        setShowAlertNoSuchId(false);
-                        var changeDateFormat = dob.current!.value;
-                        if(changeDateFormat!=null && typeof(changeDateFormat)=='string')
-                            changeDateFormat = changeDateFormat.split('T')[0];
-                        let data = {
-                            'hospital': {'hospitalId': hospitalId},
-                            'supervisor': {'supervisorId': profileData.userData.supervisorId},
-                            'fname': fname.current!.value,
-                            'lname': lname.current!.value,
-                            'gender': gender.current!.value,
-                            'address': address.current!.value,
-                            'phoneNo': phoneNo.current!.value,
-                            'dob': changeDateFormat
-                        };
-                        const addRecordEndpoint = `${apis.API_PATIENT}/`;
-                        const options = {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(data)
-                        }
+                if(hospitalId === -1){
+                    setShowAlertNoSuchId(true);
+                }
+                else {
+                    setShowAlertNoSuchId(false);
+                    var changeDateFormat = dob.current!.value;
+                    if(changeDateFormat!=null && typeof(changeDateFormat)=='string')
+                        changeDateFormat = changeDateFormat.split('T')[0];
+                    let data = {
+                        'hospital': {'hospitalId': hospitalId},
+                        'supervisor': {'supervisorId': profileData.userData.supervisorId},
+                        'fname': fname.current!.value,
+                        'lname': lname.current!.value,
+                        'gender': gender.current!.value,
+                        'address': address.current!.value,
+                        'phoneNo': phoneNo.current!.value,
+                        'dob': changeDateFormat
+                    };
+                    console.log(JSON.stringify(data));
+                    const addRecordEndpoint = `${API_PATIENT}/`;
+                    const options = {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer '+ cookie.get("jwt")
+                        },
+                        body: JSON.stringify(data)
 
                         await fetch(addRecordEndpoint, options)
                             .then(function (response) {

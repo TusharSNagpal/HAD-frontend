@@ -46,11 +46,15 @@ import {Redirect} from "react-router";
 import DoctorHome from "./DoctorHome";
 import {Route} from "react-router-dom";
 import BackButton from "../../components/BackButton";
-import * as apis from '../../api/Api'
 
+import { API_FOLLOWUPS, API_VISITED } from '../../api/Api';
+import Cookie from 'universal-cookie';
+
+import * as apis from '../../api/Api'
 
 // setupIonicReact();
 const Patient: React.FC<any> = props => {
+    const cookie = new Cookie();
     const v = props.location.state;
     const [visitDetails, setVisitDetails] = useState(v.currCase);
     const [profileData, setProfileData] = useState(v.userData);
@@ -90,7 +94,8 @@ const Patient: React.FC<any> = props => {
         const options = {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+ cookie.get("jwt")
             },
             body: JSON.stringify(visitDetails)
         }
@@ -121,7 +126,6 @@ const Patient: React.FC<any> = props => {
                     setAlertHeader("Alert");
                     setAlertMessage("Unsuccessful");
                 }
-
                 return items;
             })
     }
@@ -154,7 +158,8 @@ const Patient: React.FC<any> = props => {
         const options = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+ cookie.get("jwt")
             },
             body: JSON.stringify(newFollowUp)
         }

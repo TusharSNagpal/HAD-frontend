@@ -4,6 +4,7 @@ import {
 } from '@ionic/react';
 import React, {useState} from "react";
 import {Redirect} from "react-router";
+import Cookie from 'universal-cookie';
 
 // interface propsLogout{
 //   profile: any;
@@ -13,10 +14,10 @@ import {Redirect} from "react-router";
 // }
 
 const LogoutButton: React.FC<any> = ({profile, setProfile, profileData, setProfileData}) => {
-
+    const cookie = new Cookie();
   return(
       <IonRow>
-          <IonButton onClick = {() => {setProfile(null); setProfileData(null);}} >LOGOUT</IonButton>
+          <IonButton onClick = {() => {setProfile(null); cookie.remove("jwt"); setProfileData(null);}} >LOGOUT</IonButton>
                 {
                     !profile && !profileData ? 
                         <Redirect to = "/"></Redirect>

@@ -34,13 +34,16 @@ import {Redirect} from "react-router";
 import BackButton from "../../components/BackButton";
 import LogoutButton from '../../components/LogoutButton';
 import AlertLoggedOut from '../../components/AlertLoggedOut';
-import * as apis from '../../api/Api';
 
+import { API_ACTIVE_VIS, API_FOLLOWUP_DOC_END, API_FOLLOWUP_DOC_REV, API_VIS } from '../../api/Api';
+import Cookie from 'universal-cookie'
+
+import * as apis from '../../api/Api';
 
 // setupIonicReact();
 
 const DoctorHome: React.FC<any> = props => {
-
+    const cookie = new Cookie();
     const [profile, setProfile] = useState(props?.location?.state);
     const [profileData, setProfileData] = useState(profile);
 
@@ -65,8 +68,11 @@ const DoctorHome: React.FC<any> = props => {
 
     const deactivate = (cases:any) => {
         setCurrCase(cases);
-        fetch(`${apis.API_VIS}/${cases.visitId}`, {method : 'PUT'})
-
+        fetch(`${API_VIS}/${cases.visitId}`,
+        {
+            method : 'PUT',
+            headers: {Authorization: 'Bearer '+cookie.get("jwt")}
+        })
             .then((response) => response.json())
             .then((json) => {
                 handle();
@@ -92,13 +98,15 @@ const DoctorHome: React.FC<any> = props => {
         setCurrFollowUp(followUp)
         setRedirectToFollowUp(true)
 
-        fetch(`${apis.API_FOLLOWUP_DOC_END}/${followUp.followUpId}`, {method : 'PUT'})
-
-            .then((response) => response.json())
-            .then((json) => {
-                handle();
-            })
-
+        fetch(`${API_FOLLOWUP_DOC_END}/${followUp.followUpId}`, 
+        {
+            method : 'PUT',
+            headers: {Authorization: 'Bearer '+cookie.get("jwt")}
+        })
+        .then((response) => response.json())
+        .then((json) => {
+           handle();
+         })
     }
 
     const handleNewPatientList=()=>{
@@ -119,10 +127,7 @@ const DoctorHome: React.FC<any> = props => {
             setProfileData(null);
         }
         else{
-            const hospitalId = profileData?.userData?.hospital?.hospitalId
-            const currId = profileData?.userData?.docInHospId
-            fetch(`${apis.API_ACTIVE_VIS}/${hospitalId}/docInHosp/${currId}`)
-
+            fetch(`${API_ACTIVE_VIS}/${profileData?.userData?.hospital?.hospitalId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
                 .then((response) => response.json())
                 .then((json) => {
                     setActiveCases(json);
@@ -137,10 +142,8 @@ const DoctorHome: React.FC<any> = props => {
             setAuth(false);
         }
         else{
-            const hospitalId = profileData?.userData?.hospital?.hospitalId
-            const currId = profileData?.userData?.docInHospId
-            fetch(`${apis.API_ACTIVE_VIS}/${hospitalId}/docInHosp/${currId}`)
-
+            // const hospitalId = profileData?.userData?.hospital?.hospitalId
+            fetch(`${API_ACTIVE_VIS}/${profileData?.userData?.hospital?.hospitalId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
                 .then((response) => response.json())
                 .then((json) => {
                     setActiveCases(json);
@@ -156,8 +159,7 @@ const DoctorHome: React.FC<any> = props => {
             setAuth(false);
         }
         else{
-            fetch(`${apis.API_FOLLOWUP_DOC_REV}/${profileData?.userData?.docInHospId}`)
-
+            fetch(`${API_FOLLOWUP_DOC_REV}/${profileData?.userData?.docInHospId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
                 .then((response) => response.json())
                 .then((json) => {
                     setActiveFollowUps(json);
@@ -173,8 +175,7 @@ const DoctorHome: React.FC<any> = props => {
             setAuth(false);
         }
         else{
-            fetch(`${apis.API_FOLLOWUP_DOC_REV}/${profileData?.userData?.docInHospId}`)
-
+            fetch(`${API_FOLLOWUP_DOC_REV}/${profileData?.userData?.docInHospId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
                 .then((response) => response.json())
                 .then((json) => {
                     setActiveFollowUps(json);

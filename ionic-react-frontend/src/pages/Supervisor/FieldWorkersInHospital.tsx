@@ -37,11 +37,16 @@ import {Redirect} from "react-router";
 import React, {useEffect, useState} from "react";
 import {type} from "os";
 import BackButton from "../../components/BackButton";
+
+import { API_FWINHOSP_REG } from '../../api/Api';
+import Cookie from 'universal-cookie';
+
 import * as apis from '../../api/Api'
 
 // setupIonicReact();
 
 const FieldWorkersInHospital: React.FC<any> = props => {
+    const cookie = new Cookie()
     const profile = props.location.state;
     const [profileData, setProfileData] = useState(profile);
     // console.log(props.location.state)
@@ -59,8 +64,7 @@ const FieldWorkersInHospital: React.FC<any> = props => {
 
 
     useEffect(() => {
-        fetch(`${apis.API_FWINHOSP_REG}/hospital/${profileData.userData.hospital.hospitalId}`)
-
+        fetch(`${API_FWINHOSP_REG}hospital/${profileData.userData.hospital.hospitalId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then((response) => response.json())
             .then((json) => {
                 // setUseSt(true);

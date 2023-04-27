@@ -36,10 +36,12 @@ import {useRef, useState} from "react";
 import {Redirect} from "react-router";
 import BackButton from "../../components/BackButton";
 import { API_FWINHOSP_REG, API_FW_REG } from '../../api/Api';
+import Cookie from 'universal-cookie'
 
 // setupIonicReact();
 
 const RegisterFieldWorker: React.FC<any> = props => {
+    const cookie = new Cookie();
    // const supId = props.location.state;
     const fwId= useRef<HTMLIonInputElement>(null);
     const hospId= useRef<HTMLIonInputElement>(null);
@@ -64,8 +66,7 @@ const RegisterFieldWorker: React.FC<any> = props => {
 
     const registerFieldWorker = async() => {
 
-
-        fetch(`${API_FW_REG}/${fwId.current!.value}`)
+        fetch(`${API_FW_REG}/${fwId.current!.value}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then(function(response){
                 console.log(response);
                 if(response['status'] === 200){
@@ -106,7 +107,8 @@ const RegisterFieldWorker: React.FC<any> = props => {
                         const addRecordEndpoint = `${API_FWINHOSP_REG}/fwInHosp/${fwId.current!.value}/hospital/${hospId.current!.value}`;                        const options = {
                             method: 'POST',
                             headers: {
-                                'Content-Type': 'application/json'
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer '+ cookie.get("jwt")
                             },
                             body: JSON.stringify(data)
                         }

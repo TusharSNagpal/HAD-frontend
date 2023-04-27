@@ -37,13 +37,16 @@ import {Redirect} from "react-router";
 import React, {useEffect, useState} from "react";
 import BackButton from "../../components/BackButton";
 
-import {API_FOLLOWUPS, API_FWINHOSP_REG, API_SEND_SMS} from "../../api/Api";
+import { API_FOLLOWUPS, API_FWINHOSP_REG } from '../../api/Api';
+import Cookie from 'universal-cookie';
 
+import {API_FOLLOWUPS, API_FWINHOSP_REG, API_SEND_SMS} from "../../api/Api";
 
 // setupIonicReact();
 
 const AssignTasks: React.FC<any> = props => {
 
+    const cookie = new Cookie()
     const [followUps, setFollowUps] = useState<any[]>([]);
     const [picked, setPicked] = useState<boolean[]>([false]);
     const [showAlert, setShowAlert] = useState(false);
@@ -97,9 +100,12 @@ const AssignTasks: React.FC<any> = props => {
 
                 const options = {
                     method: 'PUT',
-                    headers:{
-                        'Content-Type': 'application/json'
+
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer '+ cookie.get("jwt")
                     },
+
                     body: JSON.stringify(followUps[i])
                 }
                 fetch(addRecordEndpoint,options)
@@ -130,7 +136,8 @@ const AssignTasks: React.FC<any> = props => {
             const options = {
                 method: 'PUT',
                 headers:{
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+ cookie.get("jwt")
                 },
                 body: JSON.stringify(fieldWorkerDetails)
             }
@@ -159,8 +166,7 @@ const AssignTasks: React.FC<any> = props => {
     }
 
     useEffect(() => {
-        fetch(`${API_FOLLOWUPS}/remaining/${profileData?.hospital?.hospitalId}`)
-
+        fetch(`${API_FOLLOWUPS}/remaining/${profileData?.hospital?.hospitalId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then((response) => response.json())
             .then((json) => {
                 // setUseSt(true);

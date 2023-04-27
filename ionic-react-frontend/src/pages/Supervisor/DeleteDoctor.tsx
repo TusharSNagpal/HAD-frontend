@@ -26,10 +26,12 @@ import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 import React, { useEffect, useRef, useState } from 'react';
 import BackButton from "../../components/BackButton";
-import {API_DOCINHOSP_DEL, API_DOCINHOSP_REG} from "../../api/Api";
 
+import { API_DOCINHOSP_DEL, API_DOCINHOSP_REG } from '../../api/Api';
+import Cookie from 'universal-cookie';
 
 const DeleteDoctor: React.FC<any> = props=> {
+    const cookie = new Cookie();
     const [showAlertNoSuchId, setShowAlertNoSuchId] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [id, setId] = useState(0);
@@ -54,7 +56,8 @@ const DeleteDoctor: React.FC<any> = props=> {
         const options = {
             method: 'DELETE',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+ cookie.get("jwt")
             },
             body: JSON.stringify(data)
         }
@@ -78,8 +81,7 @@ const DeleteDoctor: React.FC<any> = props=> {
     }
 
     useEffect(() => {
-        fetch(`${API_DOCINHOSP_REG}/${id}`)
-
+        fetch(`${API_DOCINHOSP_REG}/${id}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then(async (response) => {
                 if(response['status'] === 200) {
                     const data = await response.json();

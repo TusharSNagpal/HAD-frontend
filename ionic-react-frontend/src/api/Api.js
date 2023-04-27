@@ -1,4 +1,5 @@
 const ip = "localhost";
+
 const base = `http://${ip}:9090/api`;
 
 //base:
@@ -8,6 +9,11 @@ export const API_BASE = base;
 export const API_OTP_GEN = `${base}/phoneNumber/generateOTP`;
 export const API_OTP_VERIFY = `${base}/phoneNumber/verifyOTP`;
 export const API_SEND_SMS = `${base}/phoneNumber/sendSMS`;
+
+
+// otp with jwt:
+    export const JWT_REQ_OTP = `${base}/client/auth/requestOtp/`;
+    export const JWT_VERIFY_OTP = `${base}/client/auth/verifyOtp`;
 
 
 //followups:
