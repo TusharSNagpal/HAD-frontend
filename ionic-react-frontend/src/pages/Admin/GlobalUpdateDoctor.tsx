@@ -105,11 +105,6 @@ const GlobalUpdateDoctor = () => {
     }
 
     const handle = () => {
-        if(openForm) setOpenForm(false);
-        else setOpenForm(true);
-    }
-
-    useEffect(() => {
         fetch(`${API_DOC_REG}/${id}`, {headers : {Authorization: 'Bearer '+cookie.get("jwt")}})
            .then(async (response) => {
             if(response['status'] === 200) {
@@ -121,7 +116,10 @@ const GlobalUpdateDoctor = () => {
             }
             else if(id != 0) setShowAlertNoSuchId(true);
            })
-        },[openForm]);
+        }
+    
+
+    
 
     return(
         <IonPage>

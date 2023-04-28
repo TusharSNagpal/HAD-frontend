@@ -98,11 +98,6 @@ const GlobalUpdateHospital = () => {
 
 
     const handle = () => {
-        if(openForm) setOpenForm(false);
-        else setOpenForm(true);
-    }
-
-    useEffect(() => {
         fetch(`${API_HOSP_REG}/${id}`, {headers : {Authorization: 'Bearer '+cookie.get("jwt")}})
            .then(async (response) => {
             if(response['status'] === 200) {
@@ -114,7 +109,7 @@ const GlobalUpdateHospital = () => {
             }
             else if(id !== 0) setShowAlertNoSuchId(true);
            })
-        },[openForm]);
+    }
 
     return(
         <IonPage>

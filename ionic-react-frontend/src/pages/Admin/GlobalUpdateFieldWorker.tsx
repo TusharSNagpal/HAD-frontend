@@ -105,11 +105,6 @@ const GlobalUpdateFieldWorker = () => {
     }
 
     const handle = () => {
-        if(openForm) setOpenForm(false);
-        else setOpenForm(true);
-    }
-
-    useEffect(() => {
         fetch(`${API_FW_REG}/${id}`, {headers : {Authorization: 'Bearer '+cookie.get("jwt")}})
            .then(async (response) => {
             if(response['status'] === 200) {
@@ -121,7 +116,7 @@ const GlobalUpdateFieldWorker = () => {
             }
             else if(id !== 0) setShowAlertNoSuchId(true);
            })
-        },[openForm]);
+    }
 
     return(
         <IonPage>
