@@ -59,11 +59,6 @@ const GlobalRegisterSupervisor: React.FC = () => {
     }
 
     const handle = () => {
-        if(useSt) setUseSt(false);
-        else setUseSt(true);
-    }
-
-    useEffect(() => {
         fetch(`${API_HOSP_NOSUP}`, {headers : {Authorization: 'Bearer '+cookie.get("jwt")}})
            .then(function(response) {
             if(response['status'] === 401) {
@@ -75,7 +70,7 @@ const GlobalRegisterSupervisor: React.FC = () => {
                setHospitalOptions(json);
                console.log(hospitalOptions)
            })
-        }, [useSt]);
+    }
 
     const selectHospital = (event: any) =>{
         setHospitalId(event.target.value);
