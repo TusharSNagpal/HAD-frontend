@@ -68,21 +68,7 @@ const DoctorHome: React.FC<any> = props => {
 
     const deactivate = (cases:any) => {
         setCurrCase(cases);
-        fetch(`${API_VIS}/${cases.visitId}`,
-        {
-            method : 'PUT',
-            headers: {Authorization: 'Bearer '+cookie.get("jwt")}
-        })
-            .then(function(response){
-                if(response['status'] === 401) setAuth(false)
-                return response.json();
-            })
-            .then((json) => {
-                handle();
-            })
-
         setRedirectToPatient(true);
-
     }
 
     const handle = () => {
@@ -151,7 +137,6 @@ const DoctorHome: React.FC<any> = props => {
             })
         }
     },[useSt]);
-
 
     return(
         <IonPage>

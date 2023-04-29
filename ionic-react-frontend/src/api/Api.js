@@ -1,4 +1,4 @@
-const ip = "localhost";
+const ip = "192.168.43.109";
 
 const base = `http://${ip}:9090/api`;
 

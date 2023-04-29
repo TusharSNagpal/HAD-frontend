@@ -47,10 +47,12 @@ import DoctorHome from "./DoctorHome";
 import { Route } from "react-router-dom";
 import BackButton from "../../components/BackButton";
 import * as apis from '../../api/Api'
+import Cookies from 'universal-cookie';
 
 
 // setupIonicReact();
 const ViewPatientHistory: React.FC<any> = props => {
+    const cookie = new Cookies();
     const f = props.location.state;
     const [currCase, setCurrCase] = useState(f.visitDetails);
     const [profileData, setProfileData] = useState(f.userData);
@@ -74,7 +76,7 @@ const ViewPatientHistory: React.FC<any> = props => {
     const path = "/doctorInHospital/patient"
 
     useEffect(() => {
-        fetch(`${apis.API_VIS}/${currCase.visitId}/patient/${currCase?.patient?.patientId}`)
+        fetch(`${apis.API_VIS}/${currCase.visitId}/patient/${currCase?.patient?.patientId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then((response) => response.json())
             .then((json) => {
                 setVisits(json);
@@ -91,7 +93,7 @@ const ViewPatientHistory: React.FC<any> = props => {
         const prescription = visit.prescription.split("\n")
         setSymptomList(symptoms)
         setPrescriptionList(prescription)
-        await fetch(`${apis.API_FOLLOWUP_VIS}/${visit.visitId}/followUpId/-1`)
+        await fetch(`${apis.API_FOLLOWUP_VIS}/${visit.visitId}/followUpId/-1`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then((response) => response.json())
             .then((json) => {
                 // setUseSt(true);
