@@ -91,6 +91,7 @@ const Patient: React.FC<any> = props => {
         visitDetails.symptoms = symptoms;
         visitDetails.prescription = prescription;
         visitDetails.doctorInHospital= {'docInHospId':profileData.docInHospId};
+        visitDetails.isActive = 0;
         const addRecordEndpoint = `${apis.API_VISITED}/${visitDetails.visitId}`;
 
         const options = {
@@ -270,7 +271,7 @@ const Patient: React.FC<any> = props => {
                 </IonToolbar>
             </IonCol>
 
-                <IonCol>
+                <IonCol className='ion-text-right'>
                     <IonButton onClick={handleViewHistoryButton}>View History</IonButton>
                 </IonCol>
                 </IonRow>
