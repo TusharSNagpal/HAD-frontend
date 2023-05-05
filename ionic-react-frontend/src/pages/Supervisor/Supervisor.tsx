@@ -94,7 +94,7 @@ const Supervisor: React.FC<any> = props => {
                 {/*<IonSegment>*/}
                 <RegisterCard location = {"/supervisors/register"} actor = {"REGISTER"} data = {profileData?.userData}></RegisterCard>
                 <RegisterCard location = {"/supervisors/updatePatient"} actor = {"UPDATE PATIENT"} data = {profileData?.userData}></RegisterCard>
-                <RegisterCard location = {"/supervisors/delete"} actor = {"DELETE"} data = {profileData?.userData}></RegisterCard>
+                {/* <RegisterCard location = {"/supervisors/delete"} actor = {"DELETE"} data = {profileData?.userData}></RegisterCard> */}
                 <RegisterCard location = {"/supervisors/fieldWorkersInHospital"} actor = {"ASSIGN TASKS TO FIELD WORKER"} data = {profileData?.userData}></RegisterCard>
                 <RegisterCard location = {"/supervisors/newCase"} actor = {"NEW CASE"} data = {profileData?.userData}></RegisterCard>
                 

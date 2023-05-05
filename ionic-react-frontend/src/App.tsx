@@ -26,10 +26,10 @@ import DoctorHome from "./pages/Doctor/DoctorHome";
 import Supervisor from "./pages/Supervisor/Supervisor";
 import RegisterDoctor from './pages/Supervisor/RegisterDoctor';
 import RegisterPatient from "./pages/Supervisor/RegisterPatient";
-import FWHome from './pages/FieldWorker/FWHome';
-import FillingRemarks from './pages/FieldWorker/FillingRemarks';
-import FieldWorker from './pages/FieldWorker/FieldWorker';
-import FollowUp from './pages/FieldWorker/FollowUp';
+// import FWHome from './pages/FieldWorker/FWHome';
+// import FillingRemarks from './pages/FieldWorker/FillingRemarks';
+// import FieldWorker from './pages/FieldWorker/FieldWorker';
+// import FollowUp from './pages/FieldWorker/FollowUp';
 
 import Register from "./pages/Supervisor/Register";
 import RegisterFieldWorker from "./pages/Supervisor/RegisterFieldWorker";
@@ -62,7 +62,7 @@ import OldFollowUp from "./pages/Doctor/OldFollowUp";
 import FieldWorkersInHospital from "./pages/Supervisor/FieldWorkersInHospital";
 import AssignTasks from "./pages/Supervisor/AssignTasks";
 import Home from "./pages/Home"
-import Prescription from './pages/FieldWorker/Prescription';
+// import Prescription from './pages/FieldWorker/Prescription';
 import ViewPatientHistory from "./pages/Doctor/ViewPatientHistory";
 
 import * as apis from "./api/Api"
@@ -131,12 +131,12 @@ const App: React.FC = () => {
           {/*<Route exact path = "/fieldWorkerHome" component={FWHome}/>*/}
           {/*<Route exact path = "/fillingRemarks" component={FillingRemarks}/>*/}
 
-
+{/* 
           <Route exact path = "/fieldWorkerInHospital" component={FieldWorker}/>
           <Route exact path = "/followup" component={FollowUp}/>
           <Route exact path = "/fieldWorkerHome" component={FWHome}/>
           <Route exact path = "/fillingRemarks" component={FillingRemarks}/>
-          <Route exact path = "/prescription" component={Prescription}/>
+          <Route exact path = "/prescription" component={Prescription}/> */}
 
 
 

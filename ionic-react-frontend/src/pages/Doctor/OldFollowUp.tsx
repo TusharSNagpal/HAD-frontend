@@ -394,7 +394,7 @@ const OldFollowUp: React.FC<any> = props => {
 
                                                 {/* <IonTextarea value={tasksAssigned} onIonChange={(e) => setTasksAssigned(e.detail.value!)}></IonTextarea> */}
                                                 {mapTask.map((value: any, index: any) => (
-                                                    <IonTextarea key={index} value={mapTask[index]} onIonChange={(e) => handleChangeOfTask(e, index)}><IonButton size="large" onClick={() => { addNew(index) }}>+</IonButton><IonButton size="large" onClick={() => deleteIt(index)}>-</IonButton></IonTextarea>
+                                                    <IonTextarea key={index} value={mapTask[index]} onIonChange={(e) => handleChangeOfTask(e, index)}><IonButton size="small" onClick={() => { addNew(index) }}>Add</IonButton><IonButton size="small" onClick={() => deleteIt(index)}>Remove</IonButton></IonTextarea>
                                                     // <IonTextarea value={tasksAssigned} onIonChange={(e) => setTasksAssigned(e.detail.value!)}></IonTextarea>
                                                 ))}
                                             </IonItem>

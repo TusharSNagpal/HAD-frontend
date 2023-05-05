@@ -60,7 +60,7 @@ const DoctorHome: React.FC<any> = props => {
     const [currFollowUp, setCurrFollowUp] = useState(null);
     const [auth, setAuth] = useState(true);
 
-    const [newPatient,setNewPatient] = useState(false);
+    const [newPatient,setNewPatient] = useState(true);
     const [oldFollowUps, setOldFollowUps] = useState(false);
     const path = "/"
 
