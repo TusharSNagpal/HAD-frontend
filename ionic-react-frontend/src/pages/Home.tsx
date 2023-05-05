@@ -182,7 +182,7 @@ const Home: React.FC = () => {
                                 <IonSelectOption value="admin">ADMIN</IonSelectOption>
                                 <IonSelectOption value="supervisors">SUPERVISOR</IonSelectOption>
                                 <IonSelectOption value="doctorInHospital">DOCTOR</IonSelectOption>
-                                <IonSelectOption value="fieldWorkerInHospital">FIELD WORKER</IonSelectOption>
+                                {/* <IonSelectOption value="fieldWorkerInHospital">FIELD WORKER</IonSelectOption> */}
                             </IonSelect>
                         </IonItem>
                     </IonList>
