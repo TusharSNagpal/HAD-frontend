@@ -174,8 +174,9 @@ const OldFollowUp: React.FC<any> = props => {
             .then((response) => {
                 if (response.status === 401)
                     setAuth(false);
+            }).then(()=>{
+                setRedirect(true);
             })
-        setRedirect(true);
     }
 
     useEffect(() => {
