@@ -54,6 +54,10 @@ const RegisterPatient: React.FC<any> = props => {
 
     const [showAlert, setShowAlert] = useState(false);
     const [showAlertErr, setShowAlertErr] = useState(false);
+    const [showAlertAll, setShowAlertAll] = useState(false);
+
+    const [alertMessage, setAlertMessage] = useState<string>();
+    const [alertHeader, setAlertHeader] = useState<string>();
 
     const [redirect, setRedirect] = useState(false);
     const [auth, setAuth] = useState(true);
@@ -87,6 +91,30 @@ const RegisterPatient: React.FC<any> = props => {
     // })
 
     const registerPatient = async() => {
+        let flag = true;
+        let ph = phoneNo.current!.value;
+        ph = ph!.toString();
+        // console.log(ph.length);
+        if(ph[0] !== '+' && ph[1] !== '9' && ph[2]!=='1'){
+            flag = false;
+        }
+        for(let i = 1; i<ph.length; i++){
+            if(ph[i]>'9' || ph[i]<'0'){
+                console.log(ph[i]);
+                flag = false;
+            }
+        }
+        if(ph.length !== 13)
+            flag = false;
+
+        console.log(flag);
+
+        if(!flag || fname.current!.value==null || lname.current!.value==null || gender.current!.value==null || dob.current!.value==null || phoneNo.current!.value==null || address.current!.value==null){
+            setShowAlertAll(true);
+            setAlertHeader("Unsuccessful");
+            setAlertMessage("Please fill required data or check if phone number is valid..");
+            return;
+        }
         //here
         // console.log(`${API_SUP_REG}/${profileData.userData.supervisorId}`);
         fetch(`${API_SUP_REG}/${profileData.userData.supervisorId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
@@ -267,6 +295,14 @@ const RegisterPatient: React.FC<any> = props => {
                     header="Alert"
                     subHeader="Registration Unsuccessful..!"
                     message="Please Go to Patient Registration Tab and Register Again!"
+                    buttons={['OK']}
+                />
+
+                <IonAlert
+                    isOpen={showAlertAll}
+                    onDidDismiss={() => setShowAlertAll(false)}
+                    header={alertHeader}
+                    message={alertMessage}
                     buttons={['OK']}
                 />
 

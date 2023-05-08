@@ -48,7 +48,7 @@ import * as apis from '../../api/Api'
 
 const FieldWorkersInHospital: React.FC<any> = props => {
     const cookie = new Cookie()
-    const profile = props.location.state;
+    const profile = props?.location?.state;
     const [profileData, setProfileData] = useState(profile);
     // console.log(props.location.state)
     const [fieldWorkers, setFieldWorkers] = useState<any[]>([]);
@@ -66,6 +66,8 @@ const FieldWorkersInHospital: React.FC<any> = props => {
 
 
     useEffect(() => {
+        if(profile === undefined)
+            setAuth(false);
         fetch(`${API_FWINHOSP_REG}/hospital/${profileData.userData.hospital.hospitalId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then(function(response){
                 if(response['status'] === 401) setAuth(false)

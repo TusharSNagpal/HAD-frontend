@@ -55,10 +55,10 @@ const AssignTasks: React.FC<any> = props => {
     const [redirect, setRedirect] = useState<boolean>(false);
     const [auth, setAuth] = useState(true)
 
-    const f = props.location.state;
+    const f = props?.location?.state;
     // console.log(f)
-    const [profileData, setProfileData] = useState(f.userData);
-    const [fieldWorkerDetails,setFieldWorkerDetails] = useState(f.currFieldWorker)
+    const [profileData, setProfileData] = useState(f?.userData);
+    const [fieldWorkerDetails,setFieldWorkerDetails] = useState(f?.currFieldWorker)
     // console.log(profileData)
     const [tasksAssigned, setTasksAssigned] = useState(fieldWorkerDetails.numOfTasksAssignedPerDay)
     const path = "/supervisors/fieldWorkersInHospital"
@@ -170,6 +170,9 @@ const AssignTasks: React.FC<any> = props => {
     }
 
     useEffect(() => {
+        if(f === undefined){
+            setAuth(false);
+        }
         fetch(`${API_FOLLOWUPS}/remaining/${profileData?.hospital?.hospitalId}`, {headers: {Authorization: 'Bearer '+cookie.get("jwt")}})
             .then(function(response) {
                 if(response['status'] === 401) {
