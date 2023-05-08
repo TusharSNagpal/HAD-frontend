@@ -289,7 +289,7 @@ const Patient: React.FC<any> = props => {
                             <IonCol>
                                 <h2>Name : {visitDetails.patient.fname} {visitDetails.patient.lname}</h2>
                                 <h2>Gender : {visitDetails.patient.gender}</h2>
-                                <h2>Age : {visitDetails.patient.age}</h2>
+<!--                                 <h2>Age : {visitDetails.patient.age}</h2> -->
                             </IonCol>
 
                         </IonRow>
