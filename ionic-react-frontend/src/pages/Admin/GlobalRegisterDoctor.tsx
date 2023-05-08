@@ -57,10 +57,28 @@ const GlobalRegisterDoctor: React.FC = () => {
 
 
     const registerDoctor = async () => {
-        if(fname.current!.value==null || lname.current!.value==null || gender.current!.value==null || dob.current!.value==null || phoneNo.current!.value==null || address.current!.value==null){
+        let flag = true;
+        let ph = phoneNo.current!.value;
+        ph = ph!.toString();
+        // console.log(ph.length);
+        if(ph[0] !== '+' && ph[1] !== '9' && ph[2]!=='1'){
+            flag = false;
+        }
+        for(let i = 1; i<ph.length; i++){
+            if(ph[i]>'9' || ph[i]<'0'){
+                console.log(ph[i]);
+                flag = false;
+            }
+        }
+        if(ph.length !== 13)
+            flag = false;
+
+        console.log(flag);
+
+        if(!flag || fname.current!.value==null || lname.current!.value==null || gender.current!.value==null || dob.current!.value==null || phoneNo.current!.value==null || address.current!.value==null){
             setShowAlert(true);
             setAlertHeader("Unsuccessful");
-            setAlertMessage("Please fill required data..");
+            setAlertMessage("Please fill required data or check if phone number is valid..");
             return;
         }
         let data = {
@@ -167,7 +185,7 @@ const GlobalRegisterDoctor: React.FC = () => {
                             </IonCol>
                             <IonCol>
                                 <IonCardTitle>Phone Number: </IonCardTitle>
-                                <IonCardTitle><IonInput ref={phoneNo} class="card-input" type="tel" placeholder="888-888-8888"></IonInput></IonCardTitle>
+                                <IonCardTitle><IonInput ref={phoneNo} class="card-input" type="tel" placeholder="+916888868888" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"></IonInput></IonCardTitle>
 
                             </IonCol>
                         </IonRow>

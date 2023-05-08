@@ -56,7 +56,25 @@ const GlobalUpdateDoctor = () => {
 
 
     const updateDoctor = async() => {
-        if(fname.current!.value=="" || lname.current!.value=="" || gender.current!.value=="" || dob.current!.value=="" || phoneNo.current!.value=="" || address.current!.value=="" || registrationDate.current!.value==""){
+        let flag = true;
+        let ph = phoneNo.current!.value;
+        ph = ph!.toString();
+        // console.log(ph.length);
+        if(ph[0] !== '+' && ph[1] !== '9' && ph[2]!=='1'){
+            flag = false;
+        }
+        for(let i = 1; i<ph.length; i++){
+            if(ph[i]>'9' || ph[i]<'0'){
+                console.log(ph[i]);
+                flag = false;
+            }
+        }
+        if(ph.length !== 13)
+            flag = false;
+
+        console.log(flag);
+
+        if(!flag || fname.current!.value=="" || lname.current!.value=="" || gender.current!.value=="" || dob.current!.value=="" || phoneNo.current!.value=="" || address.current!.value=="" || registrationDate.current!.value==""){
             setShowAlert(true);
             setAlertHeader("Unsuccessful");
             setAlertMessage("Please fill required data..");
