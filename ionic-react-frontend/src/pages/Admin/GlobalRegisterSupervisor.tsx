@@ -98,7 +98,7 @@ const GlobalRegisterSupervisor: React.FC = () => {
         if(!flag || hospitalId==null || fname.current!.value==null || lname.current!.value==null || gender.current!.value==null || dob.current!.value==null || phoneNo.current!.value==null || address.current!.value==null){
             setShowAlert(true);
             setAlertHeader("Unsuccessful");
-            setAlertMessage("Please fill required data..");
+            setAlertMessage("Please fill required data or check if the phone number is valid.");
             return;
         }
         let data = {

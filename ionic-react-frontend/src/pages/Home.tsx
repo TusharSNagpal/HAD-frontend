@@ -204,10 +204,9 @@ const Home: React.FC = () => {
                                 Login
                             </IonButton>
 
-                            {
-                                auth ?
-                                    <Redirect to={{ pathname: `./${role}`, state: { userData: userData } }}/>
-                                    :null}
+                            {auth ?
+                                <Redirect to={{ pathname: `./${role}`, state: { userData: userData } }}/>
+                            :null}
                         </form>
                     </IonSegment>
 
