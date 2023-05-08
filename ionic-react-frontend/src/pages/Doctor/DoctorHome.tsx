@@ -64,7 +64,8 @@ const DoctorHome: React.FC<any> = props => {
     const [oldFollowUps, setOldFollowUps] = useState(false);
     const path = "/"
 
-
+    const [colorNewCases, setcolorNewCases] = useState("primary");
+    const [colorReview, setColorReview] = useState("dark");
 
     const deactivate = (cases:any) => {
         setCurrCase(cases);
@@ -89,11 +90,14 @@ const DoctorHome: React.FC<any> = props => {
     }
 
     const handleNewPatientList=()=>{
-
+        setcolorNewCases("primary");
+        setColorReview("dark");
         setNewPatient(true);
         setOldFollowUps(false);
     }
     const handleOldFollowUpList=()=>{
+        setcolorNewCases("dark");
+        setColorReview("primary");
         setOldFollowUps(true);
         setNewPatient(false);
     }
@@ -169,10 +173,10 @@ const DoctorHome: React.FC<any> = props => {
 
             <IonRow>
                         <IonCol>
-                            <IonButton expand = "full" color="dark" onClick={handleNewPatientList}>New Cases</IonButton>
+                            <IonButton expand = "full" color={colorNewCases} onClick={handleNewPatientList}>New Cases</IonButton>
                         </IonCol>
                         <IonCol>
-                            <IonButton expand = "full" color="dark" onClick={handleOldFollowUpList}>Review Followups</IonButton>
+                            <IonButton expand = "full" color={colorReview} onClick={handleOldFollowUpList}>Review Followups</IonButton>
                         </IonCol>
                     </IonRow>
                     {/*</IonGrid>*/}
