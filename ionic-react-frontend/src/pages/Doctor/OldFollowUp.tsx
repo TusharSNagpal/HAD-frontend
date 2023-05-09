@@ -230,7 +230,8 @@ const OldFollowUp: React.FC<any> = props => {
             assignedTask += data;
             assignedTask += '$';
         })
-        assignedTask = assignedTask.substring(0, assignedTask.length - 1);
+        assignedTask += 'Remarks'
+        // assignedTask = assignedTask.substring(0, assignedTask.length - 1);
 
         setTasksAssigned(assignedTask);
     }

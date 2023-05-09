@@ -37,8 +37,7 @@ const GlobalRegisterFieldWorker: React.FC = () => {
     const [alertMessage, setAlertMessage] = useState<string>();
     const [alertHeader, setAlertHeader] = useState<string>()
     const [auth, setAuth] = useState(true);
-
-
+    
     const fname = useRef<HTMLIonInputElement>(null)
     const lname = useRef<HTMLIonInputElement>(null)
     const gender = useRef<HTMLIonInputElement>(null)
